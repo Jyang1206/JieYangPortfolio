@@ -1,0 +1,40 @@
+<mujoco model="portfolio_guitar_scale_rig">
+  <compiler angle="radian" autolimits="true" />
+  <option timestep="0.01" gravity="0 0 -9.81" />
+
+  <asset>
+    <material name="desk_mat" rgba="0.08 0.1 0.12 1" />
+    <material name="wood_mat" rgba="0.66 0.42 0.2 1" />
+    <material name="fret_mat" rgba="0.9 0.84 0.68 1" />
+    <material name="note_mat" rgba="0.98 0.8 0.08 1" />
+    <material name="camera_mat" rgba="0.18 0.28 0.36 1" />
+  </asset>
+
+  <worldbody>
+    <light name="key" pos="0 -3.2 4.2" dir="0.1 0.2 -1" diffuse="1 0.96 0.84" />
+    <camera name="overview" pos="1.8 -4.2 2.6" xyaxes="0.92 0.39 0 -0.25 0.58 0.78" />
+
+    <geom name="desk" type="box" pos="0 0 -0.03" size="3.2 1.5 0.03" material="desk_mat" />
+
+    <body name="guitar_rig" pos="0 0 0.1">
+      <geom name="fretboard" type="box" pos="0 0 0.08" size="1.8 0.18 0.055" material="wood_mat" density="160" />
+      <geom name="nut" type="box" pos="-1.72 0 0.15" size="0.025 0.22 0.035" material="fret_mat" density="90" />
+      <geom name="fret_1" type="box" pos="-1.18 0 0.152" size="0.012 0.215 0.032" material="fret_mat" density="90" />
+      <geom name="fret_2" type="box" pos="-0.64 0 0.152" size="0.012 0.215 0.032" material="fret_mat" density="90" />
+      <geom name="fret_3" type="box" pos="-0.1 0 0.152" size="0.012 0.215 0.032" material="fret_mat" density="90" />
+      <geom name="fret_4" type="box" pos="0.44 0 0.152" size="0.012 0.215 0.032" material="fret_mat" density="90" />
+      <geom name="fret_5" type="box" pos="0.98 0 0.152" size="0.012 0.215 0.032" material="fret_mat" density="90" />
+      <geom name="string_1" type="box" pos="0 -0.135 0.174" size="1.75 0.006 0.006" material="fret_mat" density="20" />
+      <geom name="string_2" type="box" pos="0 -0.08 0.178" size="1.75 0.006 0.006" material="fret_mat" density="20" />
+      <geom name="string_3" type="box" pos="0 -0.025 0.18" size="1.75 0.006 0.006" material="fret_mat" density="20" />
+      <geom name="string_4" type="box" pos="0 0.03 0.18" size="1.75 0.006 0.006" material="fret_mat" density="20" />
+      <geom name="string_5" type="box" pos="0 0.085 0.178" size="1.75 0.006 0.006" material="fret_mat" density="20" />
+      <geom name="string_6" type="box" pos="0 0.14 0.174" size="1.75 0.006 0.006" material="fret_mat" density="20" />
+      <geom name="note_a" type="sphere" pos="-0.92 -0.08 0.23" size="0.055" material="note_mat" density="20" />
+      <geom name="note_c" type="sphere" pos="-0.38 0.03 0.23" size="0.055" material="note_mat" density="20" />
+      <geom name="note_e" type="sphere" pos="0.72 0.14 0.23" size="0.055" material="note_mat" density="20" />
+      <geom name="webcam" type="box" pos="-1.1 -0.88 0.6" size="0.18 0.08 0.1" material="camera_mat" density="100" />
+      <geom name="lens" type="cylinder" pos="-1.1 -0.97 0.6" quat="0.7071068 0.7071068 0 0" size="0.055 0.02" rgba="0.04 0.05 0.06 1" density="80" />
+    </body>
+  </worldbody>
+</mujoco>

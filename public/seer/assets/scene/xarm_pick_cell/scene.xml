@@ -1,0 +1,41 @@
+<mujoco model="portfolio_xarm_pick_cell">
+  <compiler angle="radian" autolimits="true" />
+  <option timestep="0.01" gravity="0 0 -9.81" />
+
+  <asset>
+    <material name="floor_mat" rgba="0.08 0.1 0.12 1" />
+    <material name="table_mat" rgba="0.24 0.28 0.32 1" />
+    <material name="arm_light" rgba="0.82 0.9 0.96 1" />
+    <material name="arm_joint" rgba="0.12 0.18 0.24 1" />
+    <material name="vision_teal" rgba="0.36 0.92 0.83 1" />
+    <material name="tool_mat" rgba="0.96 0.76 0.38 1" />
+  </asset>
+
+  <worldbody>
+    <light name="key" pos="0 -3 5" dir="0.1 0.25 -1" diffuse="0.95 1 1" />
+    <camera name="overview" pos="3 -5 3.2" xyaxes="0.86 0.5 0 -0.28 0.48 0.83" />
+
+    <geom name="cell_floor" type="box" pos="0 0 -0.03" size="3.5 2.4 0.03" material="floor_mat" />
+    <geom name="work_table" type="box" pos="0.65 0 0.38" size="1.15 0.75 0.08" material="table_mat" />
+    <geom name="workspace_boundary" type="box" pos="0.65 0 0.49" size="1.0 0.62 0.012" rgba="0.36 0.92 0.83 0.35" contype="0" conaffinity="0" />
+
+    <body name="xarm_cell" pos="-0.9 0 0.1">
+      <geom name="base" type="cylinder" pos="0 0 0.12" size="0.26 0.12" material="arm_joint" density="500" />
+      <geom name="shoulder" type="sphere" pos="0 0 0.34" size="0.18" material="arm_light" density="400" />
+      <geom name="upper_link" type="box" pos="0.26 0 0.78" size="0.09 0.08 0.48" quat="0.93 0 -0.37 0" material="arm_light" density="260" />
+      <geom name="elbow" type="sphere" pos="0.55 0 1.13" size="0.15" material="arm_joint" density="400" />
+      <geom name="forearm" type="box" pos="0.95 0 1.04" size="0.42 0.07 0.08" quat="0.99 0 0.13 0" material="arm_light" density="240" />
+      <geom name="wrist" type="sphere" pos="1.35 0 0.93" size="0.11" material="arm_joint" density="300" />
+      <geom name="gripper_mount" type="box" pos="1.52 0 0.82" size="0.12 0.09 0.07" material="arm_joint" density="180" />
+      <geom name="left_finger" type="box" pos="1.66 0.08 0.76" size="0.16 0.025 0.055" material="vision_teal" density="90" />
+      <geom name="right_finger" type="box" pos="1.66 -0.08 0.76" size="0.16 0.025 0.055" material="vision_teal" density="90" />
+      <geom name="camera" type="box" pos="0.9 -0.48 1.32" size="0.14 0.08 0.08" material="vision_teal" density="90" />
+    </body>
+
+    <body name="surgical_tool" pos="0.72 0.18 0.53">
+      <freejoint />
+      <geom name="handle" type="box" pos="0 0 0" size="0.26 0.035 0.018" material="tool_mat" density="80" />
+      <geom name="tip" type="box" pos="0.31 0 0" size="0.12 0.018 0.012" material="arm_light" density="80" />
+    </body>
+  </worldbody>
+</mujoco>

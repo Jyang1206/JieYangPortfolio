@@ -1,0 +1,235 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --muted: #64748b;
+  --panel: rgba(255, 255, 255, 0.86);
+  --line: rgba(15, 23, 42, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: clip;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: rgba(94, 234, 212, 0.3);
+}
+
+.mission-grid {
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.07) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.fine-grid {
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(125, 211, 252, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 211, 252, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size:
+    96px 96px,
+    96px 96px,
+    24px 24px,
+    24px 24px;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 16%, black 76%, transparent 100%);
+}
+
+.hero-scan {
+  background:
+    linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.14), transparent),
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 8px,
+      rgba(255, 255, 255, 0.035) 9px,
+      transparent 10px
+    );
+  background-size:
+    42% 100%,
+    100% 100%;
+  animation: hero-scan-drift 8s ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+.scanline {
+  position: relative;
+}
+
+.scanline::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(15, 23, 42, 0.025),
+    transparent
+  );
+  background-size: 100% 9px;
+  mix-blend-mode: multiply;
+}
+
+@keyframes model-stage-drift {
+  0% {
+    transform: translate3d(-2.5%, 1.5%, 0) rotate(-0.5deg);
+  }
+  25% {
+    transform: translate3d(3%, -2%, 0) rotate(0.7deg);
+  }
+  50% {
+    transform: translate3d(1%, 2.5%, 0) rotate(-0.3deg);
+  }
+  75% {
+    transform: translate3d(-3.5%, -1%, 0) rotate(0.4deg);
+  }
+  100% {
+    transform: translate3d(-2.5%, 1.5%, 0) rotate(-0.5deg);
+  }
+}
+
+.gallery-orbit-ring {
+  animation: gallery-orbit-ring 10s linear infinite;
+  transform-origin: center;
+}
+
+.model-stage-drift {
+  animation: model-stage-drift 14s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.contain-layout-paint {
+  contain: layout paint;
+}
+
+.green-status-dot {
+  position: relative;
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #22c55e;
+  box-shadow:
+    0 0 0 6px rgba(34, 197, 94, 0.12),
+    0 0 28px rgba(34, 197, 94, 0.7);
+}
+
+.green-status-dot::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: inherit;
+  border: 1px solid rgba(34, 197, 94, 0.32);
+  animation: green-pulse 1.8s ease-out infinite;
+}
+
+.map-landmark {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #16a34a;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 0 0 8px rgba(34, 197, 94, 0.08);
+}
+
+.map-landmark-active {
+  background: #22c55e;
+  box-shadow:
+    0 0 0 9px rgba(34, 197, 94, 0.14),
+    0 0 30px rgba(34, 197, 94, 0.65);
+}
+
+@keyframes green-pulse {
+  0% {
+    opacity: 0.7;
+    transform: scale(0.82);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+@keyframes hero-scan-drift {
+  0% {
+    background-position:
+      -60% 0,
+      0 0;
+  }
+  50% {
+    background-position:
+      160% 0,
+      0 0;
+  }
+  100% {
+    background-position:
+      -60% 0,
+      0 0;
+  }
+}
+
+@keyframes gallery-orbit-ring {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .model-stage-drift,
+  .hero-scan,
+  .gallery-orbit-ring {
+    animation: none !important;
+  }
+}

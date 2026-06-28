@@ -1,0 +1,194 @@
+{
+  "schema": "portfolio.mujoco_trace.v1",
+  "sourceMjcf": "/seer/assets/scene/xarm_pick_cell/scene.xml",
+  "sourceSha256": "0a33a56f44b2055ac5fedba6c156a4ea97774cd13454230c7a1dbdce5e41775a",
+  "scene": "xArm Pick Cell",
+  "duration": 4.8,
+  "coordinateSystem": "three-r3f-display",
+  "generatedBy": "scripts/export_xarm_mujoco_trace.py",
+  "metadata": {
+    "mujocoValidated": false,
+    "mujocoNote": "Install mujoco to validate the MJCF before export."
+  },
+  "notes": [
+    "The current MJCF cell is a static xArm display scene with a freejoint surgical_tool body.",
+    "This trace is waypoint-based and can be regenerated after the MJCF is replaced with an actuated robot model."
+  ],
+  "frames": [
+    {
+      "t": 0.0,
+      "phase": "overview",
+      "joints": [
+        0.0,
+        -0.1,
+        0.16,
+        0.04
+      ],
+      "ee": [
+        0.98,
+        0.88,
+        0.0
+      ],
+      "target": [
+        0.76,
+        0.08,
+        0.34
+      ],
+      "gripper": 1.0,
+      "status": [
+        "cell_ready",
+        "dry_run_enabled"
+      ]
+    },
+    {
+      "t": 0.16,
+      "phase": "vision",
+      "joints": [
+        0.03,
+        -0.02,
+        0.1,
+        -0.02
+      ],
+      "ee": [
+        0.88,
+        0.86,
+        0.1
+      ],
+      "target": [
+        0.76,
+        0.08,
+        0.34
+      ],
+      "gripper": 1.0,
+      "status": [
+        "camera_locked",
+        "object_detected"
+      ]
+    },
+    {
+      "t": 0.32,
+      "phase": "calibration",
+      "joints": [
+        0.08,
+        0.14,
+        -0.02,
+        -0.08
+      ],
+      "ee": [
+        0.78,
+        0.62,
+        0.23
+      ],
+      "target": [
+        0.76,
+        0.08,
+        0.34
+      ],
+      "gripper": 1.0,
+      "status": [
+        "tf_chain_valid",
+        "workspace_valid"
+      ]
+    },
+    {
+      "t": 0.46,
+      "phase": "pre_grasp",
+      "joints": [
+        0.11,
+        0.24,
+        -0.09,
+        -0.08
+      ],
+      "ee": [
+        0.74,
+        0.38,
+        0.31
+      ],
+      "target": [
+        0.76,
+        0.08,
+        0.34
+      ],
+      "gripper": 1.0,
+      "status": [
+        "pre_grasp_pose",
+        "reachability_ok"
+      ]
+    },
+    {
+      "t": 0.58,
+      "phase": "grasp",
+      "joints": [
+        0.12,
+        0.18,
+        -0.04,
+        -0.02
+      ],
+      "ee": [
+        0.76,
+        0.2,
+        0.34
+      ],
+      "target": [
+        0.76,
+        0.18,
+        0.34
+      ],
+      "gripper": 0.0,
+      "status": [
+        "gripper_closed",
+        "contact_assumed"
+      ]
+    },
+    {
+      "t": 0.74,
+      "phase": "lift",
+      "joints": [
+        0.03,
+        -0.04,
+        0.12,
+        0.08
+      ],
+      "ee": [
+        0.86,
+        0.82,
+        0.22
+      ],
+      "target": [
+        0.86,
+        0.58,
+        0.22
+      ],
+      "gripper": 0.0,
+      "status": [
+        "lift_clear",
+        "tool_secured"
+      ]
+    },
+    {
+      "t": 1.0,
+      "phase": "retreat",
+      "joints": [
+        -0.08,
+        -0.16,
+        0.2,
+        0.12
+      ],
+      "ee": [
+        0.62,
+        1.05,
+        -0.08
+      ],
+      "target": [
+        0.62,
+        0.82,
+        -0.08
+      ],
+      "gripper": 0.0,
+      "status": [
+        "retreat_pose",
+        "execution_complete"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+<mujoco model="portfolio_seer_warehouse">
+  <compiler angle="radian" autolimits="true" />
+  <option timestep="0.01" gravity="0 0 -9.81" />
+
+  <asset>
+    <material name="floor_mat" rgba="0.08 0.1 0.12 1" />
+    <material name="lane_mat" rgba="0.1 0.35 0.42 1" />
+    <material name="robot_blue" rgba="0.12 0.45 0.9 1" />
+    <material name="robot_dark" rgba="0.04 0.05 0.06 1" />
+    <material name="shelf_mat" rgba="0.32 0.34 0.36 1" />
+    <material name="tote_mat" rgba="0.95 0.58 0.18 1" />
+    <material name="zone_pick" rgba="0.18 0.8 0.45 0.55" />
+    <material name="zone_drop" rgba="0.35 0.62 1 0.55" />
+  </asset>
+
+  <worldbody>
+    <light name="key" pos="0 -3 6" dir="0 0 -1" diffuse="0.9 0.95 1" />
+    <camera name="overview" pos="4 -7 5" xyaxes="0.86 0.5 0 -0.32 0.55 0.78" />
+
+    <geom name="warehouse_floor" type="box" pos="0 0 -0.03" size="5 3.2 0.03" material="floor_mat" />
+    <geom name="main_lane" type="box" pos="0 0 0.002" size="4.4 0.18 0.004" material="lane_mat" contype="0" conaffinity="0" />
+    <geom name="cross_lane" type="box" pos="-1.6 0 0.004" size="0.18 2.4 0.004" material="lane_mat" contype="0" conaffinity="0" />
+
+    <geom name="pickup_zone" type="box" pos="-3.1 1.65 0.01" size="0.55 0.32 0.01" material="zone_pick" contype="0" conaffinity="0" />
+    <geom name="dropoff_zone" type="box" pos="3.1 -1.55 0.01" size="0.55 0.32 0.01" material="zone_drop" contype="0" conaffinity="0" />
+
+    <body name="left_shelf" pos="-1.5 1.45 0.55">
+      <geom type="box" size="0.8 0.16 0.55" material="shelf_mat" />
+      <geom type="box" pos="0 0 0.2" size="0.74 0.19 0.04" rgba="0.12 0.14 0.16 1" />
+    </body>
+    <body name="right_shelf" pos="1.5 -1.35 0.55">
+      <geom type="box" size="0.8 0.16 0.55" material="shelf_mat" />
+      <geom type="box" pos="0 0 0.2" size="0.74 0.19 0.04" rgba="0.12 0.14 0.16 1" />
+    </body>
+
+    <body name="seer_amr" pos="-2.8 -1.15 0.18">
+      <freejoint />
+      <geom name="base" type="box" size="0.42 0.32 0.12" material="robot_blue" density="450" />
+      <geom name="top_plate" type="box" pos="0 0 0.14" size="0.34 0.26 0.035" material="robot_dark" density="250" />
+      <geom name="lidar" type="cylinder" pos="0.18 0 0.22" size="0.07 0.035" material="robot_dark" density="100" />
+      <geom name="left_wheel" type="cylinder" pos="0 0.34 -0.03" quat="0.7071068 0.7071068 0 0" size="0.105 0.045" material="robot_dark" density="300" />
+      <geom name="right_wheel" type="cylinder" pos="0 -0.34 -0.03" quat="0.7071068 0.7071068 0 0" size="0.105 0.045" material="robot_dark" density="300" />
+      <geom name="payload_tote" type="box" pos="-0.08 0 0.24" size="0.22 0.18 0.08" material="tote_mat" density="120" />
+    </body>
+  </worldbody>
+</mujoco>

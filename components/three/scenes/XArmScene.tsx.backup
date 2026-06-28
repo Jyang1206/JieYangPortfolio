@@ -1,0 +1,404 @@
+"use client";
+
+import { ContactShadows, Environment, Grid, Line } from "@react-three/drei";
+import { useFrame, useThree } from "@react-three/fiber";
+import { useMemo, useRef } from "react";
+import { Group, MathUtils, Vector3 } from "three";
+import type { Project, StoryStep } from "@/data/projects";
+import { Hotspot } from "@/components/three/Hotspot";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+
+type SceneProps = {
+  project: Project;
+  progress: number;
+  activeStep: StoryStep;
+  activeIndex: number;
+};
+
+const cameraPositions: [number, number, number][] = [
+  [4.6, 3.15, 5.2],
+  [2.7, 2.35, 2.95],
+  [3.35, 2.85, 3.8],
+  [2.8, 2.15, 3.05],
+  [3.6, 2.55, 3.1],
+  [4.5, 3.4, 4.7],
+];
+
+const lookTargets: [number, number, number][] = [
+  [0, 0.65, 0],
+  [-1.28, 1.25, 0.1],
+  [-0.25, 0.8, 0],
+  [0.45, 0.58, 0.2],
+  [0.78, 0.92, 0.05],
+  [0, 0.55, 0],
+];
+
+export function XArmScene({ project, progress, activeStep, activeIndex }: SceneProps) {
+  const rigRef = useRef<Group>(null);
+  const reducedMotion = usePrefersReducedMotion();
+
+  useFrame((_, delta) => {
+    if (!rigRef.current || reducedMotion) return;
+    rigRef.current.rotation.y = MathUtils.lerp(
+      rigRef.current.rotation.y,
+      -0.25 + progress * 0.55,
+      Math.min(1, delta * 2.2),
+    );
+  });
+
+  return (
+    <>
+      <color attach="background" args={["#0f172a"]} /> {/* Dark mission-control background */}
+      <fog attach="fog" args={["#0f172a", 8, 15]} />
+      <Environment preset="studio" /> {/* Better environment lighting */}
+      <ambientLight intensity={0.25} color="#0f172a" /> {/* Very low ambient light */}
+      <directionalLight
+        position={[8, 12, 6]}
+        intensity={2.2}
+        castShadow
+        shadow-mapSize={1024}
+        shadow-bias={-0.0005}
+        color="#ffffff"
+      />
+      {/* Accent light for project color highlights */}
+      <pointLight
+        position={[-2, 2.5, 2.5]}
+        color={project.accentColor}
+        intensity={1.8}
+        distance={8}
+        decay={2}
+      />
+      {/* Rim light for edge highlighting */}
+      <spotLight
+        position={[0, 6, 0]}
+        target={[0, 0, 0]}
+        color={project.accentColor}
+        intensity={0.6}
+        angle={0.1}
+        penumbra={0.8}
+        decay={2}
+      />
+      <CameraRig activeIndex={activeIndex} reducedMotion={reducedMotion} />
+
+      {/* Mission Control Grid - temporarily disabled for debugging */}
+      {/* <Grid args={[10, 10, 10, 10]} colorOpacity={0.15} colorCenter={0.25} colorGrid={0.35} /> */}
+
+      <group ref={rigRef} position={[0, -0.62, 0]}>
+        <Workspace active={activeStep.activeHotspot === "workspace"} color={project.accentColor} />
+        <RobotArm activeHotspot={activeStep.activeHotspot} color={project.accentColor} />
+        <CameraModule active={activeStep.activeHotspot === "camera"} color={project.accentColor} />
+        <TargetObject activeIndex={activeIndex} color={project.accentColor} />
+        <TransformGraphics activeIndex={activeIndex} color={project.accentColor} />
+        <SafetyEnvelope active={activeStep.activeHotspot === "safety"} color={project.accentColor} />
+
+        <Hotspot
+          id="camera"
+          label="Camera"
+          position={[-1.32, 1.62, 0.08]}
+          activeHotspot={activeStep.activeHotspot}
+          color={project.accentColor}
+        />
+        <Hotspot
+          id="end-effector"
+          label="End Effector"
+          position={[0.86, 1.14, 0.02]}
+          activeHotspot={activeStep.activeHotspot}
+          color={project.accentColor}
+        />
+        <Hotspot
+          id="base"
+          label="Robot Base"
+          position={[-0.12, 0.18, 0]}
+          activeHotspot={activeStep.activeHotspot}
+          color={project.accentColor}
+        />
+        <Hotspot
+          id="workspace"
+          label="Workspace"
+          position={[0.22, 0.03, 0.94]}
+          activeHotspot={activeStep.activeHotspot}
+          color={project.accentColor}
+        />
+        <Hotspot
+          id="tf"
+          label="TF Transform"
+          position={[-0.72, 1.08, -0.18]}
+          activeHotspot={activeStep.activeHotspot}
+          color={project.accentColor}
+        />
+        <Hotspot
+          id="safety"
+          label="Safety Gate"
+          position={[1.36, 0.72, -1.02]}
+          activeHotspot={activeStep.activeHotspot}
+          color={project.accentColor}
+        />
+      </group>
+
+      <ContactShadows position={[0, -1.25, 0]} opacity={0.35} scale={8} blur={3} far={3.5} />
+      <Environment preset="studio" background blur={0.01} />
+    </>
+  );
+}
+
+function CameraRig({
+  activeIndex,
+  reducedMotion,
+}: {
+  activeIndex: number;
+  reducedMotion: boolean;
+}) {
+  const { camera } = useThree();
+  const target = useMemo(() => new Vector3(), []);
+  const position = useMemo(() => new Vector3(), []);
+
+  useFrame((_, delta) => {
+    const nextPosition = cameraPositions[activeIndex] ?? cameraPositions[0];
+    const nextTarget = lookTargets[activeIndex] ?? lookTargets[0];
+    position.set(...nextPosition);
+    target.set(...nextTarget);
+
+    if (reducedMotion) {
+      camera.position.copy(position);
+    } else {
+      camera.position.lerp(position, Math.min(1, delta * 2.4));
+    }
+
+    camera.lookAt(target);
+  });
+
+  return null;
+}
+
+function Workspace({ active, color }: { active: boolean; color: string }) {
+  return (
+    <group>
+      <mesh receiveShadow position={[0.15, -0.04, 0]}>
+        <boxGeometry args={[3.7, 0.08, 2.35]} />
+        <meshStandardMaterial
+          color="#f8fafc"
+          roughness={0.25}
+          metalness={0.85}
+        />
+      </mesh>
+      <mesh position={[0.15, 0.012, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[3.55, 2.2, 8, 6]} />
+        <meshStandardMaterial
+          color={active ? color : "#64748b"}
+          roughness={0.1}
+          metalness={0.9}
+          transparent
+          opacity={active ? 0.4 : 0.15}
+        />
+      </mesh>
+    </group>
+  );
+}
+
+function RobotArm({ activeHotspot, color }: { activeHotspot?: string; color: string }) {
+  const baseActive = activeHotspot === "base";
+  const effectorActive = activeHotspot === "end-effector";
+
+  return (
+    <group position={[-0.35, 0.02, -0.05]}>
+      <mesh castShadow position={[0, 0.12, 0]}>
+        <cylinderGeometry args={[0.34, 0.42, 0.24, 40]} />
+        <meshStandardMaterial
+          color={baseActive ? color : "#cbd5e1"}
+          metalness={0.7}
+          roughness={0.18}
+          envMapIntensity={1.5}
+        />
+      </mesh>
+      <mesh castShadow position={[0, 0.33, 0]}>
+        <cylinderGeometry args={[0.23, 0.23, 0.24, 32]} />
+        <meshStandardMaterial
+          color="#f8fafc"
+          metalness={0.6}
+          roughness={0.15}
+          envMapIntensity={1.2}
+        />
+      </mesh>
+      <mesh castShadow position={[0.05, 0.78, 0]} rotation={[0, 0, -0.46]}>
+        <boxGeometry args={[0.24, 1.08, 0.28]} />
+        <meshStandardMaterial
+          color="#e5edf6"
+          metalness={0.5}
+          roughness={0.2}
+          envMapIntensity={1.0}
+        />
+      </mesh>
+      <mesh castShadow position={[0.42, 1.26, 0]}>
+        <sphereGeometry args={[0.2, 32, 32]} />
+        <meshStandardMaterial
+          color="#f8fafc"
+          metalness={0.65}
+          roughness={0.12}
+          envMapIntensity={1.3}
+        />
+      </mesh>
+      <mesh castShadow position={[0.72, 1.18, 0]} rotation={[0, 0, 1.05]}>
+        <boxGeometry args={[0.21, 0.78, 0.22]} />
+        <meshStandardMaterial
+          color="#eef4fb"
+          metalness={0.55}
+          roughness={0.18}
+          envMapIntensity={1.1}
+        />
+      </mesh>
+      <mesh castShadow position={[0.98, 0.88, 0]}>
+        <boxGeometry args={[0.2, 0.22, 0.22]} />
+        <meshStandardMaterial
+          color={effectorActive ? color : "#334155"}
+          emissive={effectorActive ? color : "#000000"}
+          emissiveIntensity={effectorActive ? 0.6 : 0}
+          metalness={0.8}
+          roughness={0.08}
+          envMapIntensity={2.0}
+        />
+      </mesh>
+      <mesh castShadow position={[1.09, 0.82, 0.08]} rotation={[0, 0.2, 0.15]}>
+        <boxGeometry args={[0.05, 0.32, 0.06]} />
+        <meshStandardMaterial color="#334155" metalness={0.4} roughness={0.25} />
+      </mesh>
+      <mesh castShadow position={[1.09, 0.82, -0.08]} rotation={[0, -0.2, 0.15]}>
+        <boxGeometry args={[0.05, 0.32, 0.06]} />
+        <meshStandardMaterial color="#334155" metalness={0.4} roughness={0.25} />
+      </mesh>
+    </group>
+  );
+}
+
+function CameraModule({ active, color }: { active: boolean; color: string }) {
+  return (
+    <group position={[-1.3, 1.18, 0.1]} rotation={[0.22, -0.3, 0.05]}>
+      <mesh castShadow>
+        <boxGeometry args={[0.54, 0.34, 0.24]} />
+        <meshStandardMaterial
+          color={active ? color : "#dbeafe"}
+          emissive={active ? color : "#000000"}
+          emissiveIntensity={active ? 0.4 : 0}
+          metalness={0.8}
+          roughness={0.08}
+          envMapIntensity={2.0}
+        />
+      </mesh>
+      <mesh position={[0.29, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
+        <cylinderGeometry args={[0.1, 0.12, 0.08, 24]} />
+        <meshStandardMaterial
+          color="#334155"
+          metalness={0.5}
+          roughness={0.2}
+        />
+      </mesh>
+      <Line
+        points={[
+          [0.35, -0.05, 0],
+          [1.2, -0.75, 0.18],
+          [1.95, -1.14, 0.26],
+        ]}
+        color={color}
+        transparent
+        opacity={active ? 0.9 : 0.3}
+        lineWidth={1.4}
+      />
+    </group>
+  );
+}
+
+function TargetObject({ activeIndex, color }: { activeIndex: number; color: string }) {
+  const lifted = activeIndex >= 4;
+  return (
+    <mesh castShadow position={[0.76, lifted ? 0.58 : 0.08, 0.34]}>
+      <boxGeometry args={[0.28, 0.18, 0.28]} />
+      <meshStandardMaterial
+        color={color}
+        emissive={color}
+        emissiveIntensity={activeIndex >= 3 ? 0.5 : 0.1}
+        metalness={0.7}
+        roughness={0.1}
+      />
+    </mesh>
+  );
+}
+
+function TransformGraphics({ activeIndex, color }: { activeIndex: number; color: string }) {
+  const showTf = activeIndex >= 2;
+  const showPath = activeIndex >= 3;
+
+  return (
+    <group>
+      {showTf && (
+        <>
+          <CoordinateFrame position={[-1.05, 0.78, -0.28]} labelColor="#60a5fa" />
+          <CoordinateFrame position={[-0.35, 0.22, -0.12]} labelColor={color} />
+          <Line
+            points={[
+              [-1.05, 0.78, -0.28],
+              [-0.35, 0.22, -0.12],
+            ]}
+            color={color}
+            lineWidth={2.5}
+            transparent
+            opacity={0.85}
+          />
+        </>
+      )}
+      {showPath && (
+        <Line
+          points={[
+            [0.18, 0.16, 0.18],
+            [0.46, 0.35, 0.28],
+            [0.76, 0.4, 0.34],
+            [0.86, 0.82, 0.22],
+          ]}
+          color="#2563eb"
+          lineWidth={4}
+          transparent
+          opacity={activeIndex >= 4 ? 1 : 0.7}
+        />
+      )}
+    </group>
+  );
+}
+
+function CoordinateFrame({
+  position,
+  labelColor,
+}: {
+  position: [number, number, number];
+  labelColor: string;
+}) {
+  const [x, y, z] = position;
+
+  return (
+    <group>
+      <Line points={[position, [x + 0.36, y, z]]} color="#ef4444" lineWidth={2} />
+      <Line points={[position, [x, y + 0.36, z]]} color="#22c55e" lineWidth={2} />
+      <Line points={[position, [x, y, z + 0.36]]} color="#3b82f6" lineWidth={2} />
+      <mesh position={position}>
+        <sphereGeometry args={[0.045, 16, 16]} />
+        <meshBasicMaterial color={labelColor} />
+      </mesh>
+    </group>
+  );
+}
+
+function SafetyEnvelope({ active, color }: { active: boolean; color: string }) {
+  return (
+    <group visible={active}>
+      <mesh position={[0.18, 0.72, 0]}>
+        <boxGeometry args={[3.55, 1.55, 2.18]} />
+        <meshBasicMaterial color={color} wireframe transparent opacity={0.54} />
+      </mesh>
+      <Line
+        points={[
+          [1.45, 0.02, -1.08],
+          [1.45, 1.42, -1.08],
+        ]}
+        color={color}
+        lineWidth={4}
+      />
+    </group>
+  );
+}

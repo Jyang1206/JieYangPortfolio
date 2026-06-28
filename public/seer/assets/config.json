@@ -1,0 +1,31 @@
+{
+  "version": "0.0.4",
+  "projects": [
+    {
+      "name": "Portfolio Robotics Sandbox",
+      "id": "seer",
+      "scenes": [
+        {
+          "name": "Warehouse Pickup",
+          "path": "scene/seer_warehouse/scene.xml",
+          "policies": []
+        },
+        {
+          "name": "xArm Pick Cell",
+          "path": "scene/xarm_pick_cell/scene.xml",
+          "policies": []
+        },
+        {
+          "name": "Vehicle BEV Rig",
+          "path": "scene/vehicle_bev_rig/scene.xml",
+          "policies": []
+        },
+        {
+          "name": "Guitar Scale Rig",
+          "path": "scene/guitar_scale_rig/scene.xml",
+          "policies": []
+        }
+      ]
+    }
+  ]
+}
