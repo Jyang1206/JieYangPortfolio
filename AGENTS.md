@@ -9,7 +9,7 @@ The website should feel like an immersive robotics showcase: part mission-contro
 The core concept:
 - Landing page introduces Jie Yang as someone who enjoys solving problems and helping people.
 - The portfolio frames robotics and automation as a way to alleviate repetitive, difficult, or physically demanding work.
-- After the landing section, users see floating rotating 3D models representing different projects.
+- The home page is one long page. It opens with a welcome over a lens cap (photo at `public/images/me.jpg`, initials if missing). Scrolling scrubs each crossing slowly into five real-time rendered worlds (IRIS, Tarii, Movel AI, ST Engineering, Guitar Scale Visualizer); each world's full content (intro, what I built, real captures, story steps) scrolls over it.
 - Each project can be clicked, opening a dedicated project story page.
 - Each project page uses scroll-driven 3D storytelling: as the user scrolls, the camera, model, hotspots, overlays, and text change.
 - The goal is to show both technical skill and human-centered motivation.
@@ -70,36 +70,16 @@ The site should feel technical, cinematic, and sincere.
 ### 1. Home Page `/`
 
 Sections:
-1. Landing intro
-2. Continue/scroll cue
-3. Floating rotating 3D project models
-4. Project selection cards
-5. Contact/footer
+1. `WorldsStage`: welcome on the lens cap, then five worlds on one sticky WebGL stage. Each crossing is scrubbed by about one viewport of scroll: aperture (IRIS, with the xArm GLB standing on the tray), roster turnover (Tarii), lidar sweep (Movel AI), optical flow (ST Engineering), string pluck (Guitar). `WorldContent` renders each world's cards and captures. Keys 1-5 and the rail jump; `/#<world id>` deep-links.
+2. Contact/footer
+
+World copy lives in `data/worlds.ts`; shaders in `components/worlds/shaders.ts`. Chrome is paper `#f2efe8` and ink `#0c0c0d` only; colour belongs to the worlds. The Tarii world uses Tarii's still-water identity (Hanken Grotesk, `#f7faf8`/`#173d3c`/`#315a60`) and its public Harbourline demo captures, copied from the Tarii repo `web/public/site/harbourline/` at 52ef985ad; never show real client or hospital names. Design context: `PRODUCT.md`, `.impeccable/surfaces/app-page-tsx.md`.
 
 Landing copy should be editable from a data file. Default copy:
 
 "Hi, I'm Jie Yang. I really like solving problems and helping people. Right now, that has manifested in my interest in robotics and automation, because I think these systems can alleviate repetitive work, assist physical workers, and make difficult workflows easier. Enjoy my portfolio."
 
 The tone should be warm, human, and technically curious.
-
-### 2. Project Index / Floating Model Gallery
-
-After the landing page, show floating rotating 3D models for the main projects.
-
-Initial projects:
-- xArm Vision-to-Pick Pipeline
-- SEER Robot / Full-Stack Fleet Management Experience
-- Guitar Scale Visualizer
-- ST Engineering Downward View / BEV Motion Estimation
-- Optional: AGV / Robot Dog Deployment Story
-
-Each project model should:
-- rotate slowly at rest
-- have a short title
-- have a subtitle describing the experience
-- be clickable
-- support keyboard focus and accessible labels
-- fall back to a styled 2D project card if WebGL fails
 
 ### 3. Project Detail Page `/projects/[slug]`
 
@@ -328,8 +308,7 @@ Avoid:
 
 Use components similar to:
 
-- `LandingHero`
-- `ProjectGalaxy`
+- `WorldsStage` (home: five worlds, one gesture plays one crossing)
 - `ProjectModelCard`
 - `ProjectStoryLayout`
 - `NarrativePanel`

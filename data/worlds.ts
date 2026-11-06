@@ -46,7 +46,7 @@ export const worlds: World[] = [
       "xArm motion through MoveIt, shared workspace limits and explicit operator approval",
     ],
     tags: ["ROS 2", "C++", "MoveIt", "RealSense", "YOLO", "DINO", "React"],
-    storyHref: "/projects/xarm-vision-to-pick",
+    storyHref: "/projects/iris",
     crossing: "aperture",
     fallback: "radial-gradient(circle at 55% 48%, #6f8a94 0%, #1d3f47 38%, #071116 80%)",
   },

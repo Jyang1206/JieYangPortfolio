@@ -5,7 +5,7 @@
 | Path | Purpose |
 |---|---|
 | `app/` | Next.js App Router routes, global CSS, layout, and project route entrypoints. |
-| `components/home/` | Home page sections: hero, simulation embed, project gallery, systems showcase, about scroller. |
+| `components/worlds/` | Home page "five worlds" stage: WebGL2 shaders for each world and its entry crossing (`shaders.ts`), the renderer (`WorldRenderer.ts`) and the long-page stage where scroll scrubs each crossing, `WorldContent.tsx` for each world's cards and captures, `WorldBackdrop.tsx` for story-page heroes and `XArmWorldModel.tsx` for the xArm GLB in the IRIS world (`WorldsStage.tsx`). World copy lives in `data/worlds.ts`. |
 | `components/project/` | Shared project-story layout, narrative panels, and project-specific embeds. |
 | `components/three/` | Canvas shell, model fallback, hotspots, and R3F scene components. |
 | `data/` | Editable portfolio content and project metadata. |
@@ -28,8 +28,7 @@
 
 | Component | Purpose |
 |---|---|
-| `LandingHero` | Mission-control intro and featured 3D model preview. |
-| `ProjectGalaxy` | Floating project selection gallery and accessible project links. |
+| `WorldsStage` | Welcome plus five worlds on one long page, crossings scrubbed by scroll; each world is entered through its own crossing (aperture, roster turnover, lidar sweep, optical flow, string pluck). |
 | `ProjectStoryLayout` | Shared project detail shell: intro, artifacts, sticky canvas, and narrative panels. |
 | `ThreeCanvasShell` | Shared R3F canvas wrapper with fallback content. |
 | `ModelWithFallback` | Loads GLB assets via Drei and falls back to primitive/2D content on failure. |
