@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8">
+  <!-- Halftone dot screen, 8px pitch, tileable. Overlay on photos with mix-blend-mode: multiply (dark) or screen (light); rotate 15deg via a wrapper for a print feel. -->
+  <circle cx="2" cy="2" r="1.15" fill="#141414"/>
+  <circle cx="6" cy="6" r="1.15" fill="#141414"/>
+</svg>

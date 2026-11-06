@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="16" viewBox="0 0 64 16">
+  <!-- Double margin rule at x=56/60. Tile with repeat-y, anchored left (background-position: 0 0). -->
+  <rect x="56" y="0" width="1" height="16" fill="#1f4fff" fill-opacity="0.55"/>
+  <rect x="60" y="0" width="1" height="16" fill="#1f4fff" fill-opacity="0.3"/>
+</svg>

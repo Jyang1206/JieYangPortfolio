@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="44" height="40" viewBox="0 0 44 40">
+  <!-- One spiral coil per 40px. Tile with repeat-y, straddling the page's left edge (place at x = -22px). The page edge is at x=22. -->
+  <defs>
+    <linearGradient id="w" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#9aa0a6"/>
+      <stop offset="0.35" stop-color="#e8ebee"/>
+      <stop offset="0.6" stop-color="#8a9096"/>
+      <stop offset="1" stop-color="#4e5358"/>
+    </linearGradient>
+  </defs>
+  <!-- hole in the page -->
+  <ellipse cx="30" cy="20" rx="4.2" ry="6.5" fill="#141414" fill-opacity="0.72"/>
+  <!-- wire -->
+  <path d="M30 13 C 22 8, 10 10, 6 20 C 3 27, 10 31, 18 29 L 30 27" fill="none" stroke="url(#w)" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M30 13 C 22 8, 10 10, 6 20 C 3 27, 10 31, 18 29 L 30 27" fill="none" stroke="#000" stroke-opacity="0.25" stroke-width="3.2" stroke-linecap="round" transform="translate(0.6,1.2)" style="mix-blend-mode:multiply"/>
+</svg>

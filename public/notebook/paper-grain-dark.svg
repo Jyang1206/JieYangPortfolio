@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320">
+  <!-- Seamless grain for dark-ink surfaces (cover board, photo mounts). Transparent background; pale specks + soft mottle. -->
+  <filter id="g" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.95 0.95" numOctaves="3" seed="11" stitchTiles="stitch" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.95  0 0 0 0 0.93  0 0 0 0 0.88  0 0 0 -0.9 0.48" result="grain"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.11 0.11" numOctaves="3" seed="5" stitchTiles="stitch" result="f"/>
+    <feColorMatrix in="f" type="matrix" values="0 0 0 0 0.9  0 0 0 0 0.9  0 0 0 0 0.85  0 0 0 -1.0 0.42" result="fibre"/>
+    <feMerge><feMergeNode in="grain"/><feMergeNode in="fibre"/></feMerge>
+  </filter>
+  <rect width="320" height="320" filter="url(#g)" opacity="0.26"/>
+</svg>
