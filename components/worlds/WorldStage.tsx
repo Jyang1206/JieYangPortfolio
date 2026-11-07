@@ -28,7 +28,8 @@ export function WorldStage({ worlds, index }: WorldStageProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [webgl, setWebgl] = useState(true);
   const [still, setStill] = useState(false);
-  const paramsRef = useRef<number[]>([0, 0, 0, 0]);
+  // IRIS: the 3D arm cell brings its own tray, so the shader draws only the drape behind it.
+  const paramsRef = useRef<number[]>([world.id === "iris" ? 1 : 0, 0, 0, 0]);
   const [setParams] = useState(() => (values: ParamValues) => {
     for (const [k, v] of Object.entries(values)) paramsRef.current[Number(k)] = v;
   });
@@ -110,7 +111,7 @@ export function WorldStage({ worlds, index }: WorldStageProps) {
     <section ref={stageRef} className="nb-stage" data-world={world.id} aria-label={`${world.name}: the world, rendered live`}>
       <canvas ref={canvasRef} className="nb-stage-canvas" aria-hidden="true" hidden={!webgl} />
       {webgl && Overlay && (
-        <div className="pointer-events-none absolute inset-0 z-[5]" aria-hidden="true">
+        <div className="nb-stage-overlay" aria-hidden="true">
           <Overlay active still={still} />
         </div>
       )}

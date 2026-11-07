@@ -1,4 +1,5 @@
 // IRIS: steel tray under theatre light.
+// uParams.x = 1 draws only the drape and the light pool: the project page's 3D arm cell brings its own tray.
 const IRIS = /* glsl */ `
 // instrument: x,y centre, angle, length ; type 0 forceps, 1 scissors, 2 probe
 const int N = 5;
@@ -51,6 +52,13 @@ vec3 scene(vec2 uv) {
   steel *= mix(.74, 1., smoothstep(0., -.035, dTray));
   steel += stroke(dTray + .014, .0028) * .2;
   float trayShadow = smoothstep(.07, -.02, sdRoundBox(tp - vec2(.025, -.03), tb, .06));
+  vec2 lc = vec2(.22 + .05 * sin(t * .13), .05 + .03 * cos(t * .11));
+  float pool = exp(-dot(uv - lc, uv - lc) * 3.);
+  if (uParams.x > .5) {
+    vec3 bare = drape * (.28 + 1.1 * pool);
+    return bare + vec3(.85, .92, 1.) * pow(pool, 8.) * .07;
+  }
+
   vec3 col = drape * (1. - .6 * trayShadow);
   col = mix(col, steel, fill(dTray));
 
@@ -64,8 +72,6 @@ vec3 scene(vec2 uv) {
     col = mix(col, metal, fill(d));
   }
 
-  vec2 lc = vec2(.22 + .05 * sin(t * .13), .05 + .03 * cos(t * .11));
-  float pool = exp(-dot(uv - lc, uv - lc) * 3.);
   col *= .28 + 1.1 * pool;
   col += vec3(.85, .92, 1.) * pow(pool, 8.) * .07;
 
