@@ -127,7 +127,6 @@ export function ChooseYourJieYang({
 }: ChooseYourJieYangProps) {
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [missing, setMissing] = useState<string[]>([]);
-  const [paused, setPaused] = useState(false);
   const reduced = usePrefersReducedMotion();
   const frameRef = useRef<HTMLButtonElement>(null);
   const swipe = useRef<{ x: number; y: number; swiped: boolean } | null>(null);
@@ -200,6 +199,15 @@ export function ChooseYourJieYang({
       data-moment={current?.id ?? "none"}
       className={`${styles.section} ${className}`}
     >
+      {/* The drumming photo turns the whole hero into a gig: dark stage, sweeping lights, a crowd. */}
+      <div className={styles.backdrop} aria-hidden="true">
+        <span className={styles.beam} />
+        <span className={styles.beam} />
+        <span className={styles.beam} />
+        <span className={styles.beam} />
+        <span className={styles.haze} />
+        <span className={styles.crowd} />
+      </div>
       <div className={styles.inner}>
         <div className={styles.copy}>
           <Heading id={titleId} className={styles.title}>
@@ -231,7 +239,7 @@ export function ChooseYourJieYang({
             <div className={styles.arch}>
               <DrumStage
                 scene={current?.scene ?? "calm"}
-                still={reduced || paused}
+                still={reduced}
                 holeRef={frameRef}
                 className={styles.canvas}
               />
@@ -266,7 +274,7 @@ export function ChooseYourJieYang({
           {n > 1 && (
             <div className={styles.controls}>
               <p className={styles.hint}>
-                Click the photo to see the other sides
+                <span>↑ Click the photo to see another side of me</span>
               </p>
               <button
                 type="button"
@@ -322,16 +330,6 @@ export function ChooseYourJieYang({
                   />
                 </svg>
               </button>
-              {!reduced && (
-                <button
-                  type="button"
-                  className={styles.pause}
-                  aria-pressed={paused}
-                  onClick={() => setPaused((p) => !p)}
-                >
-                  {paused ? "Play animation" : "Pause animation"}
-                </button>
-              )}
             </div>
           )}
         </div>

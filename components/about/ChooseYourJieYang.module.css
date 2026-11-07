@@ -134,10 +134,36 @@
 }
 .hint {
   flex-basis: 100%;
-  margin: 0 0 4px;
-  text-align: center;
-  color: var(--cy-ink-soft);
-  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  margin: 0 0 6px;
+}
+.hint span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border: 2px solid var(--cy-ink);
+  border-radius: 999px;
+  background: var(--cy-card);
+  color: var(--cy-ink);
+  font-weight: 600;
+  font-size: 15px;
+  box-shadow: 3px 3px 0 var(--cy-ink);
+  animation: hintNudge 2.4s ease-in-out infinite;
+}
+@keyframes hintNudge {
+  0%,
+  70%,
+  100% {
+    transform: translateY(0);
+  }
+  80% {
+    transform: translateY(-4px);
+  }
+  90% {
+    transform: translateY(0);
+  }
 }
 .step {
   display: grid;
@@ -187,26 +213,8 @@
   background: var(--cy-blue);
   border-color: var(--cy-blue);
 }
-.pause {
-  min-height: 44px;
-  margin-left: 10px;
-  padding: 0 4px;
-  border: 0;
-  background: none;
-  color: var(--cy-ink-soft);
-  font: inherit;
-  font-size: 14px;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 4px;
-  cursor: pointer;
-}
-.pause:hover {
-  color: var(--cy-ink);
-}
 .step:focus-visible,
-.dot:focus-visible,
-.pause:focus-visible {
+.dot:focus-visible {
   outline: 2px solid var(--cy-blue);
   outline-offset: 2px;
 }
@@ -365,4 +373,119 @@
   line-height: 1;
   color: #fff;
   transform: rotate(-7deg);
+}
+
+/* ---------- the drumming moment: the whole hero becomes a stage ---------- */
+.section {
+  transition: background-color 600ms ease, color 600ms ease;
+}
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(70% 45% at 50% 108%, rgba(46, 204, 128, 0.42), transparent 70%),
+    radial-gradient(40% 30% at 18% 0%, rgba(214, 72, 255, 0.28), transparent 70%),
+    linear-gradient(180deg, #06080a 0%, #0b1712 70%, #07100c 100%);
+  transition: opacity 600ms ease;
+}
+.section[data-moment="supernova"] .backdrop {
+  opacity: 1;
+}
+.section[data-moment="supernova"]::before {
+  opacity: 0;
+}
+.section[data-moment="supernova"] {
+  --cy-paper: #07100c;
+  --cy-card: #12201a;
+  --cy-ink: #f3f1ec;
+  --cy-ink-soft: rgba(243, 241, 236, 0.74);
+  --cy-blue: #6f9bff;
+}
+.beam {
+  position: absolute;
+  top: -12%;
+  width: 34vw;
+  height: 130%;
+  transform-origin: 50% 0;
+  background: linear-gradient(180deg, rgba(140, 255, 200, 0.42), rgba(140, 255, 200, 0.05) 75%, transparent);
+  clip-path: polygon(46% 0, 54% 0, 100% 100%, 0 100%);
+  mix-blend-mode: screen;
+  filter: blur(2px);
+  animation: sweep 7s ease-in-out infinite alternate;
+}
+.beam:nth-child(1) {
+  left: 2%;
+  animation-duration: 6.2s;
+}
+.beam:nth-child(2) {
+  left: 26%;
+  background: linear-gradient(180deg, rgba(225, 120, 255, 0.4), rgba(225, 120, 255, 0.04) 75%, transparent);
+  animation-duration: 8s;
+  animation-delay: -3s;
+}
+.beam:nth-child(3) {
+  left: 52%;
+  animation-duration: 7.1s;
+  animation-delay: -1.5s;
+}
+.beam:nth-child(4) {
+  left: 76%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.03) 75%, transparent);
+  animation-duration: 5.6s;
+  animation-delay: -4s;
+}
+@keyframes sweep {
+  from {
+    transform: rotate(-24deg);
+  }
+  to {
+    transform: rotate(24deg);
+  }
+}
+.haze {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(60% 40% at 50% 60%, rgba(180, 255, 220, 0.08), transparent 70%);
+  animation: haze 4s ease-in-out infinite alternate;
+}
+@keyframes haze {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* Heads and raised hands in silhouette along the bottom edge, bobbing to the beat. */
+.crowd {
+  position: absolute;
+  left: -40px;
+  right: -40px;
+  bottom: -18px;
+  height: 120px;
+  background:
+    radial-gradient(circle at 28px 40px, #020403 17px, transparent 18px) 0 0 / 56px 120px repeat-x,
+    radial-gradient(circle at 14px 18px, #020403 13px, transparent 14px) 30px 22px / 74px 120px repeat-x,
+    linear-gradient(180deg, transparent 52px, #020403 58px);
+  animation: bob 0.52s ease-in-out infinite alternate;
+}
+@keyframes bob {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(6px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .beam,
+  .haze,
+  .crowd,
+  .hint span {
+    animation: none;
+  }
 }
