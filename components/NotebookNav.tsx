@@ -15,11 +15,21 @@ type NotebookNavProps = {
   hideBelow?: string;
 };
 
+// Plain anchors, not next/link: a same-page hash change must fire `hashchange`, which the hub listens to
+// (it scrolls to itself and filters to experience or projects). About scrolls to the about section.
 const LINKS = [
-  { href: "/#hello", label: "About" },
-  { href: "/#experience", label: "Experience" },
-  { href: "/#projects", label: "Projects" },
+  { hash: "about", label: "About" },
+  { hash: "experience", label: "Experience" },
+  { hash: "projects", label: "Projects" },
 ];
+
+/** Re-run the jump when the hash is already the one clicked (no hashchange fires then). */
+function jumpAgain(event: React.MouseEvent<HTMLAnchorElement>, hash: string) {
+  if (window.location.pathname !== "/" || window.location.hash !== `#${hash}`) return;
+  event.preventDefault();
+  const target = document.getElementById(hash) ?? document.getElementById("explore");
+  target?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 
 /** The notebook's top bar: four links on a paper strip. It steps aside while a world is being read. */
 export function NotebookNav({ mode, hideBelow }: NotebookNavProps) {
@@ -66,9 +76,17 @@ export function NotebookNav({ mode, hideBelow }: NotebookNavProps) {
       </button>
       <nav id="nb-nav-menu" className={`nb-nav-menu nb-paper ${open ? "is-open" : ""}`} aria-label="Site">
         {LINKS.map((link) => (
-          <Link key={link.href} href={link.href} className="nb-label" onClick={() => setOpen(false)}>
+          <a
+            key={link.hash}
+            href={`/#${link.hash}`}
+            className="nb-label"
+            onClick={(event) => {
+              setOpen(false);
+              jumpAgain(event, link.hash);
+            }}
+          >
             {link.label}
-          </Link>
+          </a>
         ))}
         <a href={`mailto:${contact.email}`} className="nb-btn nb-nav-contact">
           <Mail size={13} aria-hidden="true" />
