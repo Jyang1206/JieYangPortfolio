@@ -49,7 +49,7 @@ export const projects: Project[] = [
     shortDescription:
       "UI/UX, product and full-stack work on a rostering product: the web app and analytics rosterers use, spreadsheet import that matches messy staff names, and Telegram notifications for staff.",
     role: "UI/UX, product and full-stack",
-    dates: "2026",
+    dates: "Oct 2026 – present",
     category: "experience",
   },
   {

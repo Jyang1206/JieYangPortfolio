@@ -9,7 +9,7 @@ export const tariiStory: Story = {
   theme: "tarii",
   name: "Tarii",
   role: "UI/UX, product and full-stack",
-  dates: "2026",
+  dates: "Oct 2026 – present",
   place: "Rostering for hospital departments in Singapore",
   header: {
     word: "Tarii",
