@@ -77,7 +77,7 @@ export const projects: Project[] = [
   {
     slug: "guitar-scale-visualizer",
     worldId: "guitar",
-    title: "Guitar Scale Visualizer",
+    title: "Guitar Story",
     subtitle: "Scales drawn on your own fretboard",
     shortDescription:
       "A practice app that finds the fretboard in a webcam feed, overlays the notes of a scale, and listens to check what you played.",

@@ -4,6 +4,8 @@
 export type Brief = {
   /** One or two sentences: what the thing is. */
   what: string;
+  /** A short recognition shown beside the name, e.g. an award level. */
+  badge?: string;
   /** What I did, a few short lines. */
   did: string[];
   stack: string[];
@@ -56,6 +58,7 @@ export const briefs: Record<string, Brief> = {
     skills: ["Optical flow", "Camera calibration", "Image stitching", "GPU programming", "Real-time systems"],
   },
   guitar: {
+    badge: "Artemis level",
     what: "A practice app that finds the fretboard in your webcam, lights up the notes of a scale on your own guitar, and listens to check you played them. NUS Orbital, Artemis level.",
     did: [
       "Co-led the team as a software engineer",

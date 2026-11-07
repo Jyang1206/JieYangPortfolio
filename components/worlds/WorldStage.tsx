@@ -155,6 +155,7 @@ export function WorldStage({ worlds, index }: WorldStageProps) {
             </span>
             <h1 id="project-name" className="nb-brief-name">
               {shortName(world.name)}
+              {brief?.badge && <span className="nb-brief-badge">({brief.badge})</span>}
             </h1>
             {project && (
               <p className="nb-brief-meta">

@@ -2962,6 +2962,17 @@
 .nb-project[data-world="guitar"] .nb-brief-name {
   font-style: italic;
 }
+.nb-brief-badge {
+  display: block;
+  margin-top: 6px;
+  color: var(--b-accent);
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
 .nb-brief-meta {
   margin: 8px 0 0;
   color: var(--b-accent);

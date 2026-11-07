@@ -112,7 +112,7 @@ export const worlds: World[] = [
   },
   {
     id: "guitar",
-    name: "Guitar Scale Visualizer",
+    name: "Guitar Story",
     place: "NUS Orbital 2025 · Artemis",
     role: "Software engineer and co-lead",
     excerpt:

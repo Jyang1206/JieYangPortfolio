@@ -27,7 +27,7 @@ export const categoryLabel = (worldId: string) => CATEGORIES.find((c) => c.id ==
 export const categoryShort = (worldId: string) => CATEGORIES.find((c) => c.id === categoryOf(worldId))?.short ?? "Project";
 
 /** Short names for tabs and the hub. */
-export const shortName = (name: string) => (name === "Guitar Scale Visualizer" ? "Guitar" : name);
+export const shortName = (name: string) => name;
 
 /** A world's page: its project story, with the live world on top. */
 export const worldHref = (id: string) => `/projects/${projects.find((project) => project.worldId === id)?.slug ?? id}`;

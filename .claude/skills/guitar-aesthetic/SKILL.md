@@ -1,9 +1,9 @@
 ---
 name: guitar-aesthetic
-description: Use when designing, writing or reviewing anything for the Guitar Scale Visualizer world, its hub slice or its story page in this portfolio. Holds what the project is, its links and facts, and its warm stage identity.
+description: Use when designing, writing or reviewing anything for the Guitar Story world, its hub slice or its story page in this portfolio. Holds what the project is, its links and facts, and its warm stage identity.
 ---
 
-# Guitar Scale Visualizer (Code Chords / Guitar Story)
+# Guitar Story (Code Chords), Artemis level
 
 ## What it is
 A practice app that watches your fretboard through a webcam, lights up where the notes of a scale are, and listens to check you played them.
