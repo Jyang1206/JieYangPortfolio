@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+  <!-- Diagonal corner tape (45 deg), cream with faint ruled stripes, torn ends. Place over a photo corner. -->
+  <defs>
+    <pattern id="st" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="6" height="1" fill="#1f4fff" fill-opacity="0.12"/>
+    </pattern>
+    <filter id="t" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" seed="4" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.3  0 0 0 0 0.25  0 0 0 0 0.15  0 0 0 -1 0.62" result="g"/>
+      <feComposite in="g" in2="SourceGraphic" operator="in"/>
+    </filter>
+  </defs>
+  <g transform="rotate(-45 60 60)">
+    <path id="s" d="M-6 46 L0 41 L3 47 L-2 51 L2 56 L-4 61 L1 66 L-3 71 L2 76 L-2 81 L122 79 L117 74 L123 68 L118 63 L124 58 L119 53 L125 48 L120 43 L124 39 Z"/>
+    <use href="#s" fill="#efe6cf" fill-opacity="0.8"/>
+    <use href="#s" fill="url(#st)"/>
+    <use href="#s" fill="#000" filter="url(#t)" opacity="0.9"/>
+  </g>
+</svg>

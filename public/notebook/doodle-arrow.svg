@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="140" height="60" viewBox="0 0 140 60" fill="none" stroke="#1f4fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Annotation arrow, left to right with a lazy curve. Flip with transform: scaleX(-1) to point left. -->
+  <filter id="w" x="-5%" y="-10%" width="110%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="1" seed="10" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G"/></filter>
+  <g filter="url(#w)">
+    <path d="M8 44 C 40 40, 70 14, 128 20"/>
+    <path d="M114 10 L 128 20 L 112 28"/>
+  </g>
+</svg>

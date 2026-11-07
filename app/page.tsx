@@ -1,33 +1,37 @@
-import { LandingHero } from "../components/home/LandingHero";
-import { AboutScroller } from "../components/home/AboutScroller";
-import { MjswanSimEmbed } from "../components/home/MjswanSimEmbed";
-import { ProjectGalaxy } from "../components/home/ProjectGalaxy";
-import { SystemsShowcase } from "../components/home/SystemsShowcase";
-import { aboutPanels } from "../data/about";
-import { homeIntro, projects } from "../data/projects";
+import { ChooseYourJieYang } from "../components/about";
+import { ContactLinks } from "../components/ContactLinks";
+import { NotebookNav } from "../components/NotebookNav";
+import { HomeStage } from "../components/worlds/HomeStage";
+import { AboutSection } from "../components/worlds/notebook/AboutSection";
+import { worlds } from "../data/worlds";
 
 export default function HomePage() {
-  const workItems = [
-    ...projects.filter((project) => project.category === "experience"),
-    ...projects.filter((project) => project.category === "project"),
-  ];
-
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-950">
-      <LandingHero copy={homeIntro} featuredProject={workItems[0]} />
-      <MjswanSimEmbed />
-      <ProjectGalaxy projects={workItems} />
-      <SystemsShowcase projects={workItems} />
-      <AboutScroller panels={aboutPanels} />
-      <footer id="contact" className="border-t border-slate-200 bg-white px-6 py-10">
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 text-sm text-slate-600 md:flex-row md:items-center md:justify-between">
-          <p>Jie Yang · Robotics, automation, and human-centered systems</p>
-          <a
-            className="w-fit rounded-full border border-slate-300 bg-white px-4 py-2 text-slate-800 transition hover:border-sky-400 hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
-            href="mailto:ngjyang@u.nus.edu"
-          >
-            Contact
-          </a>
+    <main className="min-h-screen bg-ink">
+      <NotebookNav mode="home" hideBelow="explore" />
+      <ChooseYourJieYang />
+      <AboutSection />
+      <HomeStage worlds={worlds} />
+
+      <footer id="contact" className="nb-cover nb-paper nb-back">
+        <div className="nb-cover-corners">
+          <p className="nb-label">
+            <b>Let&rsquo;s talk</b>
+          </p>
+          <p className="nb-label right">
+            Jie Yang, NUS Computer Science
+            <br />
+            Singapore
+          </p>
+        </div>
+        <div className="nb-back-main">
+          <h2 className="nb-display nb-back-title">Write to me.</h2>
+          <p className="nb-back-note">Email is the fastest way to reach me. My resume, LinkedIn and GitHub are here too.</p>
+          <ContactLinks tone="dark" className="nb-back-links" />
+        </div>
+        <div className="nb-cover-foot">
+          <span className="nb-mono">Jie Yang, 2026</span>
+          <span className="nb-mono">press 1&ndash;6 to jump to a place</span>
         </div>
       </footer>
     </main>

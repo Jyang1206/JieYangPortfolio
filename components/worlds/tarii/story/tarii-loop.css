@@ -1,0 +1,1106 @@
+/* Tarii's phone and desk calendar, as a self-running loop. Palette: Still
+   water (Tarii's design kit). The desk calendar, characters, speech bubbles
+   and handset are ported from the Tarii site's "How it works" stage
+   (how-story.css).
+
+   Scoping: every rule sits under `.tsy` and every keyframe is prefixed
+   `tsy-`, so nothing reaches the rest of the portfolio. Breakpoints are
+   container queries on `.tsy` (the loop's own width), since it sits in a
+   column rather than the whole window. */
+
+.tsy {
+  container: tsy / inline-size;
+  position: relative;
+  --hs-ink: #173d3c;
+  --hs-teal: #315a60;
+  --hs-sage: #6da796;
+  --hs-mint: #e3f1eb;
+  --hs-paper: #fbfcf9;
+  --hs-line: #dbe6e0;
+  --hs-muted: #53706e;
+  --hs-ease: cubic-bezier(0.45, 0, 0.2, 1);
+  color: var(--hs-ink);
+  font-family: var(--font-tarii);
+  -webkit-font-smoothing: antialiased;
+}
+.tsy :is(p, button, strong, em, li, ol) {
+  font-family: inherit;
+}
+.tsy .tarii-word {
+  display: inline-block;
+  height: 0.857em;
+  width: auto;
+  max-width: none;
+  vertical-align: baseline;
+  border: 0;
+}
+
+/* The stage: one off-white card over the portfolio's 3D world. */
+.tsy .tsy-stage {
+  position: relative;
+  height: clamp(540px, 74svh, 700px);
+  overflow: hidden;
+  border: 1px solid var(--hs-line);
+  border-radius: 18px;
+  background: var(--hs-paper);
+  box-shadow: 0 30px 80px -30px rgb(23 61 60 / 0.55), 0 1px 3px rgb(23 61 60 / 0.12);
+  isolation: isolate;
+}
+.tsy .tsy-floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2%;
+  height: 14%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(23 61 60 / 0.12), transparent);
+}
+
+/* The caption: which moment, in words. */
+.tsy .tsy-caption {
+  position: absolute;
+  top: 26px;
+  left: 30px;
+  z-index: 30;
+  width: min(400px, 38%);
+  pointer-events: none;
+}
+.tsy .tsy-eyebrow {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--hs-ink);
+}
+.tsy .tsy-count {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--hs-muted);
+}
+.tsy .tsy-caption-in {
+  animation: tsy-pop 0.5s var(--hs-ease) both;
+}
+.tsy .tsy-title {
+  margin: 10px 0 0;
+  font-size: clamp(1.35rem, 2.6cqw, 1.875rem);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--hs-ink);
+}
+.tsy .tsy-text {
+  margin: 8px 0 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--hs-muted);
+}
+.tsy .tsy-dots {
+  display: flex;
+  gap: 6px;
+  margin-top: 14px;
+}
+.tsy .tsy-dots i {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgb(49 90 96 / 0.22);
+  transition: width 0.4s var(--hs-ease), background 0.3s ease;
+}
+.tsy .tsy-dots i.is-done {
+  background: rgb(49 90 96 / 0.55);
+}
+.tsy .tsy-dots i.is-on {
+  width: 24px;
+  background: var(--hs-teal);
+}
+
+/* The scene: every position is a % of the stage. */
+.tsy .tsy-scene {
+  position: absolute;
+  inset: 0;
+  perspective: 1400px;
+}
+.tsy .tsy-plant {
+  position: absolute;
+  left: 1.5%;
+  bottom: 4%;
+  z-index: 3;
+  width: 7%;
+  max-width: none;
+}
+
+/* The desk calendar, floating. Pointer readings (--hs-tx, --hs-ty, -0.5 to
+   0.5) turn it towards the pointer; at rest it stands turned a little. */
+.tsy .hs-device {
+  position: absolute;
+  left: 7%;
+  right: 35%;
+  top: 33%;
+  bottom: 15%;
+  z-index: 5;
+  transform-style: preserve-3d;
+  transform: rotateY(calc(var(--hs-tx, 0) * 40deg - 12deg))
+    rotateX(calc(var(--hs-ty, 0) * -26deg + 6deg));
+  transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  animation: tsy-bob 6.5s ease-in-out infinite;
+}
+.tsy .hs-calendar {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+/* The back board leans away like a desk easel. */
+.tsy .hs-cal-back {
+  position: absolute;
+  inset: 3% 2% 0;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #2b5a55, #163b39);
+  transform-origin: 50% 0;
+  transform: translateZ(-34px) translateY(2%);
+  box-shadow: 0 50px 60px -30px rgb(23 61 60 / 0.55);
+}
+/* Paper thickness: the page stack on the right edge and along the bottom. */
+.tsy .hs-cal-side,
+.tsy .hs-cal-base {
+  position: absolute;
+}
+.tsy .hs-cal-side {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 16px;
+  border-radius: 0 6px 6px 0;
+  transform-origin: 100% 50%;
+  transform: rotateY(-90deg);
+  background: repeating-linear-gradient(90deg, #f6f8f5 0 2px, #d8e0dc 2px 3px);
+}
+.tsy .hs-cal-base {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 16px;
+  transform-origin: 50% 100%;
+  transform: rotateX(90deg);
+  background: repeating-linear-gradient(180deg, #f6f8f5 0 2px, #d8e0dc 2px 3px);
+}
+.tsy .hs-cal-paper {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  display: flex;
+  flex-direction: column;
+  padding: 6% 3.5% 3%;
+  border-radius: 12px;
+  background: var(--hs-paper);
+  box-shadow: 0 1px 0 #fff inset, 0 3px 0 -1px #e9eee9, 0 6px 0 -2px #dfe7e2,
+    0 30px 60px -30px rgb(23 61 60 / 0.45);
+}
+.tsy .hs-rings {
+  position: absolute;
+  top: -14px;
+  left: 6%;
+  right: 6%;
+  display: flex;
+  justify-content: space-between;
+}
+.tsy .hs-rings i {
+  width: 9px;
+  height: 26px;
+  border: 2.5px solid #9aa7a4;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #f3f5f4, #b9c3c0);
+}
+.tsy .hs-cal-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 2.5%;
+}
+.tsy .hs-cal-head p {
+  flex: 1;
+  margin: 0;
+  font-size: clamp(1rem, 1.9cqw, 1.5rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--hs-ink);
+}
+.tsy .hs-cal-head p span {
+  color: var(--hs-sage);
+}
+.tsy .hs-cal-head > .tarii-word {
+  height: 18px;
+}
+.tsy .hs-published {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--hs-teal);
+  animation: tsy-pop 0.5s var(--hs-ease) both;
+}
+.tsy .hs-cal-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-rows: auto repeat(5, minmax(0, 1fr));
+  gap: 3px;
+}
+.tsy .hs-weekday {
+  padding-bottom: 4px;
+  font-size: 0.625rem;
+  font-weight: 500;
+  color: #7b918c;
+}
+.tsy .hs-weekday:nth-child(n + 6) {
+  color: var(--hs-sage);
+}
+.tsy .hs-day,
+.tsy .hs-blank {
+  position: relative;
+  min-width: 0;
+  border: 1px solid #edf1ee;
+  border-radius: 6px;
+  background: #fff;
+}
+.tsy .hs-blank {
+  background: transparent;
+  border-style: dashed;
+  border-color: #f0f3f1;
+}
+.tsy .hs-day {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 3px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.tsy .hs-day b {
+  font-size: 0.625rem;
+  font-weight: 500;
+  color: #6f8580;
+}
+.tsy .hs-day-busy:hover {
+  z-index: 4;
+  overflow: visible;
+  background: var(--hs-mint);
+  transform: translateZ(8px) scale(1.05);
+}
+.tsy .hs-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  padding: 2px 4px;
+  border-radius: 5px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--hs-ink);
+  background: #e3f1eb;
+}
+.tsy .hs-card svg {
+  flex: none;
+}
+/* The request label takes its own line under the icon and face. */
+.tsy .hs-card em {
+  order: 3;
+  flex: 1 0 100%;
+  min-width: 0;
+  font-style: normal;
+  line-height: 1.2;
+}
+.tsy .hs-card img {
+  flex: none;
+  margin-left: auto;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+/* Shift cards stay quiet: icon and face only, so requests read first. */
+.tsy .hs-card-day em,
+.tsy .hs-card-night em {
+  display: none;
+}
+.tsy .hs-card-day,
+.tsy .hs-card-night {
+  justify-content: space-between;
+}
+.tsy .hs-card-leave {
+  background: #fbe3e7;
+  color: #8a3446;
+}
+.tsy .hs-card-off {
+  background: #fdf0d5;
+  color: #7a5517;
+}
+.tsy .hs-card-pref {
+  background: #e7ecfb;
+  color: #34467a;
+}
+.tsy .hs-card-night {
+  background: #dfe9ec;
+}
+.tsy .hs-card-sick {
+  background: #fbe3e7;
+  color: #8a3446;
+  text-decoration: line-through;
+}
+.tsy .hs-card-cover {
+  background: var(--hs-teal);
+  color: #fff;
+}
+.tsy .hs-card-new {
+  animation: tsy-drop 0.6s var(--hs-ease) var(--hs-delay, 0ms) both;
+}
+.tsy .hs-tip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  z-index: 5;
+  display: none;
+  width: max-content;
+  max-width: 180px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  color: #fff;
+  background: var(--hs-ink);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.tsy .hs-tip strong {
+  display: block;
+  font-weight: 600;
+}
+.tsy .hs-day:hover .hs-tip {
+  display: block;
+}
+/* The open seat on the sick day pulses until it is taken. */
+.tsy .hs-day-swap {
+  z-index: 4;
+  animation: tsy-ring 1.4s ease-out 0.2s infinite both;
+}
+
+/* The planner's side of the moment: one real screen hovering by the
+   calendar. Hover or focus enlarges it. */
+.tsy .tsy-float {
+  position: absolute;
+  top: 7%;
+  right: 33%;
+  z-index: 18;
+  width: 21%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+  transform-origin: 100% 0;
+  transition: transform 0.35s var(--hs-ease);
+  animation: tsy-rise 0.6s var(--hs-ease) 0.4s both, tsy-bob 5.5s ease-in-out 1s infinite;
+}
+.tsy .tsy-float-frame {
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--hs-line);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 18px 40px -22px rgb(23 61 60 / 0.55);
+}
+.tsy .tsy-float img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.tsy .tsy-float:hover,
+.tsy .tsy-float:focus-visible {
+  z-index: 50;
+  outline: none;
+  transform: scale(2.1);
+}
+.tsy .tsy-float:focus-visible .tsy-float-frame {
+  outline: 3px solid var(--hs-teal);
+  outline-offset: 2px;
+}
+
+/* Characters. x of the feet is a % of the stage. */
+.tsy .hs-actor {
+  position: absolute;
+  left: var(--hs-ax);
+  bottom: 3%;
+  z-index: 16;
+  height: 34%;
+  width: max-content;
+  transform: translateX(-50%);
+  transition: left 1s linear, opacity 0.5s ease;
+}
+.tsy .hs-actor > img,
+.tsy .hs-walk {
+  display: block;
+  height: 100%;
+  width: auto;
+  max-width: none;
+  aspect-ratio: 160 / 182;
+  transform-origin: 50% 100%;
+}
+.tsy .hs-walk {
+  position: relative;
+}
+/* Four walk frames in turn. */
+.tsy .hs-walk img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  opacity: 0;
+  animation: tsy-frame 0.56s steps(1) infinite;
+}
+.tsy .hs-walk img:nth-child(2) {
+  animation-delay: -0.42s;
+}
+.tsy .hs-walk img:nth-child(3) {
+  animation-delay: -0.28s;
+}
+.tsy .hs-walk img:nth-child(4) {
+  animation-delay: -0.14s;
+}
+.tsy .hs-actor:not(.hs-walking) > img {
+  animation: tsy-breathe 3.6s ease-in-out infinite;
+}
+.tsy .hs-actor-jo > img {
+  animation-delay: -1.2s;
+}
+.tsy .hs-actor-alex > img {
+  animation-delay: -2.4s;
+}
+.tsy .hs-actor:hover > img {
+  animation: tsy-hop 0.5s var(--hs-ease);
+}
+.tsy .hs-flip {
+  scale: -1 1;
+}
+.tsy .hs-out {
+  opacity: 0;
+}
+/* Waiting off stage: moved with no walk, unseen. */
+.tsy .hs-parked {
+  opacity: 0;
+  transition: none;
+}
+.tsy .hs-say {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 4px);
+  width: max-content;
+  max-width: 200px;
+  padding: 8px 12px;
+  border: 1px solid var(--hs-line);
+  border-radius: 14px 14px 14px 4px;
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  color: var(--hs-ink);
+  background: #fff;
+  box-shadow: 0 8px 24px -14px rgb(23 61 60 / 0.45);
+  transform: translateX(-20%);
+  animation: tsy-pop 0.45s var(--hs-ease) 0.15s both;
+}
+.tsy .hs-say-left .hs-say {
+  border-radius: 14px 14px 4px 14px;
+  transform: translateX(-80%);
+}
+.tsy .hs-tag {
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  display: none;
+  padding: 3px 9px;
+  border-radius: 99px;
+  font-size: 0.6875rem;
+  white-space: nowrap;
+  color: #fff;
+  background: var(--hs-ink);
+  transform: translateX(-50%);
+}
+.tsy .hs-tag strong {
+  margin-right: 5px;
+  font-weight: 600;
+}
+.tsy .hs-actor:hover .hs-tag {
+  display: block;
+}
+
+/* The member's phone. Pointer readings (--hs-px, --hs-py) turn it. */
+.tsy .tsy-phone {
+  position: absolute;
+  top: 6%;
+  bottom: 6%;
+  right: 4%;
+  z-index: 20;
+  width: 27%;
+  display: flex;
+  justify-content: center;
+  perspective: 900px;
+  animation: tsy-bob 5.2s ease-in-out -2s infinite;
+}
+.tsy .hs-handset-frame {
+  position: relative;
+  height: 100%;
+  max-width: 100%;
+  aspect-ratio: 0.5;
+  padding: 11px;
+  border-radius: 46px;
+  background: linear-gradient(145deg, #34403f, #161e1d 55%, #2a3433);
+  box-shadow: 0 40px 60px -30px rgb(23 61 60 / 0.6), inset 0 0 0 1.5px rgb(255 255 255 / 0.14),
+    inset 0 0 0 4px #10171a;
+  transform-style: preserve-3d;
+  transform: rotateY(calc(var(--hs-px, 0) * 44deg - 8deg)) rotateX(calc(var(--hs-py, 0) * -28deg));
+  transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+/* Body thickness: two metal layers behind the face show as the edge. */
+.tsy .hs-handset-frame::before,
+.tsy .hs-handset-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.tsy .hs-handset-frame::before {
+  background: linear-gradient(90deg, #a9b6b3, #6f7d7b 50%, #a9b6b3);
+  transform: translateZ(-7px);
+}
+.tsy .hs-handset-frame::after {
+  background: linear-gradient(90deg, #8c9997, #56625f 50%, #8c9997);
+  transform: translateZ(-14px);
+}
+.tsy .hs-handset-key {
+  position: absolute;
+  width: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #1b2423, #3d4847);
+}
+.tsy .hs-handset-key-a {
+  top: 17%;
+  left: -3px;
+  height: 5%;
+}
+.tsy .hs-handset-key-b {
+  top: 25%;
+  left: -3px;
+  height: 9%;
+}
+.tsy .hs-handset-key-c {
+  top: 22%;
+  right: -3px;
+  height: 13%;
+}
+.tsy .hs-handset-screen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 36px;
+  background: #fbfcf9;
+}
+.tsy .hs-handset-status {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  height: 38px;
+  padding: 4px 22px 0 28px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #10171a;
+}
+.tsy .hs-handset-icons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.tsy .hs-handset-island {
+  position: absolute;
+  top: 9px;
+  left: 50%;
+  width: 30%;
+  height: 22px;
+  border-radius: 999px;
+  background: #0b1012;
+  translate: -50% 0;
+}
+.tsy .hs-handset-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    115deg,
+    transparent calc(30% + var(--hs-px, 0) * 60%),
+    rgb(255 255 255 / 0.24) calc(42% + var(--hs-px, 0) * 60%),
+    transparent calc(54% + var(--hs-px, 0) * 60%)
+  );
+  pointer-events: none;
+}
+.tsy .hs-handset-home {
+  position: absolute;
+  left: 50%;
+  bottom: 7px;
+  z-index: 3;
+  width: 34%;
+  height: 4px;
+  border-radius: 999px;
+  background: rgb(16 23 26 / 0.75);
+  translate: -50% 0;
+}
+/* The phone's screens cross-fade in place. */
+.tsy .tsy-screens {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+.tsy .tsy-screens > * {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.tsy .tsy-screens > img {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: top;
+}
+.tsy .tsy-screens > .is-on {
+  opacity: 1;
+}
+
+/* The cover request, drawn in the phone's own style. */
+.tsy .tsy-cover {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #eef5f1;
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+.tsy .tsy-cover p {
+  margin: 0;
+}
+.tsy .tsy-cover-top {
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--hs-line);
+  font-size: 1rem;
+  font-weight: 600;
+}
+.tsy .tsy-cover-label {
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b8a83;
+}
+.tsy .tsy-cover-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid #c8d8d1;
+  border-radius: 12px;
+  background: #fff;
+}
+.tsy .tsy-cover-who {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tsy .tsy-cover-who img {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+}
+.tsy .tsy-cover-who span {
+  display: flex;
+  flex-direction: column;
+}
+.tsy .tsy-cover-who em {
+  font-style: normal;
+  color: var(--hs-muted);
+}
+.tsy .tsy-cover-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tsy .tsy-cover-yes,
+.tsy .tsy-cover-no {
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+.tsy .tsy-cover-yes {
+  color: #fff;
+  background: var(--hs-teal);
+  animation: tsy-press 2s ease-in-out both;
+}
+.tsy .tsy-cover-no {
+  border: 1px solid #c8d8d1;
+  color: var(--hs-muted);
+}
+.tsy .tsy-cover-done {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--hs-teal);
+  animation: tsy-pop 0.4s var(--hs-ease) both;
+}
+.tsy .tsy-cover-row {
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #fff;
+}
+
+/* The six moments written out: for screen readers, and shown under the
+   settled stage with reduced motion. */
+.tsy .tsy-steps {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.tsy[data-calm] .tsy-steps {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip-path: none;
+  white-space: normal;
+  display: grid;
+  gap: 10px;
+  margin: 14px 0 0;
+  padding: 22px 26px 22px 46px;
+  border-radius: 14px;
+  background: #f7faf8;
+  box-shadow: 0 24px 60px -24px rgb(23 61 60 / 0.45);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  list-style: decimal;
+}
+.tsy[data-calm] .tsy-steps strong {
+  font-weight: 600;
+}
+
+/* Narrow (phones, small tablets): the caption on top, the calendar under
+   it, the phone standing at the bottom right over the calendar's corner, and
+   the people at the bottom left. */
+@container tsy (max-width: 719px) {
+  .tsy .tsy-stage {
+    height: 700px;
+  }
+  .tsy .tsy-caption {
+    top: 18px;
+    left: 18px;
+    right: 18px;
+    width: auto;
+  }
+  .tsy .tsy-title {
+    margin-top: 6px;
+    font-size: 1.2rem;
+  }
+  .tsy .tsy-text {
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+  .tsy .tsy-dots {
+    margin-top: 10px;
+  }
+  .tsy .hs-device {
+    top: 196px;
+    bottom: auto;
+    left: 5%;
+    right: 5%;
+    height: 230px;
+    transform: rotateY(calc(var(--hs-tx, 0) * 30deg - 8deg)) rotateX(6deg);
+  }
+  .tsy .hs-cal-paper {
+    padding: 7% 3% 3%;
+  }
+  .tsy .hs-rings {
+    top: -10px;
+  }
+  .tsy .hs-rings i {
+    width: 6px;
+    height: 18px;
+    border-width: 2px;
+  }
+  .tsy .hs-rings i:nth-child(2n) {
+    display: none;
+  }
+  .tsy .hs-cal-head {
+    gap: 6px;
+  }
+  .tsy .hs-cal-head > .tarii-word {
+    display: none;
+  }
+  .tsy .hs-published {
+    padding: 2px 7px;
+    font-size: 0.625rem;
+  }
+  .tsy .hs-cal-grid {
+    gap: 2px;
+  }
+  .tsy .hs-weekday {
+    padding-bottom: 2px;
+    font-size: 0.5625rem;
+  }
+  .tsy .hs-day {
+    padding: 2px;
+    border-radius: 4px;
+  }
+  .tsy .hs-day b {
+    font-size: 0.5625rem;
+    line-height: 1;
+  }
+  .tsy .hs-card {
+    gap: 2px;
+    padding: 1px 2px;
+    border-radius: 3px;
+  }
+  .tsy .hs-card em {
+    display: none;
+  }
+  .tsy .hs-card svg {
+    width: 8px;
+    height: 8px;
+  }
+  .tsy .hs-card img {
+    width: 11px;
+    height: 11px;
+  }
+  .tsy .tsy-float,
+  .tsy .tsy-plant {
+    display: none;
+  }
+  .tsy .tsy-phone {
+    top: auto;
+    bottom: 16px;
+    right: 5%;
+    width: 40%;
+    height: 270px;
+    justify-content: flex-end;
+  }
+  .tsy .hs-handset-frame {
+    padding: 6px;
+    border-radius: 26px;
+  }
+  .tsy .hs-handset-screen {
+    border-radius: 21px;
+  }
+  .tsy .hs-handset-status {
+    height: 24px;
+    padding: 2px 12px 0 16px;
+    font-size: 0.5625rem;
+  }
+  .tsy .hs-handset-status svg {
+    width: 9px;
+    height: 9px;
+  }
+  .tsy .hs-handset-island {
+    top: 6px;
+    height: 13px;
+  }
+  .tsy .tsy-cover {
+    gap: 5px;
+    padding: 6px 7px;
+    font-size: 0.5625rem;
+  }
+  .tsy .tsy-cover-top {
+    padding-bottom: 4px;
+    font-size: 0.75rem;
+  }
+  .tsy .tsy-cover-label {
+    font-size: 0.5rem;
+  }
+  .tsy .tsy-cover-card {
+    gap: 5px;
+    padding: 6px;
+    border-radius: 8px;
+  }
+  .tsy .tsy-cover-who img {
+    width: 20px;
+    height: 20px;
+  }
+  .tsy .tsy-cover-yes,
+  .tsy .tsy-cover-no,
+  .tsy .tsy-cover-done {
+    padding: 3px 6px;
+  }
+  .tsy .tsy-floor {
+    bottom: 0;
+  }
+  /* People stand in the bottom-left band, beside the phone and clear of it
+     (the phone stands in front of the whole scene). */
+  .tsy .hs-actor {
+    left: clamp(-20%, calc(var(--hs-ax) * 0.44 + 12%), 40%);
+    bottom: 14px;
+    height: 116px;
+  }
+  .tsy .hs-say,
+  .tsy .hs-say-left .hs-say {
+    max-width: 120px;
+    padding: 6px 9px;
+    font-size: 0.6875rem;
+    transform: translateX(-30%);
+  }
+  /* The right-hand speaker talks a row higher, clear of the left one. */
+  .tsy .hs-say-left .hs-say {
+    bottom: calc(100% + 46px);
+    transform: translateX(-60%);
+  }
+}
+
+@keyframes tsy-bob {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -8px;
+  }
+}
+@keyframes tsy-breathe {
+  0%,
+  100% {
+    scale: 1 1;
+  }
+  50% {
+    scale: 1.015 0.99;
+  }
+}
+/* Pieces come in with a fade and a short slide, never a change of size. */
+@keyframes tsy-pop {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}
+@keyframes tsy-rise {
+  from {
+    opacity: 0;
+    translate: 0 16px;
+  }
+}
+@keyframes tsy-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+@keyframes tsy-frame {
+  0% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0;
+  }
+}
+@keyframes tsy-hop {
+  50% {
+    transform: translateY(-5%);
+  }
+}
+@keyframes tsy-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgb(49 90 96 / 0.55);
+  }
+  60% {
+    box-shadow: 0 0 0 10px rgb(49 90 96 / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 2px rgb(49 90 96 / 0.6);
+  }
+}
+/* The phone's button is pressed just before the cover lands. */
+@keyframes tsy-press {
+  0%,
+  80% {
+    scale: 1;
+    box-shadow: none;
+  }
+  88% {
+    scale: 0.94;
+    box-shadow: 0 0 0 4px rgb(49 90 96 / 0.25);
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tsy *,
+  .tsy *::before,
+  .tsy *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Simple phone screen (portfolio page): shifts as a plain list. */
+.tsy .tsy-simple {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: #eef5f1;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  opacity: 1;
+}
+.tsy .tsy-simple p {
+  margin: 0;
+}
+.tsy .tsy-simple-month {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.tsy .tsy-simple ul {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tsy .tsy-simple li {
+  display: grid;
+  grid-template-columns: 3.6em 1fr auto;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 1px 0 var(--hs-line);
+}
+.tsy .tsy-simple li span:first-child {
+  color: var(--hs-muted);
+}
+.tsy .tsy-simple li span:last-child {
+  color: var(--hs-teal);
+  font-weight: 700;
+}

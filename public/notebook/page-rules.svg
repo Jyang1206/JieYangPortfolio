@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="8" height="32" viewBox="0 0 8 32">
+  <!-- Ruled lines, one every 32px. Tile with repeat; align the body line-height to 32px (or 2 lines of 16px). -->
+  <rect x="0" y="31" width="8" height="1" fill="#1f4fff" fill-opacity="0.22"/>
+</svg>

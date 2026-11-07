@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="40" viewBox="0 0 400 40" preserveAspectRatio="none">
+  <!-- Torn paper edge for mask-image. Opaque white = kept paper, transparent = torn away. Tiles horizontally: starts and ends at y=14.
+       Use as the BOTTOM edge: mask-image: linear-gradient(#000, #000) top / 100% calc(100% - 40px) no-repeat, url(torn-edge.svg) bottom / 400px 40px repeat-x.
+       Flip with transform for a top edge. -->
+  <path fill="#fff" d="M0 0 H400 V14 L392 17 L386 24 L378 20 L369 27 L360 23 L352 31 L343 26 L334 29 L326 22 L318 28 L309 33 L300 27 L291 30 L282 24 L273 29 L266 36 L257 30 L249 33 L240 26 L231 31 L222 28 L214 34 L205 29 L196 23 L188 27 L180 32 L171 27 L162 30 L154 24 L145 28 L137 35 L128 29 L120 32 L111 26 L103 30 L94 25 L86 31 L77 28 L69 34 L60 29 L52 23 L43 27 L35 32 L26 26 L18 22 L9 18 L0 14 Z"/>
+</svg>

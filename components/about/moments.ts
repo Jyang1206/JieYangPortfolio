@@ -1,0 +1,45 @@
+import type { StageScene } from "./drumScene";
+
+/* The hero's click-through "sides of me". Add a photo by adding an entry; order is the click order,
+   and the first entry is what loads first. Each moment lists candidate files, tried in order. If none
+   loads, a moment with `placeholder` initials shows them in a white-outlined print; any other moment
+   is skipped. */
+export type HeroMoment = {
+  id: string;
+  /* Short name used in "Next photo: <label>" and the progress dots. */
+  label: string;
+  title: string;
+  line: string;
+  srcs: string[];
+  alt: string;
+  /* Initials shown in place of the photo while none of `srcs` exists. */
+  placeholder?: string;
+  /* Where the face sits, so object-fit: cover keeps it in frame. */
+  objectPosition: string;
+  /* What the green arch does behind this photo. */
+  scene: StageScene;
+};
+
+export const heroMoments: HeroMoment[] = [
+  {
+    id: "hello",
+    label: "Portrait",
+    title: "Software Engineer",
+    line: "Robotics, AI, backends and interfaces.",
+    srcs: ["/images/me/portrait.webp"],
+    alt: "Portrait of Jie Yang in Paris.",
+    placeholder: "JY",
+    objectPosition: "50% 30%",
+    scene: "calm",
+  },
+  {
+    id: "supernova",
+    label: "Supernova 2025",
+    title: "Drummer",
+    line: "I also enjoy drumming and performing in a band! I won second runner-up at NUS Supernova 2025.",
+    srcs: ["/images/me/supernova-award.webp"],
+    alt: "Jie Yang smiling on an outdoor festival stage under green stage lights, holding an award and a pair of drumsticks, with a crowd behind him.",
+    objectPosition: "50% 50%",
+    scene: "drums",
+  },
+];
