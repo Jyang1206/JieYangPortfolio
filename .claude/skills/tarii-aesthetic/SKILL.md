@@ -11,7 +11,7 @@ A rostering product for hospital departments and other shift teams. Staff send l
 - Category: **Professional experience**. Role: Software Engineer Intern (UI/UX, product and full-stack work). Oct 2026 – present.
 - Jie Yang did a lot of the UI/UX and product work: the web app and the analytics rosterers use to review a roster; spreadsheet import that matches staff names written in shortened or reordered forms; staff notifications through a Telegram bot ahead of a full mobile app.
 - Never name real hospitals or clients ("a hospital department in Singapore" at most). Never claim perfect rosters, guaranteed fairness, automatic approval or unverified time savings. Voice: "the lead decides".
-- Repo: private (company). Site: https://tarii-site.pages.dev
+- Repo: private (company). Site: https://tarii-time.com
 - Source of truth: the Tarii repo `C:\Users\Admin\Desktop\Tarii\saas-roster` (`docs/design/tarii-design-kit.md`).
 
 ## Assets

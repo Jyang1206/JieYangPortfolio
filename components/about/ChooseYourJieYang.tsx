@@ -12,6 +12,8 @@ import {
   type PointerEvent,
   type SyntheticEvent,
 } from "react";
+import { tagline } from "../../data/profile";
+import { ContactLinks } from "../ContactLinks";
 import { DrumStage } from "./DrumStage";
 import { heroMoments, type HeroMoment } from "./moments";
 import styles from "./ChooseYourJieYang.module.css";
@@ -232,6 +234,10 @@ export function ChooseYourJieYang({
               </p>
             </div>
           )}
+
+          {/* Who I am in a line, and how to reach me, without scrolling. */}
+          <p className={styles.tagline}>{tagline}</p>
+          <ContactLinks tone={current?.id === "supernova" ? "light" : "dark"} className={styles.contact} />
         </div>
 
         <div className={styles.visual}>

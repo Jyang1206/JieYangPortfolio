@@ -1,23 +1,12 @@
-import { greeting, interests, languages, skills, tagline } from "../../../data/profile";
-import { ContactLinks } from "../../ContactLinks";
+import { interests, languages, skills } from "../../../data/profile";
 import { AtAGlance } from "./AtAGlance";
 import { SkillTiles } from "./SkillTiles";
 
-/** Who I am and what I work with: greeting and tagline, the at-a-glance list, three interests, and the skill tiles. */
+/** What I have done and work with: the at-a-glance list, three interests and the skill tiles. The hero holds the intro and contact links. */
 export function AboutSection() {
   return (
-    <section id="about" className="nb-about nb-paper" aria-labelledby="about-title">
+    <section id="about" className="nb-about nb-paper" aria-label="About">
       <div className="nb-about-inner">
-        <div className="nb-intro">
-          <div>
-            <p id="about-title" className="nb-hand nb-intro-greeting">
-              {greeting}
-            </p>
-            <p className="nb-intro-tagline">{tagline}</p>
-          </div>
-          <ContactLinks tone="dark" />
-        </div>
-
         <AtAGlance />
 
         <h2 className="nb-display nb-about-title">What I enjoy</h2>

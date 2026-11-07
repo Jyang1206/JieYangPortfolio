@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { education } from "../../../data/profile";
 import { projects } from "../../../data/projects";
+import { CompanyLogo } from "../CompanyLogo";
 import s from "./AtAGlance.module.css";
 
 /** The thirty-second version for recruiters: experience and projects with dates, and education. */
@@ -14,7 +15,10 @@ export function AtAGlance() {
     list.map((p) => (
       <li key={p.slug}>
         <Link href={`/projects/${p.slug}`} className={s.row}>
-          <span className={s.name}>{p.title}</span>
+          <span className={s.name}>
+            {p.logo && <CompanyLogo logo={p.logo} size={24} className={s.logo} />}
+            {p.title}
+          </span>
           <span className={s.role}>{p.roleShort ?? p.role}</span>
           <span className={s.dates}>{p.dates}</span>
         </Link>

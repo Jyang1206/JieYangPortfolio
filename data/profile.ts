@@ -1,7 +1,5 @@
 // The landing page's introduction and skills. Skills come from the resume (Nov 2026) and the projects on this site.
 
-export const greeting = "Hi! I'm Jie Yang.";
-
 export const tagline = "NUS Computer Science undergraduate building robots, backends and interfaces that people can rely on.";
 
 /** What I enjoy, in my own order. */

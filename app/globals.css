@@ -138,6 +138,9 @@
 
 /* ---------- paper surfaces ---------- */
 .nb-paper {
+  /* The grain (::before) fills this box. Without a positioned box it filled the nearest positioned
+     ancestor instead, e.g. a full-width band across the fixed nav: the hard line under the nav. */
+  position: relative;
   background-color: var(--nb-paper);
   background-image:
     radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.5), transparent 60%),
@@ -3522,4 +3525,42 @@ button.nb-brief-back {
     outline: 2px solid var(--nb-blue);
     outline-offset: 2px;
   }
+}
+
+/* ---------- company logos on white tiles ---------- */
+.nb-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  aspect-ratio: 1;
+  padding: 2px;
+  border-radius: 6px;
+  background: #fff;
+  vertical-align: middle;
+}
+.nb-logo.is-wide {
+  aspect-ratio: auto;
+  padding: 3px 6px;
+}
+.nb-logo img {
+  display: block;
+  height: 100%;
+  width: auto;
+  max-width: none;
+  object-fit: contain;
+}
+.nb-brief-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.nb-slice .name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nb-slice-logo {
+  box-shadow: 0 0 0 1px rgba(20, 20, 20, 0.15);
 }

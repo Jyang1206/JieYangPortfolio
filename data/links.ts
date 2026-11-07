@@ -12,7 +12,7 @@ export const projectLinks: Record<string, ProjectLinks> = {
   },
   tarii: {
     repo: { label: "Private company repository", private: true },
-    site: { url: "https://tarii-site.pages.dev", label: "tarii-site.pages.dev" },
+    site: { url: "https://tarii-time.com", label: "tarii-time.com" },
   },
   movel: {
     repo: { label: "Private company repository", private: true },

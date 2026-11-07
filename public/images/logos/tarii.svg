@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Tarii">
+  <!-- The installed app's icon: the Tarii mark (tarii-mark-combined.svg) on the
+       app's sage tile. The PNG icons are drawn the same way (scripts/gen_brand_icons.py). -->
+  <rect width="512" height="512" rx="115.2" fill="#EEF6F2" />
+  <g transform="translate(66.56 66.56) scale(1.43515)">
+  <defs>
+    <rect id="tile" width="27" height="27" rx="6"/>
+    <rect id="panel" x="1" y="1" width="122" height="122" rx="21" fill="#F5F8F5" stroke="#ADB8B4" stroke-width="1.5"/>
+  </defs>
+  <g transform="translate(0 0)">
+    <use href="#panel"/>
+    <use href="#tile" x="17" y="17" fill="#315A60"/>
+    <use href="#tile" x="49" y="17" fill="#E9EEEA"/>
+    <use href="#tile" x="81" y="17" fill="#A3B5B6"/>
+    <use href="#tile" x="17" y="49" fill="#315A60"/>
+    <use href="#tile" x="49" y="49" fill="#80999D"/>
+    <use href="#tile" x="81" y="49" fill="#E9EEEA"/>
+    <use href="#tile" x="17" y="81" fill="#E9EEEA"/>
+    <use href="#tile" x="49" y="81" fill="#80999D"/>
+    <use href="#tile" x="81" y="81" fill="#A3B5B6"/>
+  </g>
+  <g transform="translate(140 0)">
+    <use href="#panel"/>
+    <use href="#tile" x="17" y="17" fill="#CFE5DD"/>
+    <use href="#tile" x="49" y="17" fill="#9FCDBB"/>
+    <use href="#tile" x="81" y="17" fill="#BBDDCF"/>
+    <use href="#tile" x="17" y="49" fill="#EBF0EB"/>
+    <use href="#tile" x="49" y="49" fill="#EBF0EB"/>
+    <use href="#tile" x="81" y="49" fill="#BBDDCF"/>
+    <use href="#tile" x="17" y="81" fill="#CFE5DD"/>
+    <use href="#tile" x="49" y="81" fill="#9FCDBB"/>
+    <use href="#tile" x="81" y="81" fill="#EBF0EB"/>
+  </g>
+  <g transform="translate(0 140)">
+    <use href="#panel"/>
+    <use href="#tile" x="17" y="17" fill="#CFE5DD"/>
+    <use href="#tile" x="49" y="17" fill="#EBF0EB"/>
+    <use href="#tile" x="81" y="17" fill="#EBF0EB"/>
+    <use href="#tile" x="17" y="49" fill="#CFE5DD"/>
+    <use href="#tile" x="49" y="49" fill="#E0ECE5"/>
+    <use href="#tile" x="81" y="49" fill="#BBDDCF"/>
+    <use href="#tile" x="17" y="81" fill="#EBF0EB"/>
+    <use href="#tile" x="49" y="81" fill="#E0ECE5"/>
+    <use href="#tile" x="81" y="81" fill="#BBDDCF"/>
+  </g>
+  <g transform="translate(140 140)">
+    <use href="#panel"/>
+    <use href="#tile" x="17" y="17" fill="#E9EEEA"/>
+    <use href="#tile" x="49" y="17" fill="#758185"/>
+    <use href="#tile" x="81" y="17" fill="#A0AAAD"/>
+    <use href="#tile" x="17" y="49" fill="#2D4247"/>
+    <use href="#tile" x="49" y="49" fill="#E9EEEA"/>
+    <use href="#tile" x="81" y="49" fill="#A0AAAD"/>
+    <use href="#tile" x="17" y="81" fill="#2D4247"/>
+    <use href="#tile" x="49" y="81" fill="#758185"/>
+    <use href="#tile" x="81" y="81" fill="#E9EEEA"/>
+  </g>
+  </g>
+</svg>

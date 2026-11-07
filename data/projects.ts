@@ -20,6 +20,8 @@ export type Project = {
   subtitle: string;
   shortDescription: string;
   role: string;
+  /** The company's logo (public/images/logos), shown on a small white tile. `wide` for wordmarks. */
+  logo?: { src: string; alt: string; wide?: boolean };
   /** A shorter role for the at-a-glance list, when `role` is long. */
   roleShort?: string;
   dates: string;
@@ -47,6 +49,7 @@ export const projects: Project[] = [
     slug: "tarii",
     worldId: "tarii",
     title: "Tarii",
+    logo: { src: "/images/logos/tarii.svg", alt: "Tarii logo" },
     subtitle: "Staff rostering for hospital departments",
     shortDescription:
       "Software engineer intern on a rostering product for hospital departments: UI/UX and product design for the web app, a trial demo with a hospital department, and features the trial needed.",
@@ -58,6 +61,7 @@ export const projects: Project[] = [
     slug: "seer-fleet-management",
     worldId: "movel",
     title: "Movel AI",
+    logo: { src: "/images/logos/movel-ai.png", alt: "Movel AI logo" },
     subtitle: "Robotics fleet orchestration",
     shortDescription:
       "Backend services and operator tools that let a mixed fleet of AMRs work inside real buildings: lifts, secure doors, RFID and inventory systems.",
@@ -70,6 +74,7 @@ export const projects: Project[] = [
     slug: "st-engineering-bev-motion",
     worldId: "st-engineering",
     title: "ST Engineering",
+    logo: { src: "/images/logos/st-engineering-mark.png", alt: "ST Engineering logo" },
     subtitle: "Real-time vision on a vehicle",
     shortDescription:
       "Three C++/CUDA vision projects: rebuilding the road under a vehicle, calibrating and drawing a surround view, and stitching three forward cameras into one panorama.",
