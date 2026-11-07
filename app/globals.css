@@ -2375,21 +2375,32 @@
   color: var(--nb-ink-soft);
 }
 @media (max-width: 767px) {
+  /* Compact cards: name, category, two lines of blurb. */
   .nb-slice a,
   .nb-slice.is-hot a {
-    max-width: none;
-    padding: 12px 14px;
+    max-width: 290px;
+    margin: 0 auto;
+    padding: 10px 12px;
   }
   .nb-slice .more,
   .nb-slice.is-hot .more {
     display: block;
   }
   .nb-slice .excerpt {
-    font-size: 13.5px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 12.5px;
+    line-height: 1.4;
+  }
+  .nb-hub-slices {
+    cursor: grab;
+    user-select: none;
   }
   .nb-slice .name,
   .nb-slice.is-hot .name {
-    font-size: 28px;
+    font-size: 22px;
   }
   .nb-slice-links {
     display: none;
@@ -3180,44 +3191,59 @@
   }
 }
 
-/* ---------- hub picker: phones only, a row of names under the panorama ---------- */
+/* ---------- hub picker: phones only, numbered segments under the panorama ---------- */
 .nb-hub-picker {
   display: none;
 }
 @media (max-width: 767px) {
   .nb-hub-picker {
-    display: flex;
-    gap: 6px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding: 12px 16px 16px;
+    display: block;
+    padding: 12px 16px 18px;
     background: var(--nb-paper);
   }
-  .nb-hub-picker::-webkit-scrollbar {
-    display: none;
+  .nb-hub-picker .segments {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 6px;
   }
   .nb-hub-picker button {
-    flex: 0 0 auto;
+    display: grid;
+    gap: 6px;
     min-height: 40px;
-    padding: 0 14px;
-    border: 1.5px solid var(--nb-ink);
-    border-radius: 999px;
-    background: var(--nb-card);
-    color: var(--nb-ink);
-    font-family: var(--font-archivo), "Arial Narrow", sans-serif;
-    font-variation-settings: "wdth" 62;
-    font-weight: 900;
-    font-size: 15px;
-    text-transform: uppercase;
+    padding: 4px 0 0;
+    border: 0;
+    background: none;
+    color: var(--nb-ink-soft);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-align: left;
     cursor: pointer;
   }
+  .nb-hub-picker .bar {
+    display: block;
+    height: 3px;
+    background: rgba(20, 20, 20, 0.18);
+    transition: background-color 200ms ease;
+  }
   .nb-hub-picker button[aria-current="true"] {
+    color: var(--nb-ink);
+  }
+  .nb-hub-picker button[aria-current="true"] .bar {
     background: var(--nb-ink);
-    color: var(--nb-paper);
   }
   .nb-hub-picker button:focus-visible {
     outline: 2px solid var(--nb-blue);
     outline-offset: 2px;
+  }
+  .nb-hub-picker .now {
+    margin: 8px 0 0;
+    font-family: var(--font-archivo), "Arial Narrow", sans-serif;
+    font-variation-settings: "wdth" 62;
+    font-weight: 900;
+    font-size: 20px;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--nb-ink);
   }
 }
 

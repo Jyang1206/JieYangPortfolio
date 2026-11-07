@@ -45,6 +45,7 @@ export function HomeStage({ worlds }: HomeStageProps) {
   const centreRef = useRef(0);
   const [centre, setCentre] = useState(0);
   const panRef = useRef({ pos: -1, holdUntil: 0 });
+  const rowDrag = useRef<{ x: number; left: number; moved: boolean } | null>(null);
   /** Stop the panorama for a while: the visitor is swiping or picked a slice. */
   const holdPan = useCallback((ms = 7000) => {
     panRef.current.holdUntil = performance.now() + ms;
@@ -450,7 +451,34 @@ export function HomeStage({ worlds }: HomeStageProps) {
           <ol
             ref={listRef}
             className="nb-hub-slices"
-            onPointerDown={() => holdPan()}
+            onPointerDown={(event) => {
+              holdPan();
+              // Mouse drag scrolls the row too (touch already swipes natively).
+              if (event.pointerType !== "mouse" || !listRef.current) return;
+              rowDrag.current = { x: event.clientX, left: listRef.current.scrollLeft, moved: false };
+            }}
+            onPointerMove={(event) => {
+              const drag = rowDrag.current;
+              const list = listRef.current;
+              if (!drag || !list) return;
+              const dx = event.clientX - drag.x;
+              if (Math.abs(dx) > 4) drag.moved = true;
+              list.scrollLeft = drag.left - dx;
+              holdPan();
+            }}
+            onPointerUp={() => {
+              window.setTimeout(() => (rowDrag.current = null), 0);
+            }}
+            onPointerLeave={() => {
+              rowDrag.current = null;
+            }}
+            onClickCapture={(event) => {
+              // A drag that ends over a card must not open it.
+              if (rowDrag.current?.moved) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+            }}
             onTouchStart={() => holdPan()}
             onWheel={() => holdPan()}
           >
@@ -489,19 +517,26 @@ export function HomeStage({ worlds }: HomeStageProps) {
           </ol>
         </div>
 
-        {/* Phones only: pick a slice by name. */}
+        {/* Phones only: six numbered segments to pick a slice, with the current one named below. */}
         <nav className="nb-hub-picker" aria-label="Pick a project">
-          {worlds.slice(0, count).map((world, i) => (
-            <button
-              key={world.id}
-              type="button"
-              aria-current={centre === i ? "true" : undefined}
-              data-category={categoryOf(world.id)}
-              onClick={() => pick(i)}
-            >
-              {shortName(world.name)}
-            </button>
-          ))}
+          <div className="segments">
+            {worlds.slice(0, count).map((world, i) => (
+              <button
+                key={world.id}
+                type="button"
+                aria-label={shortName(world.name)}
+                aria-current={centre === i ? "true" : undefined}
+                data-category={categoryOf(world.id)}
+                onClick={() => pick(i)}
+              >
+                <span className="n">{String(i + 1).padStart(2, "0")}</span>
+                <span className="bar" aria-hidden="true" />
+              </button>
+            ))}
+          </div>
+          <p className="now" aria-live="polite">
+            {shortName(worlds[centre]?.name ?? "")}
+          </p>
         </nav>
       </section>
   );
