@@ -44,6 +44,12 @@ const LOOPS: Record<STModeId, { delay: number; on: number; hold: number; off: nu
   2: { delay: 700, on: 2500, hold: 3500, off: 1200, pause: 1300 },
 };
 
+/** One full pass of a project's story, in ms. */
+export const loopMs = (mode: STModeId) => {
+  const { delay, on, hold, off, pause } = LOOPS[mode];
+  return MODE_MS + delay + on + hold + off + pause;
+};
+
 const ease = (k: number) => (k < 0.5 ? 2 * k * k : 1 - ((-2 * k + 2) * (-2 * k + 2)) / 2);
 
 /** Story value at `ms` into a project's loop: wait, ramp on, hold, ramp off, pause, repeat. */

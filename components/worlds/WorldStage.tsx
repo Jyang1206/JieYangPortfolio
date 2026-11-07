@@ -39,6 +39,8 @@ export function WorldStage({ worlds, index }: WorldStageProps) {
   const extras = WORLD_EXTRAS[world.id];
   const Overlay = extras?.Overlay;
   const Driver = extras?.Controls;
+  const Panel = extras?.Panel;
+  const Extra = extras?.Extra;
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -130,7 +132,17 @@ export function WorldStage({ worlds, index }: WorldStageProps) {
           )}
           {world.id === "iris" && <IrisDetectionsPanel still={still} className="nb-stage-panel" />}
           {world.id === "iris" && webgl && <p className="nb-stage-hint">Drag to look around the cell</p>}
+          {Panel && (
+            <div className="nb-stage-controls">
+              <Panel setParams={setParams} still={still} />
+            </div>
+          )}
         </div>
+        {Extra && (
+          <div className="nb-stage-extra">
+            <Extra />
+          </div>
+        )}
 
         <div className="nb-brief">
           <Link href="/#explore" className="nb-brief-back">

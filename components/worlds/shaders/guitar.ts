@@ -49,6 +49,20 @@ int prefString(int m) {
   return best;
 }
 
+// Note names inside the dots: a 3 x 5 pixel font. Glyphs A..G then '#'; bit (row * 3 + col), row 0 at the top.
+int GLYPH[8] = int[8](23530, 15083, 25166, 15211, 29391, 4815, 27470, 24445);
+int LETTER[12] = int[12](2, 2, 3, 3, 4, 5, 5, 6, 6, 0, 0, 1); // pitch class -> glyph (C C# D D# E F F# G G# A A# B)
+bool SHARP(int pc) { return pc == 1 || pc == 3 || pc == 6 || pc == 8 || pc == 10; }
+float glyphAt(vec2 q, int g, float cell) {
+  vec2 c = floor(vec2(q.x / cell + 1.5, 2.5 - q.y / cell));
+  if (c.x < 0. || c.x > 2. || c.y < 0. || c.y > 4.) return 0.;
+  return float((GLYPH[g] >> (int(c.y) * 3 + int(c.x))) & 1);
+}
+float noteLabel(vec2 q, int pc) {
+  if (!SHARP(pc)) return glyphAt(q, LETTER[pc], .0046);
+  return max(glyphAt(q - vec2(-.0062, 0.), LETTER[pc], .0036), glyphAt(q - vec2(.0068, -.0016), 7, .0026));
+}
+
 float noteX(int f) {
   if (f == 0) return NUT - .035;
   float ff = float(f);
@@ -171,10 +185,9 @@ vec3 scene(vec2 uv) {
         col += tone * (1. - smoothstep(0., .06, len)) * lit * .35;
         col = mix(col, tone * (.75 + .5 * lit), fill(d));
         col = mix(col, vec3(1., .9, .7), stroke(d, .0016) * lit);
-        if (ring) {
-          col = mix(col, vec3(1., .93, .82) * (.7 + .3 * lit), stroke(d - .0085, .0018));
-          col = mix(col, vec3(.16, .06, .03), fill(len - .0055));
-        }
+        if (ring) col = mix(col, vec3(1., .93, .82) * (.7 + .3 * lit), stroke(d - .0085, .0018));
+        // The note's name, when the dot is big enough on screen to read it.
+        if (len < .02 && .02 / px > 7.) col = mix(col, vec3(.2, .07, .02), noteLabel(p - vec2(noteX(f), yy), m % 12) * .92);
       }
     }
   }
