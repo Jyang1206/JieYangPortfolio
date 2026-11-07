@@ -6,6 +6,8 @@ export type Brief = {
   what: string;
   /** A short recognition shown beside the name, e.g. an award level. */
   badge?: string;
+  /** A poster the stage can open over the world with a toggle. */
+  poster?: { src: string; alt: string; width: number; height: number };
   /** What I did, a few short lines. */
   did: string[];
   stack: string[];
@@ -21,12 +23,16 @@ export type BriefSection = {
   title: string;
   text?: string;
   points?: string[];
-  /** A picture for the section (opens full size in a new tab). */
-  image?: { src: string; alt: string; width: number; height: number };
 };
 
 export const briefs: Record<string, Brief> = {
   iris: {
+    poster: {
+      src: "/images/iris/inspire-2026-poster.webp",
+      alt: "IRIS poster for INSPIRE 2026: the problem, objectives, the gripper picking forceps, results (94% detected, 78% upper instrument named, 87% safe picks, 83% trays sorted) and the six-step pipeline.",
+      width: 1413,
+      height: 2000,
+    },
     what: "A robot cell built with the Singapore National Eye Centre. It identifies surgical instruments in a cluttered tray and sorts them, topmost first, into their slots.",
     did: [
       "Cleaned the datasets, then trained and evaluated every model",
@@ -46,15 +52,6 @@ export const briefs: Record<string, Brief> = {
           "Several are near-copies, such as flat and dissecting tweezers",
           "Their tips are delicate, so the arm cannot pull one from underneath",
         ],
-      },
-      {
-        title: "Poster",
-        image: {
-          src: "/images/iris/inspire-2026-poster.webp",
-          alt: "IRIS poster for INSPIRE 2026: the problem, objectives, the gripper picking forceps, results (94% detected, 78% upper instrument named, 87% safe picks, 83% trays sorted) and the six-step pipeline.",
-          width: 1413,
-          height: 2000,
-        },
       },
       {
         title: "What I learned",
