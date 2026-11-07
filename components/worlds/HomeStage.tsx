@@ -260,6 +260,63 @@ export function HomeStage({ worlds }: HomeStageProps) {
     };
   }, [count, worlds]);
 
+  // Desktop: when scrolling comes to rest near the hub, glide onto it with an ease-in-out (a soft snap).
+  useEffect(() => {
+    const hub = hubRef.current;
+    if (!hub) return;
+    const wide = window.matchMedia("(min-width: 768px)");
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let idle = 0;
+    let raf = 0;
+    let gliding = false;
+    const ease = (k: number) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+    const stop = () => {
+      cancelAnimationFrame(raf);
+      gliding = false;
+    };
+    const glide = () => {
+      const offset = hub.getBoundingClientRect().top;
+      if (!wide.matches || Math.abs(offset) < 2 || Math.abs(offset) > window.innerHeight * 0.35) return;
+      const from = window.scrollY;
+      const to = from + offset;
+      if (motion.matches) {
+        window.scrollTo({ top: to, behavior: "instant" });
+        return;
+      }
+      const start = performance.now();
+      const ms = Math.min(900, 380 + Math.abs(offset) * 1.4);
+      gliding = true;
+      const step = (now: number) => {
+        const k = Math.min(1, (now - start) / ms);
+        window.scrollTo({ top: from + (to - from) * ease(k), behavior: "instant" });
+        if (k < 1) raf = requestAnimationFrame(step);
+        else gliding = false;
+      };
+      raf = requestAnimationFrame(step);
+    };
+    const onScroll = () => {
+      if (gliding) return;
+      window.clearTimeout(idle);
+      idle = window.setTimeout(glide, 140);
+    };
+    // Any input from the visitor takes over from the glide.
+    const interrupt = () => {
+      if (gliding) stop();
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("wheel", interrupt, { passive: true });
+    window.addEventListener("touchstart", interrupt, { passive: true });
+    window.addEventListener("keydown", interrupt);
+    return () => {
+      stop();
+      window.clearTimeout(idle);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("wheel", interrupt);
+      window.removeEventListener("touchstart", interrupt);
+      window.removeEventListener("keydown", interrupt);
+    };
+  }, []);
+
   // Keys 1-6 open a world; /#explore (and the old /#experience, /#projects links) scroll to the hub.
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {

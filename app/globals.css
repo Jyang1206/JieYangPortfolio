@@ -3211,14 +3211,11 @@
 }
 
 /* ---------- desktop: the hub is a full screen the page snaps to ---------- */
+/* The page glides onto it with easing in HomeStage (CSS scroll-snap cannot be eased). */
 @media (min-width: 768px) {
-  html {
-    scroll-snap-type: y proximity;
-  }
   .nb-hub {
     height: 100vh;
     height: 100dvh;
-    scroll-snap-align: start;
   }
 }
 
