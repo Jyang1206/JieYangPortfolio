@@ -130,7 +130,8 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  margin-top: 18px;
+  /* Clear of the tilted prints, which hang a little below the arch. */
+  margin-top: 40px;
 }
 .hint {
   flex-basis: 100%;

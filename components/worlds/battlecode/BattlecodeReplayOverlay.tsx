@@ -115,7 +115,7 @@ export function BattlecodeReplayOverlay({ active, still }: { active: boolean; st
     <div className="pointer-events-none absolute inset-0" aria-hidden={!match}>
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" aria-hidden="true" />
       {match && (
-        <figure className="absolute right-4 top-[176px] max-w-[19rem] bg-[#0c0f0b]/80 px-3.5 py-2.5 text-[#f2efe8] backdrop-blur-sm sm:right-6 lg:top-auto lg:bottom-6">
+        <figure className="absolute left-3 right-3 top-3 rounded-lg bg-[#0c0f0b]/80 px-3 py-2 text-[#f2efe8] backdrop-blur-sm sm:left-auto sm:right-6 sm:top-[88px] sm:max-w-[19rem] sm:px-3.5 sm:py-2.5">
           <p className="flex items-baseline justify-between gap-4 font-mono text-[11px] tabular-nums text-[#f2efe8]/70">
             <span>
               Round <span ref={roundRef} className="text-[#f2efe8]">0</span> / {match.rounds - 1}
@@ -131,7 +131,7 @@ export function BattlecodeReplayOverlay({ active, still }: { active: boolean; st
             <span className="text-[#f2efe8]/70">{match.teams[1]}</span>
             <span className="size-2 rounded-full" style={{ background: TEAM[1] }} aria-hidden="true" />
           </p>
-          <figcaption className="mt-1.5 text-[11.5px] leading-snug text-[#f2efe8]/75">
+          <figcaption className="mt-1.5 hidden text-[11.5px] leading-snug text-[#f2efe8]/75 sm:block">
             Replay of a real match, rendered for this page. Gems tributed, first to 1,000 wins.
           </figcaption>
         </figure>

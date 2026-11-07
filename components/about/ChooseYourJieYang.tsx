@@ -274,7 +274,7 @@ export function ChooseYourJieYang({
           {n > 1 && (
             <div className={styles.controls}>
               <p className={styles.hint}>
-                <span>↑ Click the photo to see another side of me</span>
+                <span>Click to see other photos of me</span>
               </p>
               <button
                 type="button"

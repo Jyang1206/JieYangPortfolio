@@ -731,9 +731,11 @@
     display: flex;
     flex-direction: column;
   }
+  /* Phones: a swipeable row of slices; each card's strip of the live worlds slides with it. */
   .nb-hub-band {
     position: relative;
-    height: calc(6 * 150px);
+    height: 72svh;
+    min-height: 460px;
   }
   .nb-hub-title {
     position: static;
@@ -756,26 +758,42 @@
   }
   .nb-hub-slices {
     display: flex;
-    flex-direction: column;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding: 0 11vw;
+  }
+  .nb-hub-slices::-webkit-scrollbar {
+    display: none;
   }
   .nb-slice {
     position: relative;
     left: auto;
     top: auto;
     translate: none;
-    flex: 1 1 0;
+    flex: 0 0 78vw;
     display: flex;
-    align-items: center;
-    padding: 0 16px;
+    align-items: flex-end;
+    padding: 0 12px 22px;
+    scroll-snap-align: center;
   }
   .nb-slice a {
-    max-width: calc(100vw - 32px);
+    width: 100%;
+    max-width: none;
+    transform: translateY(14px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 360ms ease, transform 360ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  /* One description at a time: the slice in the middle of the row. */
+  .nb-slice.is-centre a {
     transform: none;
     opacity: 1;
+    pointer-events: auto;
   }
-  .nb-slice .excerpt,
-  .nb-slice .go {
-    display: block;
+  .nb-hub-slices {
+    scroll-snap-type: none;
   }
 }
 
@@ -2359,13 +2377,18 @@
 @media (max-width: 767px) {
   .nb-slice a,
   .nb-slice.is-hot a {
-    max-width: calc(100vw - 32px);
+    max-width: none;
     padding: 12px 14px;
   }
-  .nb-slice .more {
+  .nb-slice .more,
+  .nb-slice.is-hot .more {
     display: block;
   }
-  .nb-slice .name {
+  .nb-slice .excerpt {
+    font-size: 13.5px;
+  }
+  .nb-slice .name,
+  .nb-slice.is-hot .name {
     font-size: 28px;
   }
   .nb-slice-links {
@@ -2688,6 +2711,28 @@
   z-index: 6;
 }
 
+.nb-stage-hint {
+  display: none;
+}
+@media (pointer: fine) and (min-width: 900px) {
+  .nb-stage-hint {
+    position: absolute;
+    left: calc(50% + 200px);
+    bottom: 132px;
+    z-index: 6;
+    display: block;
+    translate: -50% 0;
+    margin: 0;
+    padding: 6px 14px;
+    border: 1px solid var(--b-line);
+    border-radius: 999px;
+    background: var(--b-bg);
+    color: var(--b-soft);
+    font-size: 13px;
+    pointer-events: none;
+    backdrop-filter: blur(10px);
+  }
+}
 .nb-brief {
   position: absolute;
   top: 0;
@@ -2899,7 +2944,8 @@
     padding: 0;
   }
   .nb-brief-back {
-    display: none;
+    position: relative;
+    z-index: 7;
   }
   .nb-brief-strip {
     position: static;
@@ -2914,11 +2960,64 @@
   }
 }
 
-/* Narrow screens: the hub is a column of six bands; the band block must keep its height. */
+/* Phones: the hub is a swipeable row of slices (see the hub's phone rules above). */
 @media (max-width: 767px) {
   .nb-hub-band {
     position: relative;
     inset: auto;
-    height: calc(6 * 150px);
+    height: 72svh;
+  }
+}
+
+/* ---------- hub picker: phones only, a row of names under the panorama ---------- */
+.nb-hub-picker {
+  display: none;
+}
+@media (max-width: 767px) {
+  .nb-hub-picker {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 12px 16px 16px;
+    background: var(--nb-paper);
+  }
+  .nb-hub-picker::-webkit-scrollbar {
+    display: none;
+  }
+  .nb-hub-picker button {
+    flex: 0 0 auto;
+    min-height: 40px;
+    padding: 0 14px;
+    border: 1.5px solid var(--nb-ink);
+    border-radius: 999px;
+    background: var(--nb-card);
+    color: var(--nb-ink);
+    font-family: var(--font-archivo), "Arial Narrow", sans-serif;
+    font-variation-settings: "wdth" 62;
+    font-weight: 900;
+    font-size: 15px;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .nb-hub-picker button[aria-current="true"] {
+    background: var(--nb-ink);
+    color: var(--nb-paper);
+  }
+  .nb-hub-picker button:focus-visible {
+    outline: 2px solid var(--nb-blue);
+    outline-offset: 2px;
+  }
+}
+
+/* ---------- desktop: the hub is a full screen the page snaps to ---------- */
+@media (min-width: 768px) {
+  html {
+    scroll-snap-type: y proximity;
+  }
+  .nb-hub {
+    height: 100vh;
+    height: 100dvh;
+    scroll-snap-align: start;
   }
 }
