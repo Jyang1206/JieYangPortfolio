@@ -25,12 +25,25 @@ export type SkillGroup = { label: string; items: string[] };
 export const skills: SkillGroup[] = [
   { label: "Languages", items: ["C++", "Python", "TypeScript", "JavaScript", "Java", "SQL"] },
   {
-    label: "Robotics and perception",
-    items: ["ROS 2", "MoveIt", "OpenCV", "NVIDIA VPI", "RGB-D cameras", "Camera calibration", "AprilTags", "Optical flow / KLT", "BEV and ego-motion", "Surround-view stitching"],
+    label: "Robotics",
+    items: ["ROS 2", "MoveIt", "Robot grasping", "RGB-D cameras", "Camera calibration", "AprilTags", "BEV and ego-motion"],
   },
   {
-    label: "AI and models",
-    items: ["YOLO detection and segmentation", "DINOv3 embeddings", "Vision-language models", "PyTorch", "Hugging Face", "Roboflow", "Model evaluation", "CUDA"],
+    label: "AI and machine learning",
+    items: [
+      "YOLO detection and segmentation",
+      "DINOv3 embeddings",
+      "Vision-language models",
+      "PyTorch",
+      "Hugging Face",
+      "Roboflow",
+      "Model evaluation",
+      "OpenCV",
+      "NVIDIA VPI",
+      "Optical flow / KLT",
+      "Surround-view stitching",
+      "CUDA",
+    ],
   },
   {
     label: "Backend and systems",

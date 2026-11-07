@@ -190,8 +190,8 @@ function ToolsArt() {
 
 const ART: Record<string, () => ReactNode> = {
   Languages: LanguagesArt,
-  "Robotics and perception": RoboticsArt,
-  "AI and models": AiArt,
+  Robotics: RoboticsArt,
+  "AI and machine learning": AiArt,
   "Backend and systems": BackendArt,
   "Frontend and design": FrontendArt,
   Tools: ToolsArt,
