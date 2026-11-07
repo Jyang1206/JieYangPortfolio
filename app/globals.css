@@ -138,6 +138,9 @@
 
 /* ---------- paper surfaces ---------- */
 .nb-paper {
+  /* The grain (::before) fills this box. Without a positioned box it filled the nearest positioned
+     ancestor instead, e.g. a full-width band across the fixed nav: the hard line under the nav. */
+  position: relative;
   background-color: var(--nb-paper);
   background-image:
     radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.5), transparent 60%),
