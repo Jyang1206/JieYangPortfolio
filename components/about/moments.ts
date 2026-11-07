@@ -26,7 +26,7 @@ export const heroMoments: HeroMoment[] = [
     label: "Portrait",
     title: "Engineer",
     line: "Robotics, AI, backends and interfaces. Click the photo to see the other sides.",
-    srcs: ["/images/me/portrait.jpg", "/images/me/portrait.webp", "/images/me/portrait.png"],
+    srcs: ["/images/me/portrait.webp"],
     alt: "Portrait of Jie Yang in Paris.",
     placeholder: "JY",
     objectPosition: "50% 30%",
