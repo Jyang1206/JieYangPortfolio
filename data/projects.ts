@@ -49,8 +49,8 @@ export const projects: Project[] = [
     title: "Tarii",
     subtitle: "Staff rostering for hospital departments",
     shortDescription:
-      "UI/UX, product and full-stack work on a rostering product: the web app and analytics rosterers use, spreadsheet import that matches messy staff names, and Telegram notifications for staff.",
-    role: "UI/UX, product and full-stack",
+      "Software engineer intern on a rostering product for hospital departments: UI/UX and product design for the web app, a trial demo with a hospital department, and features the trial needed.",
+    role: "Software Engineer Intern",
     dates: "Oct 2026 – present",
     category: "experience",
   },

@@ -54,7 +54,7 @@ export const worlds: World[] = [
     id: "tarii",
     name: "Tarii",
     place: "Hospital staff rostering",
-    role: "UI/UX, product and full-stack",
+    role: "Software Engineer Intern",
     excerpt:
       "A rostering product for hospital departments. I did UI/UX and product work, helped run a trial demo with a hospital department, and built features the trial needed.",
     built: [

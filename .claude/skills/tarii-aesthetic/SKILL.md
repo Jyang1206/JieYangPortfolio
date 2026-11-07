@@ -8,7 +8,7 @@ description: Use when designing, writing or reviewing anything for the Tarii wor
 ## What it is
 A rostering product for hospital departments and other shift teams. Staff send leave, availability and preferences; the rosterer sets departments, stations, shifts, coverage and rules; a constraint solver proposes a roster; people review, adjust and publish; staff see postings, changes and swaps on their phone.
 
-- Category: **Professional experience**. Role: UI/UX, product and full-stack. Oct 2026 – present.
+- Category: **Professional experience**. Role: Software Engineer Intern (UI/UX, product and full-stack work). Oct 2026 – present.
 - Jie Yang did a lot of the UI/UX and product work: the web app and the analytics rosterers use to review a roster; spreadsheet import that matches staff names written in shortened or reordered forms; staff notifications through a Telegram bot ahead of a full mobile app.
 - Never name real hospitals or clients ("a hospital department in Singapore" at most). Never claim perfect rosters, guaranteed fairness, automatic approval or unverified time savings. Voice: "the lead decides".
 - Repo: private (company). Site: https://tarii-site.pages.dev
