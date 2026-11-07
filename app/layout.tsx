@@ -24,10 +24,21 @@ const hanken = localFont({
   weight: "100 900",
 });
 
+const description = "Jie Yang, software engineer and NUS Computer Science student: robotics, AI, backends and interfaces.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://jieyang.vercel.app"),
   title: "Jie Yang",
-  description:
-    "Jie Yang, software engineer: robotics, AI, backends and interfaces.",
+  description,
+  // The preview card for links pasted into LinkedIn, Telegram, Slack and so on; the image is app/opengraph-image.tsx.
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: "Jie Yang",
+    title: "Jie Yang · Software Engineer",
+    description,
+  },
+  twitter: { card: "summary_large_image", title: "Jie Yang · Software Engineer", description },
 };
 
 export default function RootLayout({
