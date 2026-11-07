@@ -20,6 +20,8 @@ export type Project = {
   subtitle: string;
   shortDescription: string;
   role: string;
+  /** A shorter role for the at-a-glance list, when `role` is long. */
+  roleShort?: string;
   dates: string;
   category: ProjectCategory;
   storySteps?: StoryStep[];
@@ -60,6 +62,7 @@ export const projects: Project[] = [
     shortDescription:
       "Backend services and operator tools that let a mixed fleet of AMRs work inside real buildings: lifts, secure doors, RFID and inventory systems.",
     role: "Full-Stack Developer Intern, Robotics Fleet Orchestration",
+    roleShort: "Full-Stack Developer Intern",
     dates: "Dec 2025 – Apr 2026",
     category: "experience",
   },
@@ -71,6 +74,7 @@ export const projects: Project[] = [
     shortDescription:
       "Three C++/CUDA vision projects: rebuilding the road under a vehicle, calibrating and drawing a surround view, and stitching three forward cameras into one panorama.",
     role: "Software Engineering Intern, Computer Vision & Autonomous Systems",
+    roleShort: "Software Engineering Intern",
     dates: "May – Aug 2026",
     category: "experience",
   },

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, FileImage, X } from "lucide-react";
 import type { World } from "../../data/worlds";
 import { briefs } from "../../data/briefs";
 import { nextProject, projects } from "../../data/projects";
@@ -11,6 +11,7 @@ import { categoryLabel, categoryOf, shortName } from "./categories";
 import { ProjectLinks } from "./notebook/ProjectLinks";
 import { IrisDetectionsPanel } from "./iris/arm";
 import { WorldRenderer } from "./WorldRenderer";
+import { BriefCard } from "./BriefCard";
 
 const STILL_TIME = 14;
 const MAX_PIXELS = 3_800_000;
@@ -31,6 +32,7 @@ export function WorldStage({ worlds, index }: WorldStageProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [webgl, setWebgl] = useState(true);
   const [still, setStill] = useState(false);
+  const [posterOpen, setPosterOpen] = useState(false);
   // IRIS: the 3D arm cell brings its own tray, so the shader draws only the drape behind it.
   const paramsRef = useRef<number[]>([world.id === "iris" ? 1 : 0, 0, 0, 0]);
   const [setParams] = useState(() => (values: ParamValues) => {
@@ -138,6 +140,23 @@ export function WorldStage({ worlds, index }: WorldStageProps) {
             </div>
           )}
         </div>
+        {brief?.poster && posterOpen && (
+          <figure
+            id="project-poster"
+            className="nb-stage-poster"
+            onKeyDown={(event) => {
+              if (event.key === "Escape") setPosterOpen(false);
+            }}
+          >
+            <button type="button" className="close" aria-label="Close poster" onClick={() => setPosterOpen(false)} autoFocus>
+              <X size={16} aria-hidden="true" />
+            </button>
+            <a href={brief.poster.src} target="_blank" rel="noreferrer">
+              {/* eslint-disable-next-line @next/next/no-img-element -- a plain full-size poster, also opened as a file. */}
+              <img src={brief.poster.src} alt={brief.poster.alt} width={brief.poster.width} height={brief.poster.height} />
+            </a>
+          </figure>
+        )}
         {Extra && (
           <div className="nb-stage-extra">
             <Extra />
@@ -145,36 +164,46 @@ export function WorldStage({ worlds, index }: WorldStageProps) {
         )}
 
         <div className="nb-brief">
-          <Link href="/#explore" className="nb-brief-back">
-            <ArrowLeft size={14} aria-hidden="true" />
-            All work
-          </Link>
-          <article className="nb-brief-card">
-            <span className="nb-chip" data-category={category}>
-              {categoryLabel(world.id)}
-            </span>
-            <h1 id="project-name" className="nb-brief-name">
-              {shortName(world.name)}
-              {brief?.badge && <span className="nb-brief-badge">({brief.badge})</span>}
-            </h1>
-            {project && (
-              <p className="nb-brief-meta">
-                {project.role} · {project.dates}
-              </p>
+          <div className="nb-brief-actions">
+            <Link href="/" className="nb-brief-back">
+              <ArrowLeft size={14} aria-hidden="true" />
+              Home
+            </Link>
+            {brief?.poster && (
+              <button
+                type="button"
+                className="nb-brief-back"
+                aria-expanded={posterOpen}
+                aria-controls="project-poster"
+                onClick={() => setPosterOpen((v) => !v)}
+              >
+                <FileImage size={14} aria-hidden="true" />
+                {posterOpen ? "Hide poster" : "Poster"}
+              </button>
             )}
-            {brief && (
-              <>
-                <p className="nb-brief-what">{brief.what}</p>
-                <h2 className="nb-brief-h">What I did</h2>
-                <ul className="nb-brief-did">
-                  {brief.did.map((line) => (
-                    <li key={line}>{line}</li>
-                  ))}
-                </ul>
-              </>
-            )}
-            <ProjectLinks worldId={world.id} />
-          </article>
+          </div>
+          {brief ? (
+            <BriefCard
+              brief={brief}
+              header={
+                <>
+                  <span className="nb-chip" data-category={category}>
+                    {categoryLabel(world.id)}
+                  </span>
+                  <h1 id="project-name" className="nb-brief-name">
+                    {shortName(world.name)}
+                    {brief.badge && <span className="nb-brief-badge">({brief.badge})</span>}
+                  </h1>
+                  {project && (
+                    <p className="nb-brief-meta">
+                      {project.role} · {project.dates}
+                    </p>
+                  )}
+                </>
+              }
+              links={<ProjectLinks worldId={world.id} />}
+            />
+          ) : null}
         </div>
 
         {brief && (

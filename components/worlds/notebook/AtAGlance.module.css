@@ -1,0 +1,78 @@
+/* At a glance: plain rows with dates, for a quick read. */
+.glance {
+  margin: 0 0 clamp(40px, 6vw, 72px);
+}
+.title {
+  margin: 0 0 18px;
+  font-family: var(--font-archivo), "Arial Narrow", sans-serif;
+  font-variation-settings: "wdth" 62;
+  font-weight: 900;
+  font-size: clamp(30px, 4vw, 44px);
+  line-height: 0.95;
+  text-transform: uppercase;
+  color: var(--nb-ink);
+}
+.cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 20px 48px;
+}
+@media (max-width: 767px) {
+  .cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.h {
+  margin: 18px 0 6px;
+  padding-bottom: 6px;
+  border-bottom: 1.5px solid var(--nb-ink);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nb-ink);
+}
+.cols > div > .h:first-child {
+  margin-top: 0;
+}
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "name dates" "role role";
+  gap: 2px 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(20, 20, 20, 0.14);
+  color: var(--nb-ink);
+  text-decoration: none;
+}
+a.row:hover .name {
+  color: var(--nb-blue);
+}
+a.row:focus-visible {
+  outline: 2px solid var(--nb-blue);
+  outline-offset: 2px;
+}
+.name {
+  grid-area: name;
+  font-weight: 600;
+  font-size: 16px;
+}
+.role {
+  grid-area: role;
+  color: var(--nb-ink-soft);
+  font-size: 14px;
+}
+.dates {
+  grid-area: dates;
+  color: var(--nb-ink-soft);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  white-space: nowrap;
+  align-self: center;
+}

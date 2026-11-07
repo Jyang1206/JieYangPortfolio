@@ -1,8 +1,9 @@
 import { greeting, interests, languages, skills, tagline } from "../../../data/profile";
 import { ContactLinks } from "../../ContactLinks";
+import { AtAGlance } from "./AtAGlance";
 import { SkillTiles } from "./SkillTiles";
 
-/** Who I am and what I work with: the greeting and tagline, three interests, and one animated tile per skill group. */
+/** Who I am and what I work with: greeting and tagline, the at-a-glance list, three interests, and the skill tiles. */
 export function AboutSection() {
   return (
     <section id="about" className="nb-about nb-paper" aria-labelledby="about-title">
@@ -16,6 +17,8 @@ export function AboutSection() {
           </div>
           <ContactLinks tone="dark" />
         </div>
+
+        <AtAGlance />
 
         <h2 className="nb-display nb-about-title">What I enjoy</h2>
         <div className="nb-about-interests">
