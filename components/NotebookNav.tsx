@@ -99,7 +99,7 @@ export function NotebookNav({ mode, hideBelow }: NotebookNavProps) {
   const lastY = useRef(0);
 
   useEffect(() => {
-    const onScroll = () => {
+    const update = () => {
       const y = window.scrollY;
       if (mode === "home") {
         const el = hideBelow ? document.getElementById(hideBelow) : null;
@@ -113,9 +113,13 @@ export function NotebookNav({ mode, hideBelow }: NotebookNavProps) {
         else if (up) setHidden(false);
       }
       lastY.current = y;
+    };
+    // Only a real scroll closes the phone menu; the first run here happens right after it opens.
+    const onScroll = () => {
+      update();
       if (open) setOpen(false);
     };
-    onScroll();
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [mode, hideBelow, open]);
