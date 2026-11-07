@@ -1,0 +1,801 @@
+/* Skill tiles on the home page About section: a dark readout panel with a looping illustration per
+   skill group, the full list sliding over it on hover, keyboard focus or tap. */
+
+.grid {
+  --st-ink: var(--nb-ink, #141414);
+  --st-card: var(--nb-card, #fbfaf7);
+  --st-blue: var(--nb-blue, #1f4fff);
+  --st-bg: #131417;
+  --st-paper: #f1efea;
+  --st-paper-soft: rgba(241, 239, 234, 0.42);
+  --st-faint: rgba(241, 239, 234, 0.16);
+  --st-accent: #6f8cff;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--st-card);
+  border: 1.5px solid var(--st-ink);
+  box-shadow: 6px 6px 0 var(--st-ink);
+  color: var(--st-ink);
+  transition: transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* ---------- header ---------- */
+.head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "index count"
+    "title title";
+  align-items: center;
+  gap: 10px 12px;
+  padding: 14px 16px 14px;
+  border-bottom: 1.5px solid var(--st-ink);
+}
+.index,
+.count {
+  font-family: var(--font-mono);
+  font-variation-settings: "wdth" 90;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+.index {
+  grid-area: index;
+  padding: 2px 6px;
+  background: var(--st-ink);
+  color: var(--st-paper);
+}
+.count {
+  grid-area: count;
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--nb-ink-soft, #4a4642);
+}
+.plus {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--st-ink);
+  transition: transform 220ms ease, background-color 220ms ease;
+}
+.plus::before,
+.plus::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 1.5px;
+  background: var(--st-ink);
+  transform: translate(-50%, -50%);
+}
+.plus::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+.title {
+  grid-area: title;
+  margin: 0;
+  font-family: var(--nb-font-display, sans-serif);
+  font-variation-settings: "wdth" 70;
+  font-weight: 900;
+  font-size: clamp(22px, 2.2vw, 28px);
+  line-height: 0.95;
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
+}
+.trigger {
+  all: unset;
+  cursor: pointer;
+  text-align: left;
+}
+/* The whole tile is the hit area. */
+.trigger::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+
+/* ---------- stage ---------- */
+.stage {
+  position: relative;
+  aspect-ratio: 240 / 150;
+  min-height: 200px;
+  background-color: var(--st-bg);
+  background-image:
+    linear-gradient(rgba(241, 239, 234, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(241, 239, 234, 0.045) 1px, transparent 1px);
+  background-size: 16px 16px;
+  overflow: hidden;
+}
+.art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 260ms ease, transform 260ms ease;
+}
+
+.reveal {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 7px;
+  margin: 0;
+  padding: 18px;
+  list-style: none;
+  overflow: auto;
+  background: color-mix(in srgb, var(--st-blue) 94%, transparent);
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 220ms ease, transform 260ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  pointer-events: none;
+}
+.chip {
+  padding: 5px 9px 4px;
+  border: 1px solid rgba(241, 239, 234, 0.55);
+  color: var(--st-paper);
+  font-family: var(--nb-font, sans-serif);
+  font-size: 14px;
+  line-height: 1.25;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 200ms ease, transform 240ms ease;
+  transition-delay: calc(var(--i, 0) * 22ms);
+}
+
+/* ---------- revealed: hover (pointer devices), keyboard focus, or tapped open ---------- */
+@media (hover: hover) {
+  .tile:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0 var(--st-blue);
+  }
+  .tile:hover .reveal,
+  .tile:hover .chip {
+    opacity: 1;
+    transform: none;
+  }
+  .tile:hover .art {
+    opacity: 0.35;
+    transform: scale(1.04);
+  }
+  .tile:hover .plus {
+    transform: rotate(45deg);
+    background: var(--st-blue);
+    border-color: var(--st-blue);
+  }
+  .tile:hover .plus::before,
+  .tile:hover .plus::after {
+    background: var(--st-paper);
+  }
+}
+.tile[data-open],
+.tile:has(.trigger:focus-visible) {
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0 var(--st-blue);
+}
+.tile[data-open] .reveal,
+.tile[data-open] .chip,
+.tile:has(.trigger:focus-visible) .reveal,
+.tile:has(.trigger:focus-visible) .chip {
+  opacity: 1;
+  transform: none;
+}
+.tile[data-open] .art,
+.tile:has(.trigger:focus-visible) .art {
+  opacity: 0.35;
+}
+.tile[data-open] .plus,
+.tile:has(.trigger:focus-visible) .plus {
+  transform: rotate(45deg);
+  background: var(--st-blue);
+  border-color: var(--st-blue);
+}
+.tile[data-open] .plus::before,
+.tile[data-open] .plus::after,
+.tile:has(.trigger:focus-visible) .plus::before,
+.tile:has(.trigger:focus-visible) .plus::after {
+  background: var(--st-paper);
+}
+.tile:has(.trigger:focus-visible) {
+  outline: 3px solid var(--st-blue);
+  outline-offset: 4px;
+}
+
+/* ---------- shared SVG paint ---------- */
+.svgMono,
+.svgMonoInk,
+.svgMonoLg {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 7px;
+  letter-spacing: 0.02em;
+  fill: var(--st-paper-soft);
+}
+.svgMonoInk {
+  fill: var(--st-bg);
+  font-weight: 600;
+}
+.svgMonoLg {
+  font-size: 8.5px;
+  fill: var(--st-paper);
+}
+.chrome {
+  fill: rgba(241, 239, 234, 0.07);
+}
+.fillChrome {
+  fill: var(--st-faint);
+}
+.fillAccent {
+  fill: var(--st-accent);
+}
+.fillPaper {
+  fill: var(--st-paper);
+}
+.fillPaperSoft {
+  fill: var(--st-paper-soft);
+}
+.fillInk {
+  fill: var(--st-bg);
+}
+.fillInkPanel {
+  fill: var(--st-bg);
+}
+.strokeFaint {
+  stroke: var(--st-faint);
+  stroke-width: 1;
+}
+.strokeAccent {
+  stroke: var(--st-accent);
+  stroke-width: 1.5;
+  fill: none;
+}
+
+/* Languages: tokens type in line by line, the active file tab moves */
+.tokKey {
+  fill: var(--st-accent);
+}
+.tokText {
+  fill: var(--st-paper);
+  opacity: 0.85;
+}
+.tokAccent {
+  fill: #c9d4ff;
+  opacity: 0.7;
+}
+.tokFaint {
+  fill: var(--st-faint);
+}
+.type {
+  transform-box: fill-box;
+  transform-origin: left center;
+  animation: type 6s steps(6, end) infinite both;
+}
+@keyframes type {
+  0% {
+    transform: scaleX(0);
+  }
+  8%,
+  80% {
+    transform: scaleX(1);
+  }
+  86%,
+  100% {
+    transform: scaleX(0);
+  }
+}
+.caret {
+  animation: blink 1s steps(1, end) infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+.tabMark {
+  animation: tab 6s cubic-bezier(0.7, 0, 0.2, 1) infinite;
+}
+@keyframes tab {
+  0%,
+  30% {
+    transform: translateX(0);
+  }
+  36%,
+  63% {
+    transform: translateX(62px);
+  }
+  69%,
+  95% {
+    transform: translateX(124px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Robotics: a two-link arm reaches, the camera scans, feature points light up */
+.joint {
+  fill: var(--st-bg);
+  stroke: var(--st-accent);
+  stroke-width: 2;
+}
+.gripper {
+  stroke: var(--st-paper);
+  stroke-width: 3;
+  stroke-linecap: round;
+  fill: none;
+}
+.frustum {
+  fill: rgba(111, 140, 255, 0.1);
+  stroke: rgba(111, 140, 255, 0.55);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+.shoulder {
+  transform-box: view-box;
+  transform-origin: 56px 122px;
+  animation: shoulder 5s ease-in-out infinite;
+}
+@keyframes shoulder {
+  0%,
+  100% {
+    transform: rotate(-6deg);
+  }
+  50% {
+    transform: rotate(14deg);
+  }
+}
+.elbow {
+  transform-box: view-box;
+  transform-origin: 56px 79px;
+  animation: elbow 5s ease-in-out infinite;
+}
+@keyframes elbow {
+  0%,
+  100% {
+    transform: rotate(-8deg);
+  }
+  50% {
+    transform: rotate(22deg);
+  }
+}
+.grip {
+  transform-box: view-box;
+  transform-origin: 119px 79px;
+  animation: grip 5s ease-in-out infinite;
+}
+@keyframes grip {
+  0%,
+  40%,
+  100% {
+    transform: scaleY(1);
+  }
+  52%,
+  70% {
+    transform: scaleY(0.5);
+  }
+}
+.scan {
+  animation: scan 2.6s linear infinite;
+}
+@keyframes scan {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(94px);
+    opacity: 0;
+  }
+}
+.feature {
+  animation: feature 2.4s ease-in-out infinite both;
+}
+@keyframes feature {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  30%,
+  55% {
+    opacity: 1;
+  }
+}
+
+/* AI: the detection box snaps from shape to shape and relabels */
+.shapeFill {
+  fill: var(--st-paper-soft);
+}
+.bracket {
+  stroke: var(--st-accent);
+  stroke-width: 2.5;
+  fill: none;
+}
+.boxFill {
+  fill: rgba(111, 140, 255, 0.14);
+  stroke: rgba(111, 140, 255, 0.6);
+  stroke-width: 1;
+}
+.detect {
+  animation: detect 4.5s cubic-bezier(0.3, 1.5, 0.5, 1) infinite;
+}
+@keyframes detect {
+  0%,
+  27% {
+    transform: translateX(0);
+  }
+  33%,
+  60% {
+    transform: translateX(70px);
+  }
+  66%,
+  94% {
+    transform: translateX(140px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.label0 {
+  animation: label0 4.5s steps(1, end) infinite;
+}
+.label1,
+.label2 {
+  opacity: 0;
+}
+.label1 {
+  animation: label1 4.5s steps(1, end) infinite;
+}
+.label2 {
+  animation: label2 4.5s steps(1, end) infinite;
+}
+@keyframes label0 {
+  0% {
+    opacity: 1;
+  }
+  31% {
+    opacity: 0;
+  }
+  97% {
+    opacity: 1;
+  }
+}
+@keyframes label1 {
+  0% {
+    opacity: 0;
+  }
+  31% {
+    opacity: 1;
+  }
+  64% {
+    opacity: 0;
+  }
+}
+@keyframes label2 {
+  0% {
+    opacity: 0;
+  }
+  64% {
+    opacity: 1;
+  }
+  97% {
+    opacity: 0;
+  }
+}
+.conf {
+  transform-box: fill-box;
+  transform-origin: left center;
+  transform: scaleX(0.97);
+  animation: conf 4.5s ease-out infinite;
+}
+@keyframes conf {
+  0% {
+    transform: scaleX(0.2);
+  }
+  20%,
+  31% {
+    transform: scaleX(0.97);
+  }
+  34% {
+    transform: scaleX(0.2);
+  }
+  52%,
+  64% {
+    transform: scaleX(0.94);
+  }
+  67% {
+    transform: scaleX(0.2);
+  }
+  85%,
+  100% {
+    transform: scaleX(0.91);
+  }
+}
+
+/* Backend: packets travel between services, status lights blink on arrival */
+.wire {
+  stroke: var(--st-paper-soft);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 3;
+  fill: none;
+}
+.service {
+  fill: rgba(241, 239, 234, 0.06);
+  stroke: var(--st-paper);
+  stroke-width: 1.25;
+}
+.led {
+  animation: led 1.8s ease-in-out infinite both;
+}
+@keyframes led {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.packetX {
+  transform: translateX(11px);
+  animation: packetX 1.8s cubic-bezier(0.5, 0, 0.5, 1) infinite both;
+}
+@keyframes packetX {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  15%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(22px);
+    opacity: 0;
+  }
+}
+.packetY {
+  transform: translateY(14px);
+  animation: packetY 1.8s cubic-bezier(0.5, 0, 0.5, 1) infinite both;
+}
+@keyframes packetY {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  15%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(28px);
+    opacity: 0;
+  }
+}
+
+/* Frontend: a UI card assembles, then the cursor clicks its button */
+.guide {
+  stroke: var(--st-accent);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+  opacity: 0.7;
+}
+.cardFrame {
+  fill: rgba(241, 239, 234, 0.06);
+  stroke: var(--st-paper);
+  stroke-width: 1.25;
+}
+.imgLine {
+  stroke: var(--st-bg);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  fill: none;
+}
+.ghostBtn {
+  fill: none;
+  stroke: var(--st-paper-soft);
+  stroke-width: 1.25;
+}
+.build0,
+.build1,
+.build2,
+.build3,
+.build4 {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: assemble 6s cubic-bezier(0.2, 0.8, 0.2, 1) infinite both;
+}
+.build1 {
+  animation-delay: 0.4s;
+}
+.build2 {
+  animation-delay: 0.8s;
+}
+.build3 {
+  animation-delay: 1.1s;
+}
+.build4 {
+  animation-delay: 1.5s;
+}
+@keyframes assemble {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+  8%,
+  78% {
+    opacity: 1;
+    transform: none;
+  }
+  86%,
+  100% {
+    opacity: 0;
+    transform: none;
+  }
+}
+.cursor {
+  fill: var(--st-paper);
+  stroke: var(--st-bg);
+  stroke-width: 1;
+}
+.pointer {
+  transform: translate(96px, 120px);
+  animation: pointer 6s ease-in-out infinite;
+}
+@keyframes pointer {
+  0%,
+  28% {
+    transform: translate(214px, 150px);
+  }
+  44% {
+    transform: translate(96px, 120px);
+  }
+  48% {
+    transform: translate(96px, 120px) scale(0.8);
+  }
+  52%,
+  72% {
+    transform: translate(96px, 120px);
+  }
+  84%,
+  100% {
+    transform: translate(214px, 150px);
+  }
+}
+
+/* Tools: a git command types, tests pass, the branch draws and merges */
+.promptSign {
+  fill: var(--st-accent);
+}
+.typeCover {
+  transform: translateX(160px);
+  animation: typeCover 5.5s steps(22, end) infinite;
+}
+@keyframes typeCover {
+  0% {
+    transform: translateX(0);
+  }
+  35%,
+  100% {
+    transform: translateX(160px);
+  }
+}
+.okLine {
+  animation: okLine 5.5s steps(1, end) infinite;
+}
+@keyframes okLine {
+  0%,
+  38% {
+    opacity: 0;
+  }
+  40%,
+  100% {
+    opacity: 1;
+  }
+}
+.mainLine {
+  stroke: var(--st-paper-soft);
+  stroke-width: 2;
+  fill: none;
+}
+.branchLine {
+  stroke: var(--st-accent);
+  stroke-width: 2;
+  fill: none;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  animation: branch 5.5s ease-in-out infinite;
+}
+@keyframes branch {
+  0%,
+  10% {
+    stroke-dashoffset: 1;
+  }
+  60%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+.commit {
+  fill: var(--st-bg);
+  stroke: var(--st-paper);
+  stroke-width: 2;
+}
+.commitBranch {
+  fill: var(--st-accent);
+  stroke: var(--st-bg);
+  stroke-width: 2;
+}
+.commitPop {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: commitPop 5.5s cubic-bezier(0.3, 1.6, 0.5, 1) infinite both;
+}
+@keyframes commitPop {
+  0% {
+    transform: scale(0);
+  }
+  6%,
+  82% {
+    transform: scale(1);
+  }
+  90%,
+  100% {
+    transform: scale(0);
+  }
+}
+
+/* ---------- layout ---------- */
+@media (max-width: 1000px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 620px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .stage {
+    min-height: 190px;
+  }
+}
+
+/* Hold a still, complete frame. */
+@media (prefers-reduced-motion: reduce) {
+  .art *,
+  .art {
+    animation: none !important;
+    transition: none !important;
+  }
+  .tile,
+  .reveal,
+  .chip,
+  .plus {
+    transition: none;
+  }
+  .tile:hover .art {
+    transform: none;
+  }
+}

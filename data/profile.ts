@@ -39,17 +39,3 @@ export const skills: SkillGroup[] = [
   { label: "Frontend and design", items: ["React", "Next.js", "Vite", "Tailwind CSS", "WebGL / Three.js", "UI/UX and product design"] },
   { label: "Tools", items: ["Git", "GitHub Actions", "Linux", "CMake", "GoogleTest", "Gradle"] },
 ];
-
-/** One-line AI summary for the intro. The detailed list lives with the projects. */
-export const aiSummary =
-  "I train and evaluate vision models end to end, from cleaning the data to running them on live robot cameras: segmentation, identity embeddings and learned contact reasoning for IRIS, and in-browser detection for the Guitar Scale Visualizer.";
-
-/** AI experience in detail, shown on the IRIS and Guitar pages rather than the intro. */
-export const aiExperience = [
-  "Cleaned and curated the instrument datasets, then trained and evaluated every IRIS model myself",
-  "YOLO instance segmentation for reflective, look-alike, overlapping surgical tools (IRIS)",
-  "A DINOv3 identity head on masked crops, tested with leave-one-capture-day-out folds (IRIS)",
-  "Learned contact heads that decide which instrument is on top, plus vision-language experiments for tray understanding (IRIS)",
-  "Mapped model detections from an RGB-D camera into grasp coordinates for a UFACTORY arm through ROS 2 and MoveIt (IRIS)",
-  "YOLOv8 fretboard detection in the browser with 90% note-overlay accuracy at 30 FPS (Guitar Scale Visualizer)",
-];
