@@ -7,46 +7,6 @@ import s from "./SkillTiles.module.css";
 /* Each skill group is a tile: a looping illustration of the area at rest, the full list on hover,
    keyboard focus or tap. The list is always in the DOM, so screen readers get it without revealing. */
 
-function LanguagesArt() {
-  const lines = [
-    [{ x: 34, w: 22, c: s.tokKey }, { x: 60, w: 46, c: s.tokText }, { x: 110, w: 18, c: s.tokAccent }],
-    [{ x: 44, w: 30, c: s.tokText }, { x: 78, w: 54, c: s.tokAccent }],
-    [{ x: 44, w: 18, c: s.tokKey }, { x: 66, w: 70, c: s.tokText }, { x: 140, w: 26, c: s.tokFaint }],
-    [{ x: 54, w: 40, c: s.tokAccent }, { x: 98, w: 34, c: s.tokText }],
-    [{ x: 44, w: 26, c: s.tokKey }, { x: 74, w: 42, c: s.tokText }],
-    [{ x: 34, w: 12, c: s.tokFaint }],
-  ];
-  return (
-    <svg viewBox="0 0 240 150" className={s.art} aria-hidden="true" focusable="false">
-      <g className={s.tabs}>
-        <rect x="10" y="10" width="220" height="16" className={s.chrome} />
-        <text x="18" y="21.5" className={s.svgMono}>main.cpp</text>
-        <text x="80" y="21.5" className={s.svgMono}>train.py</text>
-        <text x="142" y="21.5" className={s.svgMono}>app.tsx</text>
-        <rect x="14" y="24" width="50" height="2" className={`${s.fillAccent} ${s.tabMark}`} />
-      </g>
-      {lines.map((tokens, i) => (
-        <g key={i}>
-          <rect x="16" y={38 + i * 17} width="8" height="5" className={s.tokFaint} />
-          {tokens.map((t, j) => (
-            <rect
-              key={j}
-              x={t.x}
-              y={37 + i * 17}
-              width={t.w}
-              height="7"
-              rx="1"
-              className={`${t.c} ${s.type}`}
-              style={{ animationDelay: `${i * 0.45 + j * 0.15}s` }}
-            />
-          ))}
-        </g>
-      ))}
-      <rect x="50" y="122" width="5" height="10" className={`${s.fillAccent} ${s.caret}`} />
-    </svg>
-  );
-}
-
 function RoboticsArt() {
   const points = [
     [150, 112], [176, 106], [204, 114], [162, 124], [192, 126], [218, 120], [170, 116], [208, 104],
@@ -119,10 +79,10 @@ function AiArt() {
 function BackendArt() {
   const boxes = [
     { x: 10, y: 34, label: "client" },
-    { x: 92, y: 34, label: "api" },
-    { x: 174, y: 34, label: "queue" },
-    { x: 92, y: 98, label: "db" },
-    { x: 174, y: 98, label: "worker" },
+    { x: 92, y: 34, label: "gateway" },
+    { x: 174, y: 34, label: "events" },
+    { x: 92, y: 98, label: "postgres" },
+    { x: 174, y: 98, label: "service" },
   ];
   return (
     <svg viewBox="0 0 240 150" className={s.art} aria-hidden="true" focusable="false">
@@ -163,7 +123,7 @@ function FrontendArt() {
   );
 }
 
-function ToolsArt() {
+function TerminalArt({ cmd, ok }: { cmd: string; ok: string }) {
   return (
     <svg viewBox="0 0 240 150" className={s.art} aria-hidden="true" focusable="false">
       <rect x="10" y="10" width="220" height="16" className={s.chrome} />
@@ -171,11 +131,11 @@ function ToolsArt() {
       <circle cx="30" cy="18" r="3" className={s.fillPaperSoft} />
       <circle cx="40" cy="18" r="3" className={s.fillAccent} />
       <text x="16" y="44" className={s.svgMonoLg}>
-        <tspan className={s.promptSign}>$</tspan> git merge feature/sort
+        <tspan className={s.promptSign}>$</tspan> {cmd}
       </text>
       <rect x="28" y="34" width="160" height="14" className={`${s.fillInkPanel} ${s.typeCover}`} />
       <text x="16" y="60" className={`${s.svgMono} ${s.okLine}`}>
-        ok  ctest 42/42 passed
+        {ok}
       </text>
       <path d="M20 118 H222" className={s.mainLine} />
       <path d="M62 118 C78 118 78 92 96 92 H160 C178 92 178 118 194 118" pathLength={1} className={s.branchLine} />
@@ -188,19 +148,40 @@ function ToolsArt() {
   );
 }
 
+/** A loss curve drawing itself down over the epochs, with the checkpoints popping in. */
+function TrainingArt() {
+  return (
+    <svg viewBox="0 0 240 150" className={s.art} aria-hidden="true" focusable="false">
+      <path d="M30 20 V126 H222" className={s.mainLine} />
+      {[50, 80, 110].map((y) => (
+        <path key={y} d={`M30 ${y} H222`} className={s.guide} />
+      ))}
+      <text x="34" y="18" className={s.svgMono}>loss</text>
+      <text x="190" y="140" className={s.svgMono}>epoch</text>
+      <path d="M32 30 C60 36 70 78 96 88 S150 104 176 108 S206 112 220 112" pathLength={1} className={s.branchLine} />
+      <path d="M32 40 C62 50 74 86 100 96 S152 110 178 114 S208 116 220 118" pathLength={1} className={`${s.branchLine} ${s.valLine}`} />
+      {[
+        [96, 88, 1.2], [140, 101, 2], [176, 108, 2.8], [220, 112, 3.6],
+      ].map(([x, y, d]) => (
+        <circle key={x} cx={x} cy={y} r="4" className={`${s.commitBranch} ${s.commitPop}`} style={{ animationDelay: `${d}s` }} />
+      ))}
+    </svg>
+  );
+}
+
 const ART: Record<string, () => ReactNode> = {
-  Languages: LanguagesArt,
-  Robotics: RoboticsArt,
-  "AI and machine learning": AiArt,
-  "Backend and systems": BackendArt,
-  "Frontend and design": FrontendArt,
-  Tools: ToolsArt,
+  "AI and machine learning": TrainingArt,
+  Perception: AiArt,
+  "ROS and control": RoboticsArt,
+  Frontend: FrontendArt,
+  Backend: () => <TerminalArt cmd="POST /api/v1/rosters" ok="201 created  18 ms" />,
+  "System architecture": BackendArt,
 };
 
 function SkillTile({ group, index }: { group: SkillGroup; index: number }) {
   const [open, setOpen] = useState(false);
   const listId = useId();
-  const Art = ART[group.label] ?? LanguagesArt;
+  const Art = ART[group.label] ?? FrontendArt;
   return (
     <li className={s.tile} data-open={open ? "true" : undefined}>
       <div className={s.head}>
@@ -235,12 +216,27 @@ function SkillTile({ group, index }: { group: SkillGroup; index: number }) {
   );
 }
 
-export function SkillTiles({ groups }: { groups: SkillGroup[] }) {
+/** Languages as one line, then the tiles in two areas: Robotics and Full stack. */
+export function SkillTiles({ groups, languages }: { groups: SkillGroup[]; languages: string[] }) {
+  const areas = [...new Set(groups.map((group) => group.area))];
   return (
-    <ul className={s.grid} aria-label="Skills">
-      {groups.map((group, i) => (
-        <SkillTile key={group.label} group={group} index={i} />
+    <div className={s.skills}>
+      <p className={s.languages}>
+        <span className={s.languagesLabel}>Languages</span>
+        {languages.join(" · ")}
+      </p>
+      {areas.map((area) => (
+        <section key={area} className={s.area} aria-label={area}>
+          <h3 className={s.areaTitle}>{area}</h3>
+          <ul className={s.grid}>
+            {groups
+              .filter((group) => group.area === area)
+              .map((group) => (
+                <SkillTile key={group.label} group={group} index={groups.indexOf(group)} />
+              ))}
+          </ul>
+        </section>
       ))}
-    </ul>
+    </div>
   );
 }

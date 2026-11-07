@@ -20,35 +20,58 @@ export const interests = [
   },
 ];
 
-export type SkillGroup = { label: string; items: string[] };
+export type SkillGroup = { area: "Robotics" | "Full stack"; label: string; items: string[] };
+
+export const languages = ["C++", "Python", "TypeScript", "JavaScript", "Java", "SQL"];
 
 export const skills: SkillGroup[] = [
-  { label: "Languages", items: ["C++", "Python", "TypeScript", "JavaScript", "Java", "SQL"] },
   {
-    label: "Robotics",
-    items: ["ROS 2", "MoveIt", "Robot grasping", "RGB-D cameras", "Camera calibration", "AprilTags", "BEV and ego-motion"],
+    area: "Robotics",
+    label: "AI and machine learning",
+    items: ["PyTorch", "Hugging Face", "Model training", "Model evaluation", "Data cleaning and labelling", "Roboflow", "Vision-language models", "CUDA"],
   },
   {
-    label: "AI and machine learning",
+    area: "Robotics",
+    label: "Perception",
     items: [
       "YOLO detection and segmentation",
       "DINOv3 embeddings",
-      "Vision-language models",
-      "PyTorch",
-      "Hugging Face",
-      "Roboflow",
-      "Model evaluation",
       "OpenCV",
       "NVIDIA VPI",
       "Optical flow / KLT",
+      "Camera calibration",
+      "AprilTags",
+      "RGB-D cameras",
       "Surround-view stitching",
-      "CUDA",
+      "BEV and ego-motion",
     ],
   },
   {
-    label: "Backend and systems",
-    items: ["Node.js", "FastAPI", "REST APIs", "Docker", "RabbitMQ", "MQTT", "Redis", "SQLite", "Firebase", "GStreamer / RTSP", "DDS"],
+    area: "Robotics",
+    label: "ROS and control",
+    items: ["ROS 2", "MoveIt", "ros2_control", "Grasp planning", "DDS", "GStreamer / RTSP", "CMake", "GoogleTest"],
   },
-  { label: "Frontend and design", items: ["React", "Next.js", "Vite", "Tailwind CSS", "WebGL / Three.js", "UI/UX and product design"] },
-  { label: "Tools", items: ["Git", "GitHub Actions", "Linux", "CMake", "GoogleTest", "Gradle"] },
+  {
+    area: "Full stack",
+    label: "Frontend",
+    items: ["React", "Next.js", "Vite", "Tailwind CSS", "WebGL / Three.js", "UI/UX and product design"],
+  },
+  {
+    area: "Full stack",
+    label: "Backend",
+    items: ["Node.js", "FastAPI", "REST API design", "PostgreSQL", "Redis", "SQLite", "Firebase"],
+  },
+  {
+    area: "Full stack",
+    label: "System architecture",
+    items: [
+      "Event-driven microservices",
+      "API gateway",
+      "RabbitMQ",
+      "MQTT",
+      "Docker containers",
+      "AWS deployment",
+      "GitHub Actions CI",
+    ],
+  },
 ];

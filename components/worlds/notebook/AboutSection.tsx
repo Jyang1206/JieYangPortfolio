@@ -1,4 +1,4 @@
-import { greeting, interests, skills, tagline } from "../../../data/profile";
+import { greeting, interests, languages, skills, tagline } from "../../../data/profile";
 import { ContactLinks } from "../../ContactLinks";
 import { SkillTiles } from "./SkillTiles";
 
@@ -28,7 +28,7 @@ export function AboutSection() {
         </div>
 
         <h2 className="nb-display nb-about-title nb-about-title-2">Skills</h2>
-        <SkillTiles groups={skills} />
+        <SkillTiles groups={skills} languages={languages} />
       </div>
     </section>
   );

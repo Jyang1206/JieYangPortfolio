@@ -799,3 +799,43 @@
     transform: none;
   }
 }
+
+/* ---------- two areas (Robotics, Full stack) and the languages line ---------- */
+.skills {
+  display: grid;
+  gap: clamp(28px, 4vw, 44px);
+}
+.languages {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 14px;
+  margin: 0;
+  font-size: 17px;
+  color: var(--nb-ink);
+}
+.languagesLabel,
+.areaTitle {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nb-ink-soft);
+}
+.area {
+  display: grid;
+  gap: 14px;
+}
+.areaTitle {
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 1.5px solid var(--nb-ink);
+  font-size: 12px;
+  color: var(--nb-ink);
+}
+/* Validation loss: same draw-in as training, quieter. */
+.valLine {
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-width: 1.5;
+}
