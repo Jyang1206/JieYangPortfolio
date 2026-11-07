@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Mail, Menu, X } from "lucide-react";
-import { contact } from "../data/contact";
 
 type NotebookNavProps = {
   /**
@@ -93,7 +92,7 @@ function SideNav() {
   );
 }
 
-/** The top bar: the name and Contact (plus a menu of sections on phones); the home page adds the side nav. */
+/** The top bar: the name and the same sections as the side nav (a menu on phones); the home page adds the side nav. */
 export function NotebookNav({ mode, hideBelow }: NotebookNavProps) {
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
@@ -147,11 +146,11 @@ export function NotebookNav({ mode, hideBelow }: NotebookNavProps) {
           className={`nb-nav-menu nb-paper ${open ? "is-open" : ""}`}
           aria-label="Site"
         >
-          {LINKS.map((link) => (
+          {LINKS.filter((link) => link.hash !== "contact").map((link) => (
             <a
               key={link.hash}
               href={`/#${link.hash}`}
-              className="nb-label nb-nav-section"
+              className="nb-label"
               onClick={(event) => {
                 setOpen(false);
                 jumpAgain(event, link.hash);
@@ -160,7 +159,16 @@ export function NotebookNav({ mode, hideBelow }: NotebookNavProps) {
               {link.label}
             </a>
           ))}
-          <a href={`mailto:${contact.email}`} className="nb-btn nb-nav-contact">
+          {/* A plain anchor on purpose: a same-page hash change must fire hashchange (see LINKS). */}
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+          <a
+            href="/#contact"
+            className="nb-btn nb-nav-contact"
+            onClick={(event) => {
+              setOpen(false);
+              jumpAgain(event, "contact");
+            }}
+          >
             <Mail size={13} aria-hidden="true" />
             Contact
           </a>

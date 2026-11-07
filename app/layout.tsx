@@ -25,9 +25,9 @@ const hanken = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Jie Yang Robotics Portfolio",
+  title: "Jie Yang",
   description:
-    "An interactive robotics portfolio about human-centered automation, perception, and deployment work.",
+    "Jie Yang, software engineer: robotics, AI, backends and interfaces.",
 };
 
 export default function RootLayout({

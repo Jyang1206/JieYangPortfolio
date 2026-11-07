@@ -3261,10 +3261,6 @@
   display: none;
 }
 @media (min-width: 900px) {
-  /* Section links live in the side nav on desktop; the top bar keeps the name and Contact. */
-  .nb-nav-section {
-    display: none !important;
-  }
   .nb-side-nav {
     position: fixed;
     left: 18px;
