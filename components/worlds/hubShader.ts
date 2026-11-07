@@ -2,7 +2,8 @@
 // wedge shows the part of the world that would sit there if the world were full-bleed.
 //
 // uLayout 0: wedges by polar angle from the centre, clockwise from the top.
-// uLayout 1: horizontal bands, top first (narrow screens, where a pizza would be too small to read).
+// uLayout 1: horizontal bands, top first.
+// uLayout 2: side-by-side strips with slightly slanted seams, left first (phones: a swipeable row).
 // uBounds[k]..uBounds[k+1] is slice k's share of the turn (or of the height), as fractions of 1.
 // uHover is the slice drawn live and bright; -1 when nothing is hovered.
 
@@ -46,6 +47,10 @@ void main() {
     // Fraction of the turn, clockwise from the top.
     f = fract((atan(p.x, p.y)) / TAU - uRotate + 2.);
     scale = length(p) * TAU; // one unit of f equals this many pixels at this radius
+  } else if (uLayout == 2) {
+    // Lean the seams: the strip edge sits further right at the top than at the bottom.
+    f = st.x - .09 * (st.y - .5) * uRes.y / uRes.x;
+    scale = uRes.x;
   } else {
     f = 1. - st.y;
     scale = uRes.y;

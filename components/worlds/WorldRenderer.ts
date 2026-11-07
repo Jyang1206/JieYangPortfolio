@@ -14,10 +14,10 @@ export type HubState = {
   hovered: number;
   /** Relative width of each slice; normalised here. Ignored when `bounds` is given. */
   weights: ArrayLike<number>;
-  /** Explicit slice edges as fractions of the turn or height, length count + 1 (band layout on narrow screens). */
+  /** Explicit slice edges as fractions of the turn, height or width, length count + 1 (band and strip layouts). */
   bounds?: ArrayLike<number>;
   /** 0: wedges around the centre. 1: horizontal bands. */
-  layout: 0 | 1;
+  layout: 0 | 1 | 2;
   /** Paper colour for the seams and the centre disc, 0..1 RGB. */
   seam: [number, number, number];
   /** Radius of the paper disc in the middle, in device pixels (wedge layout only). */

@@ -14,6 +14,7 @@ const STILL_TIME = 14; // shader clock used when the visitor prefers reduced mot
 const MAX_PIXELS = 3_800_000; // render budget, roughly 2560 x 1480
 const HOT = 1.4; // how much the hovered slice widens
 const SPIN = 1 / 70; // turns per second while nothing is hovered
+const PAN_SPEED = 38; // phones: CSS pixels per second the row of slices pans
 const SEAM: [number, number, number] = [0.945, 0.937, 0.918]; // --nb-paper
 
 type HomeStageProps = {
@@ -41,6 +42,26 @@ export function HomeStage({ worlds }: HomeStageProps) {
   const [readyMask, setReadyMask] = useState(0);
   const [filter, setFilter] = useState<Category | null>(null);
   const count = Math.min(worlds.length, 6);
+  // Phones: the row of slices pans by itself like a panorama; `centre` is the slice in the middle.
+  const listRef = useRef<HTMLOListElement>(null);
+  const centreRef = useRef(0);
+  const [centre, setCentre] = useState(0);
+  const panRef = useRef({ pos: -1, holdUntil: 0 });
+  /** Stop the panorama for a while: the visitor is swiping or picked a slice. */
+  const holdPan = useCallback((ms = 7000) => {
+    panRef.current.holdUntil = performance.now() + ms;
+    panRef.current.pos = -1;
+  }, []);
+  const pick = useCallback(
+    (i: number) => {
+      const list = listRef.current;
+      const card = sliceRefs.current[i];
+      if (!list || !card) return;
+      holdPan(9000);
+      list.scrollTo({ left: card.offsetLeft - (list.clientWidth - card.clientWidth) / 2, behavior: "smooth" });
+    },
+    [holdPan],
+  );
 
   const hover = useCallback((i: number) => {
     if (hoveredRef.current === i) return;
@@ -138,15 +159,37 @@ export function HomeStage({ worlds }: HomeStageProps) {
       }
 
       if (bands) {
-        // Narrow screens: bands follow the rows on the page; the row at the middle of the screen is live.
+        // Phones: the slices are a row that pans by itself; each strip follows its card, the centred one is live.
+        const list = listRef.current;
+        const pan = panRef.current;
+        if (list && !reduce && now > pan.holdUntil) {
+          const max = list.scrollWidth - list.clientWidth;
+          if (pan.pos < 0) pan.pos = list.scrollLeft;
+          pan.pos += PAN_SPEED * dt;
+          if (pan.pos >= max) {
+            // End of the row: rest a moment, then glide back to the start.
+            pan.pos = -1;
+            pan.holdUntil = now + 4500;
+            window.setTimeout(() => list.scrollTo({ left: 0, behavior: "smooth" }), 1800);
+          } else {
+            list.scrollLeft = pan.pos;
+          }
+        }
         hot = -1;
+        const box = canvas.getBoundingClientRect();
+        const w = Math.max(box.width, 1);
+        const mid = box.left + w / 2;
         for (let i = 0; i < count; i++) {
           const el = sliceRefs.current[i];
           if (!el) continue;
           const r = el.getBoundingClientRect();
-          bounds[i] = r.top / vh;
-          if (i === count - 1) bounds[count] = r.bottom / vh;
-          if (r.top <= vh * 0.5 && r.bottom > vh * 0.5) hot = i;
+          bounds[i] = (r.left - box.left) / w;
+          if (i === count - 1) bounds[count] = (r.right - box.left) / w;
+          if (r.left <= mid && r.right > mid) hot = i;
+        }
+        if (hot >= 0 && hot !== centreRef.current) {
+          centreRef.current = hot;
+          setCentre(hot);
         }
       } else {
         for (let i = 0; i < count; i++) {
@@ -180,7 +223,7 @@ export function HomeStage({ worlds }: HomeStageProps) {
               hovered: hot,
               weights,
               bounds: bands ? bounds : undefined,
-              layout: bands ? 1 : 0,
+              layout: bands ? 2 : 0,
               seam: SEAM,
               disc: Math.min(vw, vh) * 0.07 * (canvas.width / Math.max(vw, 1)),
               reveal: reduce ? (reveal > 0.5 ? 1 : 0) : reveal,
@@ -346,7 +389,13 @@ export function HomeStage({ worlds }: HomeStageProps) {
         <div className="nb-hub-band">
           {/* The worlds, drawn only here: the canvas belongs to the hub, not the page. */}
           <canvas ref={canvasRef} className="nb-hub-canvas" aria-hidden="true" hidden={!webgl} />
-          <ol className="nb-hub-slices">
+          <ol
+            ref={listRef}
+            className="nb-hub-slices"
+            onPointerDown={() => holdPan()}
+            onTouchStart={() => holdPan()}
+            onWheel={() => holdPan()}
+          >
             {worlds.slice(0, count).map((world, i) => {
               const category = categoryOf(world.id);
               const ready = (readyMask >> i) & 1;
@@ -357,7 +406,7 @@ export function HomeStage({ worlds }: HomeStageProps) {
                   ref={(el) => {
                     sliceRefs.current[i] = el;
                   }}
-                  className={`nb-slice ${hovered === i ? "is-hot" : ""} ${dim ? "is-dim" : ""}`}
+                  className={`nb-slice ${hovered === i ? "is-hot" : ""} ${centre === i ? "is-centre" : ""} ${dim ? "is-dim" : ""}`}
                   data-world={world.id}
                 >
                   <Link href={worldHref(world.id)} onFocus={() => hover(i)} onBlur={() => hover(-1)} onPointerEnter={() => hover(i)}>
@@ -382,6 +431,21 @@ export function HomeStage({ worlds }: HomeStageProps) {
             })}
           </ol>
         </div>
+
+        {/* Phones only: pick a slice by name. */}
+        <nav className="nb-hub-picker" aria-label="Pick a project">
+          {worlds.slice(0, count).map((world, i) => (
+            <button
+              key={world.id}
+              type="button"
+              aria-current={centre === i ? "true" : undefined}
+              data-category={categoryOf(world.id)}
+              onClick={() => pick(i)}
+            >
+              {shortName(world.name)}
+            </button>
+          ))}
+        </nav>
       </section>
   );
 }
