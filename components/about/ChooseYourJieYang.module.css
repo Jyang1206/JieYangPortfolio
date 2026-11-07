@@ -128,8 +128,16 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  margin-top: 20px;
+  margin-top: 18px;
+}
+.hint {
+  flex-basis: 100%;
+  margin: 0 0 4px;
+  text-align: center;
+  color: var(--cy-ink-soft);
+  font-size: 14px;
 }
 .step {
   display: grid;
@@ -204,19 +212,24 @@
 }
 
 /* ---------- the stage: green arch, the photo big in front of it ---------- */
-.stage {
-  position: relative;
+.visual {
   order: -1;
   width: 100%;
-  aspect-ratio: 0.9;
   justify-self: center;
 }
+.stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 0.9;
+}
 @media (min-width: 880px) {
-  .stage {
+  .visual {
     order: 0;
-    width: min(100%, calc(min(86svh, 900px) * 0.95));
-    aspect-ratio: 0.95;
+    width: min(100%, calc(min(76svh, 820px) * 0.95));
     justify-self: end;
+  }
+  .stage {
+    aspect-ratio: 0.95;
   }
 }
 .arch {

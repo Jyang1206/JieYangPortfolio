@@ -24,8 +24,8 @@ export const heroMoments: HeroMoment[] = [
   {
     id: "hello",
     label: "Portrait",
-    title: "Engineer",
-    line: "Robotics, AI, backends and interfaces. Click the photo to see the other sides.",
+    title: "Software Engineer",
+    line: "Robotics, AI, backends and interfaces.",
     srcs: ["/images/me/portrait.webp"],
     alt: "Portrait of Jie Yang in Paris.",
     placeholder: "JY",

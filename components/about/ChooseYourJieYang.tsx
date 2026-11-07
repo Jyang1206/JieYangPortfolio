@@ -53,7 +53,8 @@ function Print({ moment, depth, first, imgId, onMissing }: PrintProps) {
 
   /* Advance only past the file that failed, so an error reported twice skips nothing. */
   const fail = useCallback(
-    (failed: string) => setAttempt((i) => (moment.srcs[i] === failed ? i + 1 : i)),
+    (failed: string) =>
+      setAttempt((i) => (moment.srcs[i] === failed ? i + 1 : i)),
     [moment.srcs],
   );
 
@@ -70,9 +71,18 @@ function Print({ moment, depth, first, imgId, onMissing }: PrintProps) {
   const front = depth === 0;
 
   return (
-    <span className={styles.print} data-depth={Math.min(depth, 2)} aria-hidden={front ? undefined : true}>
+    <span
+      className={styles.print}
+      data-depth={Math.min(depth, 2)}
+      aria-hidden={front ? undefined : true}
+    >
       {exhausted ? (
-        <span className={styles.placeholder} id={front ? imgId : undefined} role="img" aria-label="Jie Yang">
+        <span
+          className={styles.placeholder}
+          id={front ? imgId : undefined}
+          role="img"
+          aria-label="Jie Yang"
+        >
           <span className={styles.placeholderInitials} aria-hidden="true">
             {moment.placeholder}
           </span>
@@ -109,7 +119,12 @@ type ChooseYourJieYangProps = {
   className?: string;
 };
 
-export function ChooseYourJieYang({ as: Heading = "h1", moments = heroMoments, id = "hello", className = "" }: ChooseYourJieYangProps) {
+export function ChooseYourJieYang({
+  as: Heading = "h1",
+  moments = heroMoments,
+  id = "hello",
+  className = "",
+}: ChooseYourJieYangProps) {
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [missing, setMissing] = useState<string[]>([]);
   const [paused, setPaused] = useState(false);
@@ -134,7 +149,9 @@ export function ChooseYourJieYang({ as: Heading = "h1", moments = heroMoments, i
   const prev = n > 1 ? visible[(pos - 1 + n) % n] : undefined;
 
   const markMissing = useCallback((missingId: string) => {
-    setMissing((list) => (list.includes(missingId) ? list : [...list, missingId]));
+    setMissing((list) =>
+      list.includes(missingId) ? list : [...list, missingId],
+    );
   }, []);
 
   const go = (delta: number) => {
@@ -191,7 +208,11 @@ export function ChooseYourJieYang({ as: Heading = "h1", moments = heroMoments, i
           </Heading>
 
           {current && (
-            <div className={styles.moment} aria-live="polite" aria-atomic="true">
+            <div
+              className={styles.moment}
+              aria-live="polite"
+              aria-atomic="true"
+            >
               <p className={styles.srOnly}>
                 Photo {pos + 1} of {n}.
               </p>
@@ -203,17 +224,68 @@ export function ChooseYourJieYang({ as: Heading = "h1", moments = heroMoments, i
               </p>
             </div>
           )}
+        </div>
 
+        <div className={styles.visual}>
+          <div className={styles.stage}>
+            <div className={styles.arch}>
+              <DrumStage
+                scene={current?.scene ?? "calm"}
+                still={reduced || paused}
+                holeRef={frameRef}
+                className={styles.canvas}
+              />
+            </div>
+            {current && (
+              <button
+                ref={frameRef}
+                type="button"
+                className={styles.frame}
+                aria-label={next ? `Next photo: ${next.label}` : current.alt}
+                aria-describedby={next ? imgId : undefined}
+                onClick={onFrameClick}
+                onPointerDown={onPointerDown}
+                onPointerUp={onPointerUp}
+                onPointerCancel={() => {
+                  swipe.current = null;
+                }}
+              >
+                {visible.map((m, i) => (
+                  <Print
+                    key={m.id}
+                    moment={m}
+                    depth={(i - pos + n) % n}
+                    first={i === 0}
+                    imgId={imgId}
+                    onMissing={markMissing}
+                  />
+                ))}
+              </button>
+            )}
+          </div>
           {n > 1 && (
             <div className={styles.controls}>
+              <p className={styles.hint}>
+                Click the photo to see the other sides
+              </p>
               <button
                 type="button"
                 className={styles.step}
                 aria-label={`Previous photo: ${prev?.label}`}
                 onClick={() => go(-1)}
               >
-                <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
-                  <path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" strokeWidth="2" />
+                <svg
+                  viewBox="0 0 16 16"
+                  width="16"
+                  height="16"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M10 3 5 8l5 5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
                 </svg>
               </button>
               <div className={styles.dots}>
@@ -236,8 +308,18 @@ export function ChooseYourJieYang({ as: Heading = "h1", moments = heroMoments, i
                 aria-label={`Next photo: ${next?.label}`}
                 onClick={() => go(1)}
               >
-                <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
-                  <path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="2" />
+                <svg
+                  viewBox="0 0 16 16"
+                  width="16"
+                  height="16"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M6 3l5 5-5 5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
                 </svg>
               </button>
               {!reduced && (
@@ -251,38 +333,6 @@ export function ChooseYourJieYang({ as: Heading = "h1", moments = heroMoments, i
                 </button>
               )}
             </div>
-          )}
-        </div>
-
-        <div className={styles.stage}>
-          <div className={styles.arch}>
-            <DrumStage scene={current?.scene ?? "calm"} still={reduced || paused} holeRef={frameRef} className={styles.canvas} />
-          </div>
-          {current && (
-            <button
-              ref={frameRef}
-              type="button"
-              className={styles.frame}
-              aria-label={next ? `Next photo: ${next.label}` : current.alt}
-              aria-describedby={next ? imgId : undefined}
-              onClick={onFrameClick}
-              onPointerDown={onPointerDown}
-              onPointerUp={onPointerUp}
-              onPointerCancel={() => {
-                swipe.current = null;
-              }}
-            >
-              {visible.map((m, i) => (
-                <Print
-                  key={m.id}
-                  moment={m}
-                  depth={(i - pos + n) % n}
-                  first={i === 0}
-                  imgId={imgId}
-                  onMissing={markMissing}
-                />
-              ))}
-            </button>
           )}
         </div>
       </div>
