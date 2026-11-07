@@ -2741,6 +2741,11 @@
   z-index: 6;
   max-width: min(560px, calc(100% - min(440px, 40vw) - 120px));
 }
+/* The guitar's key picker sits bottom right, just above the stack bar. */
+.nb-project[data-world="guitar"] .nb-stage-controls {
+  top: auto;
+  bottom: 132px;
+}
 .nb-world-tabs,
 .nb-guitar-panel {
   display: flex;
@@ -2816,29 +2821,44 @@
 .nb-stage-extra > * {
   width: 100%;
 }
-/* Only the floating desk calendar: none of the site section's card, background, caption or phone. */
+/* The desk calendar and a simple phone: none of the site section's card, background or caption. */
 .nb-stage-extra .tsy .tsy-stage {
-  height: auto;
-  overflow: visible;
   border: 0;
-  border-radius: 0;
   background: none;
   box-shadow: none;
 }
-.nb-stage-extra .tsy :is(.tsy-floor, .tsy-caption, .tsy-plant, .tsy-phone) {
+.nb-stage-extra .tsy :is(.tsy-floor, .tsy-caption, .tsy-plant) {
   display: none;
 }
-.nb-stage-extra .tsy .tsy-scene {
-  position: relative;
-  inset: auto;
-  display: grid;
-  place-items: center;
+/* Calendar left, phone right, filling the space the caption and characters used to take. */
+.nb-stage-extra .tsy .tsy-stage {
+  height: clamp(320px, 60vh, 600px);
 }
+/* A nearly square desk calendar: its height sets its width. */
 .nb-stage-extra .tsy .hs-device {
-  position: relative;
-  inset: auto;
-  width: min(620px, 100%);
-  aspect-ratio: 1.55;
+  left: 0;
+  right: auto;
+  top: 9%;
+  bottom: 9%;
+  aspect-ratio: 1.12;
+}
+.nb-stage-extra .tsy .tsy-phone {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 32%;
+}
+@media (max-width: 899px) {
+  .nb-stage-extra .tsy .tsy-stage {
+    height: 320px;
+  }
+  .nb-stage-extra .tsy .hs-device {
+    top: 14%;
+    bottom: 14%;
+  }
+  .nb-stage-extra .tsy .tsy-phone {
+    width: 36%;
+  }
 }
 
 .nb-brief {
@@ -3060,6 +3080,11 @@
     left: 12px;
     right: 12px;
     max-width: none;
+  }
+  /* Clear of the brief card and its All work button, which overlap the bottom of the view. */
+  .nb-project[data-world="guitar"] .nb-stage-controls {
+    top: auto;
+    bottom: 104px;
   }
   .nb-world-tabs,
   .nb-guitar-panel .row {

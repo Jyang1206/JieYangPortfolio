@@ -1062,3 +1062,45 @@
     transition: none !important;
   }
 }
+
+/* Simple phone screen (portfolio page): shifts as a plain list. */
+.tsy .tsy-simple {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: #eef5f1;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  opacity: 1;
+}
+.tsy .tsy-simple p {
+  margin: 0;
+}
+.tsy .tsy-simple-month {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.tsy .tsy-simple ul {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tsy .tsy-simple li {
+  display: grid;
+  grid-template-columns: 3.6em 1fr auto;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 1px 0 var(--hs-line);
+}
+.tsy .tsy-simple li span:first-child {
+  color: var(--hs-muted);
+}
+.tsy .tsy-simple li span:last-child {
+  color: var(--hs-teal);
+  font-weight: 700;
+}

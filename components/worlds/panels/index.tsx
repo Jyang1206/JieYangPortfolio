@@ -27,7 +27,7 @@ type WorldExtras = {
 
 export const WORLD_EXTRAS: Record<string, WorldExtras> = {
   iris: { Overlay: IrisArmOverlay },
-  tarii: { Extra: TariiStory },
+  tarii: { Extra: () => <TariiStory simple /> },
   "st-engineering": { Controls: STControls, Panel: STPanel },
   guitar: { Panel: GuitarPanel },
   battlecode: { Overlay: BattlecodeReplayOverlay },

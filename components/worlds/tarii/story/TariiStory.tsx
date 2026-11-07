@@ -122,7 +122,11 @@ function walkTo(from: Positions, next: number) {
  * off screen; with reduced motion it shows the month settled, with the six
  * moments written out.
  */
-export function TariiStory() {
+/**
+ * `simple`: the calendar and a plain coded phone only (the portfolio's Tarii page). No characters and
+ * no floating planner screenshots; the phone shows a short list of shifts and the moment's update.
+ */
+export function TariiStory({ simple = false }: { simple?: boolean } = {}) {
   const calm = useSyncExternalStore(subscribeReduced, readReduced, () => false);
   const rootRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -259,7 +263,7 @@ export function TariiStory() {
             <DeskCalendar moment={shown} covered={covered} fresh={!calm} />
           </div>
 
-          {!calm && scene.float ? (
+          {!simple && !calm && scene.float ? (
             <button
               type="button"
               key={scene.float.src}
@@ -272,7 +276,7 @@ export function TariiStory() {
             </button>
           ) : null}
 
-          {ACTORS.map(({ id, role }) => {
+          {!simple && ACTORS.map(({ id, role }) => {
             const mark: Mark | undefined = scene.actors[id];
             const x = places[id];
             const off = !mark;
@@ -323,7 +327,13 @@ export function TariiStory() {
                 </span>
               </div>
               <div className="tsy-screens">
-                {MOMENTS.map((m, i) => {
+                {simple ? (
+                  scene.screen === "cover" ? (
+                    <CoverScreen on accepted={covered} />
+                  ) : (
+                    <SimpleScreen title={scene.title} />
+                  )
+                ) : MOMENTS.map((m, i) => {
                   const on = i === (calm ? 2 : shown);
                   // Only this screen and its neighbours stay in the page.
                   if (!on && Math.abs(i - shown) > 1 && !(shown === 0 && i === LAST)) return null;
@@ -429,6 +439,35 @@ function DeskCalendar({ moment, covered, fresh }: { moment: number; covered: boo
 }
 
 /** The phone's cover request, drawn in Tarii's style: Alex's seat on the 22nd, and Maya taking it. */
+/** A plain phone screen: this week's shifts and the latest update, drawn rather than captured. */
+function SimpleScreen({ title }: { title: string }) {
+  const shifts = [
+    ["Mon 19", "Ward A", "AM"],
+    ["Tue 20", "Ward A", "AM"],
+    ["Thu 22", "Clinic", "PM"],
+    ["Sat 24", "Off", ""],
+  ];
+  return (
+    <div className="tsy-simple is-on">
+      <p className="tsy-cover-top">My shifts</p>
+      <p className="tsy-simple-month">October 2026</p>
+      <ul>
+        {shifts.map(([day, place, part]) => (
+          <li key={day}>
+            <span>{day}</span>
+            <span>{place}</span>
+            <span>{part}</span>
+          </li>
+        ))}
+      </ul>
+      <p className="tsy-cover-label">Update</p>
+      <div className="tsy-cover-row" key={title}>
+        {title}
+      </div>
+    </div>
+  );
+}
+
 function CoverScreen({ on, accepted }: { on: boolean; accepted: boolean }) {
   return (
     <div className={`tsy-cover${on ? " is-on" : ""}`}>
