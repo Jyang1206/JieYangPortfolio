@@ -3102,10 +3102,13 @@
   font-family: var(--font-mono);
   font-size: 11px;
 }
+/* The poster is portrait: show its top in the card, the whole thing on click. */
 .nb-brief-image img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 210px;
+  object-fit: cover;
+  object-position: top;
   border-radius: 8px;
   border: 1px solid var(--b-line);
 }

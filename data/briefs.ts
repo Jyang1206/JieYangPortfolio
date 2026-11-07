@@ -50,10 +50,10 @@ export const briefs: Record<string, Brief> = {
       {
         title: "Poster",
         image: {
-          src: "/images/iris/inspire-2026-poster.png",
-          alt: "IRIS poster for INSPIRE 2026: the problem, the UF850 arm, what decides what, and the six-step pipeline from capture to pick and place.",
-          width: 2027,
-          height: 1432,
+          src: "/images/iris/inspire-2026-poster.webp",
+          alt: "IRIS poster for INSPIRE 2026: the problem, objectives, the gripper picking forceps, results (94% detected, 78% upper instrument named, 87% safe picks, 83% trays sorted) and the six-step pipeline.",
+          width: 1413,
+          height: 2000,
         },
       },
       {
