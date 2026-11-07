@@ -1,8 +1,8 @@
 "use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Environment, Lightformer } from "@react-three/drei";
-import { Suspense, useEffect, useMemo, useRef } from "react";
+import { Environment, Lightformer, OrbitControls } from "@react-three/drei";
+import { Suspense, useEffect, useMemo, useRef, useState, type MutableRefObject } from "react";
 import { CanvasTexture, Matrix4, MeshStandardMaterial, SRGBColorSpace, Vector3, type Group } from "three";
 import { Instrument3D, TrayAndRack, type InstrumentMaterials } from "./Instruments3D";
 import { forward, getPlan, jointsAt } from "./motion";
@@ -57,7 +57,7 @@ function GroundShadows() {
   );
 }
 
-function SortingLoop({ still }: { still: boolean }) {
+function SortingLoop({ still, orbiting }: { still: boolean; orbiting: MutableRefObject<boolean> }) {
   const joints = useRef<(Group | null)[]>([]);
   const gripper = useRef<(Group | null)[]>([]);
   const refs = useMemo<ArmRefs>(
@@ -73,6 +73,7 @@ function SortingLoop({ still }: { still: boolean }) {
   );
   const instrumentRefs = useRef<(Group | null)[]>([]);
   const camera = useThree((state) => state.camera);
+  const controls = useThree((state) => state.controls) as unknown as { target: Vector3 } | null;
   const invalidate = useThree((state) => state.invalidate);
   // With `still` the canvas renders on demand: draw once the model has loaded (and once more for the environment map).
   useEffect(() => {
@@ -113,6 +114,8 @@ function SortingLoop({ still }: { still: boolean }) {
       for (const material of Object.values(materials[i])) material.opacity = state.opacity;
     });
 
+    // Once the visitor has dragged the view, it stays where they left it.
+    if (orbiting.current) return;
     // Lean the view gently toward the tool centre point; narrow viewports step back to keep the cell in frame.
     const e = tcp.elements;
     scratch.at.set(e[12], e[14], -e[13]);
@@ -123,6 +126,7 @@ function SortingLoop({ still }: { still: boolean }) {
     const back = aspect < 1.3 ? Math.min(2.4, (1.3 / aspect) ** 0.85) : 1;
     camera.position.copy(EYE).sub(LOOK).multiplyScalar(back).add(scratch.look);
     camera.lookAt(scratch.look);
+    controls?.target.copy(scratch.look);
   });
 
   return (
@@ -151,13 +155,16 @@ function SortingLoop({ still }: { still: boolean }) {
  * `still` holds one representative frame; `active` false stops rendering.
  */
 export default function ArmCanvas({ active, still }: { active: boolean; still: boolean }) {
+  const orbiting = useRef(false);
+  // Drag to look around with a mouse or pen; on touch screens a drag must still scroll the page.
+  const [canOrbit] = useState(() => typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches);
   return (
     <Canvas
       frameloop={active ? (still ? "demand" : "always") : "never"}
       dpr={[1, 2]}
       camera={{ position: EYE.toArray(), fov: 30, near: 0.05, far: 20 }}
       gl={{ alpha: true, antialias: true, premultipliedAlpha: false }}
-      style={{ background: "transparent" }}
+      style={{ background: "transparent", pointerEvents: canOrbit ? "auto" : "none", cursor: canOrbit ? "grab" : undefined }}
       aria-hidden="true"
     >
       <ambientLight intensity={0.55} />
@@ -172,7 +179,20 @@ export default function ArmCanvas({ active, still }: { active: boolean; still: b
           <Lightformer form="rect" intensity={0.9} position={[-4, 1, -2]} rotation={[0, Math.PI / 3, 0]} scale={[3, 2, 1]} />
           <Lightformer form="ring" intensity={0.6} color="#c8ccff" position={[0, 1, -4]} scale={2} />
         </Environment>
-        <SortingLoop still={still} />
+        <SortingLoop still={still} orbiting={orbiting} />
+        {canOrbit && (
+          <OrbitControls
+            makeDefault
+            target={LOOK.toArray()}
+            enableZoom={false}
+            enablePan={false}
+            minPolarAngle={0.25}
+            maxPolarAngle={1.45}
+            onStart={() => {
+              orbiting.current = true;
+            }}
+          />
+        )}
       </Suspense>
     </Canvas>
   );

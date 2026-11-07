@@ -129,6 +129,7 @@ export function WorldStage({ worlds, index }: WorldStageProps) {
             </div>
           )}
           {world.id === "iris" && <IrisDetectionsPanel still={still} className="nb-stage-panel" />}
+          {world.id === "iris" && webgl && <p className="nb-stage-hint">Drag to look around the cell</p>}
         </div>
 
         <div className="nb-brief">
