@@ -11,6 +11,7 @@ import { categoryLabel, categoryOf, shortName } from "./categories";
 import { ProjectLinks } from "./notebook/ProjectLinks";
 import { IrisDetectionsPanel } from "./iris/arm";
 import { WorldRenderer } from "./WorldRenderer";
+import { BriefCard } from "./BriefCard";
 
 const STILL_TIME = 14;
 const MAX_PIXELS = 3_800_000;
@@ -149,32 +150,28 @@ export function WorldStage({ worlds, index }: WorldStageProps) {
             <ArrowLeft size={14} aria-hidden="true" />
             All work
           </Link>
-          <article className="nb-brief-card">
-            <span className="nb-chip" data-category={category}>
-              {categoryLabel(world.id)}
-            </span>
-            <h1 id="project-name" className="nb-brief-name">
-              {shortName(world.name)}
-              {brief?.badge && <span className="nb-brief-badge">({brief.badge})</span>}
-            </h1>
-            {project && (
-              <p className="nb-brief-meta">
-                {project.role} · {project.dates}
-              </p>
-            )}
-            {brief && (
-              <>
-                <p className="nb-brief-what">{brief.what}</p>
-                <h2 className="nb-brief-h">What I did</h2>
-                <ul className="nb-brief-did">
-                  {brief.did.map((line) => (
-                    <li key={line}>{line}</li>
-                  ))}
-                </ul>
-              </>
-            )}
-            <ProjectLinks worldId={world.id} />
-          </article>
+          {brief ? (
+            <BriefCard
+              brief={brief}
+              header={
+                <>
+                  <span className="nb-chip" data-category={category}>
+                    {categoryLabel(world.id)}
+                  </span>
+                  <h1 id="project-name" className="nb-brief-name">
+                    {shortName(world.name)}
+                    {brief.badge && <span className="nb-brief-badge">({brief.badge})</span>}
+                  </h1>
+                  {project && (
+                    <p className="nb-brief-meta">
+                      {project.role} · {project.dates}
+                    </p>
+                  )}
+                </>
+              }
+              links={<ProjectLinks worldId={world.id} />}
+            />
+          ) : null}
         </div>
 
         {brief && (
