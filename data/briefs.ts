@@ -17,7 +17,13 @@ export type Brief = {
   more?: BriefSection[];
 };
 
-export type BriefSection = { title: string; text?: string; points?: string[] };
+export type BriefSection = {
+  title: string;
+  text?: string;
+  points?: string[];
+  /** A picture for the section (opens full size in a new tab). */
+  image?: { src: string; alt: string; width: number; height: number };
+};
 
 export const briefs: Record<string, Brief> = {
   iris: {
@@ -42,14 +48,13 @@ export const briefs: Record<string, Brief> = {
         ],
       },
       {
-        title: "Results",
-        text: "From the INSPIRE 2026 poster, on tray layouts that were not in the training data.",
-        points: [
-          "94% of instruments found in the first survey (131 of 140)",
-          "Upper instrument named in 78% of touching pairs",
-          "87% of proposed picks had nothing resting on them",
-          "83% of trays sorted with no intervention (25 of 30)",
-        ],
+        title: "Poster",
+        image: {
+          src: "/images/iris/inspire-2026-poster.png",
+          alt: "IRIS poster for INSPIRE 2026: the problem, the UF850 arm, what decides what, and the six-step pipeline from capture to pick and place.",
+          width: 2027,
+          height: 1432,
+        },
       },
       {
         title: "What I learned",

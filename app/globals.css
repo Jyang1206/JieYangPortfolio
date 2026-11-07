@@ -3094,6 +3094,24 @@
     animation: none;
   }
 }
+.nb-brief-image {
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+  color: var(--b-soft);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+.nb-brief-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--b-line);
+}
+.nb-brief-image:hover span {
+  color: var(--b-accent);
+}
 .nb-brief-foot {
   display: flex;
   align-items: center;

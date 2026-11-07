@@ -101,7 +101,14 @@ export function BriefCard({ brief, header, links }: BriefCardProps) {
           ) : (
             <>
               {"text" in section && section.text && <p className="nb-brief-what">{section.text}</p>}
-              {"points" in section && section.points && (
+              {"image" in section && section.image && (
+                <a className="nb-brief-image" href={section.image.src} target="_blank" rel="noreferrer">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- a plain full-size poster, opened as a file. */}
+                  <img src={section.image.src} alt={section.image.alt} width={section.image.width} height={section.image.height} loading="lazy" />
+                  <span>Open full size</span>
+                </a>
+              )}
+                            {"points" in section && section.points && (
                 <ul className="nb-brief-did">
                   {section.points.map((line) => (
                     <li key={line}>{line}</li>
