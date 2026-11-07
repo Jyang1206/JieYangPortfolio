@@ -165,9 +165,9 @@ export function WorldStage({ worlds, index }: WorldStageProps) {
 
         <div className="nb-brief">
           <div className="nb-brief-actions">
-            <Link href="/#explore" className="nb-brief-back">
+            <Link href="/" className="nb-brief-back">
               <ArrowLeft size={14} aria-hidden="true" />
-              All work
+              Home
             </Link>
             {brief?.poster && (
               <button
