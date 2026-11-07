@@ -206,8 +206,14 @@ export function HomeStage({ worlds }: HomeStageProps) {
           acc += weights[i];
           const el = sliceRefs.current[i];
           if (el) {
-            el.style.setProperty("--x", `${vw / 2 + Math.sin(a) * R}px`);
-            el.style.setProperty("--y", `${vh / 2 - Math.cos(a) * R}px`);
+            // Keep the whole note on screen: an opened note near an edge would otherwise be cut off.
+            const a2 = el.firstElementChild as HTMLElement | null;
+            const hw = (a2?.offsetWidth ?? 0) / 2 + 14;
+            const hh = (a2?.offsetHeight ?? 0) / 2 + 14;
+            const x = Math.min(Math.max(vw / 2 + Math.sin(a) * R, hw), vw - hw);
+            const y = Math.min(Math.max(vh / 2 - Math.cos(a) * R, hh), vh - hh);
+            el.style.setProperty("--x", `${x}px`);
+            el.style.setProperty("--y", `${y}px`);
           }
         }
       }

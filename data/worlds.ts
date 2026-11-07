@@ -56,13 +56,13 @@ export const worlds: World[] = [
     place: "Hospital staff rostering",
     role: "UI/UX, product and full-stack",
     excerpt:
-      "A rostering product for hospital departments. I did a lot of its UI/UX and product work: the screens rosterers and staff use every day, the analytics, spreadsheet import and notifications.",
+      "A rostering product for hospital departments. I did UI/UX and product work, helped run a trial demo with a hospital department, and built features the trial needed.",
     built: [
-      "UI/UX and product design for the web app and the analytics rosterers use to review a roster",
-      "Spreadsheet import that matches staff names written in shortened or reordered forms",
-      "Staff notifications through a Telegram bot, ahead of a full mobile app",
+      "UI/UX and product design for the web app rosterers use",
+      "Helped run a trial demo with a hospital department in Singapore and improved the demo experience",
+      "Built new features when the trial needed them",
     ],
-    tags: ["Full-stack", "Analytics", "Data import", "Telegram bot"],
+    tags: ["Full-stack", "UI/UX", "Product", "Client demos"],
     storyHref: "/projects/tarii",
     crossing: "roster turnover",
     theme: "tarii",

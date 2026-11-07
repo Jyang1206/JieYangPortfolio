@@ -36,7 +36,7 @@ export const INSTRUMENTS: Instrument[] = [
   { id: "artery-forceps", label: "artery forceps", track: 3, x: 0.47, y: -0.135, yaw: 1.75, lift: INSTRUMENT_THICKNESS, grip: -0.005, slot: 0, restsOn: "scalpel-handle" },
   { id: "needle-holder", label: "needle holder", track: 12, x: 0.55, y: 0.04, yaw: -0.25, lift: 0, grip: -0.005, slot: 4 },
   { id: "tissue-forceps", label: "tissue forceps", track: 9, x: 0.515, y: 0.06, yaw: 1.3, lift: INSTRUMENT_THICKNESS, grip: 0.0, slot: 3, restsOn: "needle-holder" },
-  { id: "iris-scissors", label: "iris scissors", track: 4, x: 0.375, y: 0.1, yaw: 2.35, lift: 0, grip: -0.01, slot: 1 },
+  { id: "iris-scissors", label: "curved scissors", track: 4, x: 0.375, y: 0.1, yaw: 2.35, lift: 0, grip: -0.01, slot: 1 },
 ];
 
 /** Topmost first: what the contact graph allows at each pick (anything resting on an instrument goes before it). */
