@@ -490,3 +490,17 @@
     animation: none;
   }
 }
+
+/* Tagline and contact buttons under the moment text. */
+.tagline {
+  max-width: 34ch;
+  /* The moment block above already reserves room for its longest line. */
+  margin: 4px 0 0;
+  color: var(--cy-ink);
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.45;
+  transition: color 600ms ease;
+}
+.contact {
+  margin-top: 16px;
+}
