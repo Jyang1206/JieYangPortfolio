@@ -6,6 +6,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import type { World } from "../../data/worlds";
 import { categoryOf, categoryShort, shortName, worldHref } from "./categories";
+import { CompanyLogo } from "./CompanyLogo";
+import { projects } from "../../data/projects";
 import { ProjectLinks } from "./notebook/ProjectLinks";
 import { BattlecodeSlice } from "./hub/battlecodeSlice";
 import { WorldRenderer } from "./WorldRenderer";
@@ -21,6 +23,7 @@ type HomeStageProps = {
   worlds: World[];
 };
 
+const logoOf = (worldId: string) => projects.find((p) => p.worldId === worldId)?.logo;
 const clamp01 = (x: number) => Math.min(Math.max(x, 0), 1);
 
 /**
@@ -501,7 +504,10 @@ export function HomeStage({ worlds }: HomeStageProps) {
                         {categoryShort(world.id)}
                       </span>
                     </span>
-                    <span className="name">{shortName(world.name)}</span>
+                    <span className="name">
+                      {logoOf(world.id) && <CompanyLogo logo={logoOf(world.id)!} size={24} className="nb-slice-logo" />}
+                      {shortName(world.name)}
+                    </span>
                     <span className="more">
                       <span className="excerpt">{world.excerpt}</span>
                       <span className="go nb-label">

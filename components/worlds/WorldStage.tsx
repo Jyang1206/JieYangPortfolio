@@ -12,6 +12,7 @@ import { ProjectLinks } from "./notebook/ProjectLinks";
 import { IrisDetectionsPanel } from "./iris/arm";
 import { WorldRenderer } from "./WorldRenderer";
 import { BriefCard } from "./BriefCard";
+import { CompanyLogo } from "./CompanyLogo";
 
 const STILL_TIME = 14;
 const MAX_PIXELS = 3_800_000;
@@ -187,9 +188,12 @@ export function WorldStage({ worlds, index }: WorldStageProps) {
               brief={brief}
               header={
                 <>
-                  <span className="nb-chip" data-category={category}>
-                    {categoryLabel(world.id)}
-                  </span>
+                  <div className="nb-brief-top">
+                    <span className="nb-chip" data-category={category}>
+                      {categoryLabel(world.id)}
+                    </span>
+                    {project?.logo && <CompanyLogo logo={project.logo} size={30} />}
+                  </div>
                   <h1 id="project-name" className="nb-brief-name">
                     {shortName(world.name)}
                     {brief.badge && <span className="nb-brief-badge">({brief.badge})</span>}
