@@ -29,9 +29,10 @@ This repo uses a lightweight progressive-disclosure handoff pattern inspired by 
 
 Latest handoff:
 - The active app is a Next.js App Router portfolio using npm scripts from `package.json`.
-- Project content is centralized in `data/projects.ts`; scenes should consume this data rather than own project copy.
-- Project story scroll progress is owned by `hooks/useScrollNarrativeProgress.ts`; `ProjectStoryLayout` composes layout, scene selection, and narrative panels.
-- Real models currently use available files such as `/models/xarm5-xf1300.glb`, `/models/amr.glb`, `/models/agv-forklifter.glb`, `/models/guitar-camera.glb`, and `/models/vehicle.glb`.
+- Project content is centralized in `data/` (`projects.ts`, `worlds.ts`, `briefs.ts`, `profile.ts`); components consume it rather than own project copy.
+- Each project page (`app/projects/[slug]`) is `components/worlds/WorldStage.tsx`: the live WebGL world with the short brief around it.
+- The only 3D model in use is the UF850 arm at `public/robot/uf850/uf850-visual.glb` (IRIS page).
+- Deployment is Vercel (`vercel.json` pins the Next.js framework); keep `public/` to assets the site actually loads.
 - Run `npm run lint`, `npm run typecheck`, and `npm run build` before finishing code changes when feasible.
 
 ## Primary Tech Stack
@@ -237,15 +238,7 @@ Do not hard-code project text inside scene components unless it is purely visual
 
 ## 3D Asset Handling
 
-Use `.glb` or `.gltf` models stored under `/public/models`.
-
-Expected paths:
-- `/models/xarm.glb`
-- `/models/seer.glb`
-- `/models/agv.glb`
-- `/models/robot-dog.glb`
-- `/models/guitar-camera.glb`
-- `/models/vehicle.glb`
+Store `.glb` models next to their licence under `public/` (today only `public/robot/uf850/`). Do not commit models the site does not load: they slow every deploy.
 
 If a model is missing, create a clean placeholder model using simple primitive geometry. The site must not crash because an asset is missing.
 

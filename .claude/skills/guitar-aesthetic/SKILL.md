@@ -15,7 +15,6 @@ A practice app that watches your fretboard through a webcam, lights up where the
 
 ## Assets
 - Shader: `components/worlds/shaders/guitar.ts` (rosewood fretboard; with zero params it cycles six keys/scales every 7 s and plays through the notes).
-- GLB: `public/models/guitar-camera.glb`.
 
 ## Look: stage and rosewood
 - Rosewood `#2a130a`–`#5a2c16`, nickel frets, bone/cream inlays `#efe3cf`, amber spotlight `#ffb347`, warm red root notes `#e2553a`.

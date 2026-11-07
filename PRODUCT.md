@@ -32,7 +32,7 @@ Five environments, in this order unless changed:
 
 - Next.js App Router, TypeScript, Tailwind v4, React Three Fiber/drei, Framer Motion (existing stack; do not add heavy animation libraries).
 - Backgrounds are real-time rendered (WebGL), chosen by the user over generated images.
-- Existing GLB models under `public/models`, MuJoCo browser sim under `public/seer`, project story routes under `/projects/[slug]`.
+- The UF850 GLB under `public/robot/uf850` (IRIS); project pages under `/projects/[slug]`.
 - Must work without WebGL, honour reduced motion, and stay usable on mobile.
 
 ## Evidence on Hand

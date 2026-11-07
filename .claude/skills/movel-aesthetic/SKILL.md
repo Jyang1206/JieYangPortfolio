@@ -16,7 +16,6 @@ Software that lets a mixed fleet of robots work inside real buildings: SEER AMRs
 ## Assets
 - `public/images/fleet-management-ui.png` (fleet management + trolley inventory dashboard).
 - Shader: `components/worlds/shaders/movel.ts` (top-down warehouse floor, racking, AMRs on dashed routes, self-running dispatch loop to lift lobby / RFID gate / laundry chute / secure store).
-- GLBs available: `public/models/amr.glb`, `agv-forklifter.glb`.
 
 ## Look: fleet operations floor
 - Polished concrete greys `#46494a`–`#7b8081`, safety yellow `#f2c230` lane lines and hazard hatching, racking orange `#d9622b`, route cyan `#40c7ff`, status green `#4ade80`.
