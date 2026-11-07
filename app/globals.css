@@ -2952,7 +2952,7 @@ button.nb-brief-back {
   flex-wrap: wrap;
   gap: 8px;
 }
-/* A project's poster, opened over the world from the toggle beside All work. */
+/* A project's poster, opened over the world from the toggle beside Home. */
 .nb-stage-poster {
   position: absolute;
   top: 72px;
