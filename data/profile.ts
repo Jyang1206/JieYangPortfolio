@@ -75,3 +75,17 @@ export const skills: SkillGroup[] = [
     ],
   },
 ];
+
+/** Education, from the resume (Nov 2026). */
+export const education = [
+  {
+    school: "National University of Singapore",
+    detail: "Bachelor of Computer Science · NUS Merit Scholarship",
+    dates: "2024 – 2028 (expected)",
+  },
+  {
+    school: "Anglo-Chinese School (Independent)",
+    detail: "International Baccalaureate Diploma, 42/45",
+    dates: "",
+  },
+];
