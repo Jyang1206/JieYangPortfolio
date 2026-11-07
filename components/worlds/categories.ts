@@ -1,7 +1,7 @@
 import { projects } from "../../data/projects";
 
 // How each world is filed. Colours are the three category inks used on the hub's
-// chips and legend and on each world page's corner label (globals.css `--cat-*`).
+// chips and on each world page's corner label (globals.css `--cat-*`).
 
 export type Category = "experience" | "project" | "hackathon";
 
@@ -23,6 +23,8 @@ export const CATEGORIES: { id: Category; label: string; short: string }[] = [
 export const categoryOf = (worldId: string): Category => CATEGORY_OF[worldId] ?? "project";
 
 export const categoryLabel = (worldId: string) => CATEGORIES.find((c) => c.id === categoryOf(worldId))?.label ?? "Project";
+/** The short form, for the hub's compact slice labels. */
+export const categoryShort = (worldId: string) => CATEGORIES.find((c) => c.id === categoryOf(worldId))?.short ?? "Project";
 
 /** Short names for tabs and the hub. */
 export const shortName = (name: string) => (name === "Guitar Scale Visualizer" ? "Guitar" : name);

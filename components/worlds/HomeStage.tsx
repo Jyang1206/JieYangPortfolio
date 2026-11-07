@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, RotateCw } from "lucide-react";
 import type { World } from "../../data/worlds";
-import { CATEGORIES, categoryLabel, categoryOf, shortName, worldHref, type Category } from "./categories";
+import { categoryOf, categoryShort, shortName, worldHref, type Category } from "./categories";
 import { ProjectLinks } from "./notebook/ProjectLinks";
 import { BattlecodeSlice } from "./hub/battlecodeSlice";
 import { WorldRenderer } from "./WorldRenderer";
@@ -247,13 +247,18 @@ export function HomeStage({ worlds }: HomeStageProps) {
     return { f: (Math.atan2(x, -y) / (Math.PI * 2) + 1) % 1, d: Math.hypot(x, y), r };
   };
 
-  // Pointer over the hub: the wedge under it is the hot one; a drag spins the pizza.
+  // Pointer over the hub: the wedge under it is the hot one; dragging from the centre spins the pizza.
   const onHubMove = (event: React.PointerEvent<HTMLElement>) => {
     const hub = hubRef.current;
     if (!hub || window.matchMedia("(max-width: 767px)").matches) return;
     const { f, d, r } = angleAt(event);
     const rot = rotRef.current;
     if (rot.dragging) {
+      // A press on the centre disc has no angle yet: take it from the first move a little way out.
+      if (Number.isNaN(rot.lastAngle) || d < 10) {
+        if (d >= 10) rot.lastAngle = f;
+        return;
+      }
       let delta = f - rot.lastAngle;
       if (delta > 0.5) delta -= 1;
       if (delta < -0.5) delta += 1;
@@ -285,12 +290,14 @@ export function HomeStage({ worlds }: HomeStageProps) {
     hover(count - 1);
   };
   const onHubDown = (event: React.PointerEvent<HTMLElement>) => {
-    if (window.matchMedia("(max-width: 767px)").matches || (event.target as HTMLElement).closest("a")) return;
+    // Only the centre disc starts a spin, so the slices stay plain links to hover and click.
+    if (window.matchMedia("(max-width: 767px)").matches || !(event.target as HTMLElement).closest(".nb-hub-centre")) return;
     const rot = rotRef.current;
     rot.dragging = true;
     rot.moved = false;
     rot.velocity = 0;
-    rot.lastAngle = angleAt(event).f;
+    const start = angleAt(event);
+    rot.lastAngle = start.d < 10 ? NaN : start.f;
     rot.lastTime = performance.now();
     hubRef.current?.setPointerCapture(event.pointerId);
     setDragging(true);
@@ -332,7 +339,9 @@ export function HomeStage({ worlds }: HomeStageProps) {
           </h2>
         </div>
 
-        <div className="nb-hub-centre nb-paper" aria-hidden="true" />
+        <div className="nb-hub-centre nb-paper" aria-hidden="true" title="Drag to spin">
+          <RotateCw size={22} strokeWidth={1.75} />
+        </div>
 
         <div className="nb-hub-band">
           {/* The worlds, drawn only here: the canvas belongs to the hub, not the page. */}
@@ -355,7 +364,7 @@ export function HomeStage({ worlds }: HomeStageProps) {
                     <span className="head">
                       <span className="nb-mono num">{String(i + 1).padStart(2, "0")}</span>
                       <span className="nb-chip" data-category={category}>
-                        {categoryLabel(world.id)}
+                        {categoryShort(world.id)}
                       </span>
                     </span>
                     <span className="name">{shortName(world.name)}</span>
@@ -373,20 +382,6 @@ export function HomeStage({ worlds }: HomeStageProps) {
             })}
           </ol>
         </div>
-
-        <ul className="nb-hub-legend nb-paper" aria-label="Categories">
-          {CATEGORIES.map((c) => (
-            <li key={c.id}>
-              <Link
-                href={c.id === "experience" ? "/#experience" : "/#projects"}
-                className={`nb-legend-item ${filter && filter !== c.id && !(filter === "project" && c.id === "hackathon") ? "is-off" : ""}`}
-                data-category={c.id}
-              >
-                {c.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
       </section>
   );
 }

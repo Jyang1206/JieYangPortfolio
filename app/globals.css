@@ -555,6 +555,7 @@
   cursor: pointer;
   overflow: hidden;
   background: #101114;
+  user-select: none;
 }
 .nb-hub-canvas {
   position: absolute;
@@ -611,8 +612,18 @@
   height: var(--disc, 120px);
   border-radius: 50%;
   text-align: center;
-  pointer-events: none;
   color: var(--nb-ink-soft);
+  cursor: grab;
+  touch-action: none;
+  transition: color 0.2s ease, scale 0.2s ease;
+}
+.nb-hub-centre:hover {
+  color: var(--nb-ink);
+  scale: 1.04;
+}
+.nb-hub.is-dragging,
+.nb-hub.is-dragging .nb-hub-centre {
+  cursor: grabbing;
 }
 .nb-hub-centre .nb-mono {
   font-size: 10.5px;
