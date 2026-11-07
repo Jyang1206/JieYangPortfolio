@@ -2847,6 +2847,7 @@
 }
 /* The desk calendar and a simple phone: none of the site section's card, background or caption. */
 .nb-stage-extra .tsy .tsy-stage {
+  overflow: visible;
   border: 0;
   background: none;
   box-shadow: none;
