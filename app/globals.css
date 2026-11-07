@@ -625,6 +625,17 @@
 .nb-hub.is-dragging .nb-hub-centre {
   cursor: grabbing;
 }
+/* Same heavy condensed face as the "Hello! I'm" title. */
+.nb-hub-centre-text {
+  max-width: 6ch;
+  font-family: var(--font-archivo), "Arial Narrow", sans-serif;
+  font-variation-settings: "wdth" 62;
+  font-weight: 900;
+  font-size: 22px;
+  line-height: 0.88;
+  text-transform: uppercase;
+  color: var(--nb-ink);
+}
 .nb-hub-centre .nb-mono {
   font-size: 10.5px;
   line-height: 1.5;
@@ -2599,12 +2610,64 @@
 }
 
 /* ---------- the live world at the top of a project page ---------- */
+/* ---------- project page: the live world with its brief around it ---------- */
+/* The brief sits on dark worlds, so it is a dark panel in each world's own colours. */
+.nb-project {
+  --b-bg: rgba(12, 14, 18, 0.8);
+  --b-line: rgba(255, 255, 255, 0.14);
+  --b-ink: #eef0f2;
+  --b-soft: rgba(238, 240, 242, 0.72);
+  --b-accent: #6f8cff;
+  --b-font: var(--font-sans);
+  --b-display: var(--font-archivo), "Arial Narrow", sans-serif;
+  --b-wdth: 62;
+  background: #0c0c0d;
+}
+.nb-project[data-world="iris"] {
+  --b-bg: rgba(7, 22, 28, 0.8);
+  --b-accent: #5b8cff;
+  --b-display: var(--font-iris);
+  --b-wdth: 100;
+}
+.nb-project[data-world="tarii"] {
+  --b-bg: rgba(16, 42, 42, 0.8);
+  --b-ink: #eef6f2;
+  --b-soft: rgba(238, 246, 242, 0.75);
+  --b-accent: #a4c8ba;
+  --b-font: var(--font-tarii);
+  --b-display: var(--font-tarii);
+  --b-wdth: 100;
+}
+.nb-project[data-world="movel"] {
+  --b-bg: rgba(22, 24, 25, 0.82);
+  --b-accent: #f2c230;
+}
+.nb-project[data-world="st-engineering"] {
+  --b-bg: rgba(10, 12, 17, 0.82);
+  --b-accent: #ffa040;
+}
+.nb-project[data-world="guitar"] {
+  --b-bg: rgba(32, 15, 8, 0.82);
+  --b-ink: #f3e8d6;
+  --b-soft: rgba(243, 232, 214, 0.75);
+  --b-accent: #ffb347;
+}
+.nb-project[data-world="battlecode"] {
+  --b-bg: rgba(14, 18, 13, 0.84);
+  --b-accent: #f2c14e;
+}
+
 .nb-stage {
   position: relative;
   height: 100svh;
-  min-height: 520px;
+  min-height: 680px;
   overflow: hidden;
-  background: #0c0c0d;
+  color: var(--b-ink);
+  font-family: var(--b-font);
+}
+.nb-stage-view {
+  position: absolute;
+  inset: 0;
 }
 .nb-stage-canvas {
   position: absolute;
@@ -2618,64 +2681,236 @@
   z-index: 5;
   pointer-events: none;
 }
-.nb-stage-lead {
+.nb-stage-panel {
   position: absolute;
-  left: clamp(20px, 5vw, 72px);
-  bottom: 40px;
+  top: 88px;
+  right: clamp(16px, 3vw, 40px);
   z-index: 6;
-  max-width: 440px;
 }
-.nb-stage-lead .nb-card {
-  padding: 18px 20px;
+
+.nb-brief {
+  position: absolute;
+  top: 0;
+  bottom: 132px;
+  left: clamp(16px, 4vw, 56px);
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  width: min(440px, 40vw);
+  padding-top: 72px;
 }
-.nb-stage-lead .name {
-  display: block;
-  margin-top: 8px;
-  font-family: var(--nb-font-display);
-  font-variation-settings: "wdth" var(--nb-wdth);
+.nb-brief-back {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--b-line);
+  border-radius: 999px;
+  background: var(--b-bg);
+  color: var(--b-soft);
+  font-size: 13px;
+  backdrop-filter: blur(10px);
+}
+.nb-brief-back:hover {
+  color: var(--b-ink);
+}
+.nb-brief-card,
+.nb-brief-strip {
+  border: 1px solid var(--b-line);
+  border-radius: 14px;
+  background: var(--b-bg);
+  backdrop-filter: blur(14px) saturate(1.2);
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.8);
+}
+.nb-brief-card {
+  padding: 20px 22px 18px;
+}
+.nb-brief-name {
+  margin: 10px 0 0;
+  font-family: var(--b-display);
+  font-variation-settings: "wdth" var(--b-wdth);
   font-weight: 900;
-  font-size: 38px;
+  font-size: clamp(36px, 4vw, 52px);
   line-height: 0.9;
   text-transform: uppercase;
+  color: var(--b-ink);
 }
-[data-world="iris"] .nb-stage-lead .name {
+.nb-project[data-world="iris"] .nb-brief-name {
   font-weight: 400;
 }
-[data-world="tarii"] .nb-stage-lead .name {
+.nb-project[data-world="tarii"] .nb-brief-name {
   font-weight: 700;
   text-transform: none;
 }
-[data-world="guitar"] .nb-stage-lead .name {
+.nb-project[data-world="guitar"] .nb-brief-name {
   font-style: italic;
 }
-.nb-stage-down {
-  margin-top: 14px;
+.nb-brief-meta {
+  margin: 8px 0 0;
+  color: var(--b-accent);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
 }
-@media (max-width: 767px) {
-  .nb-stage {
-    height: 80svh;
-  }
-  .nb-stage-lead {
-    left: 16px;
-    right: 16px;
-    bottom: 20px;
-    max-width: none;
-  }
-  /* Keep the arm cell above the project card instead of behind it. */
-  [data-world="iris"] .nb-stage-overlay {
-    bottom: 280px;
+.nb-brief-what {
+  margin: 14px 0 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.nb-brief-h {
+  margin: 0;
+  color: var(--b-soft);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.nb-brief-card .nb-brief-h {
+  margin-top: 16px;
+}
+.nb-brief-did {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.nb-brief-did li {
+  position: relative;
+  padding-left: 16px;
+}
+.nb-brief-did li + li {
+  margin-top: 5px;
+}
+.nb-brief-did li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 7px;
+  height: 2px;
+  background: var(--b-accent);
+}
+.nb-brief-card .nb-links {
+  margin-top: 16px;
+}
+.nb-brief-card .nb-links a {
+  color: var(--b-accent);
+}
+.nb-brief-card .nb-links a:hover {
+  color: var(--b-ink);
+}
+.nb-brief-card .nb-links .private {
+  color: var(--b-soft);
+}
+
+.nb-brief-strip {
+  position: absolute;
+  left: clamp(16px, 4vw, 56px);
+  right: clamp(16px, 4vw, 56px);
+  bottom: 24px;
+  z-index: 6;
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: start;
+  padding: 16px 20px;
+}
+.nb-brief-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.nb-brief-tags li {
+  padding: 4px 9px;
+  border: 1px solid var(--b-line);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 12.5px;
+  line-height: 1.2;
+}
+.nb-brief-tags.is-skills li {
+  border-color: color-mix(in srgb, var(--b-accent) 45%, transparent);
+  color: var(--b-accent);
+}
+.nb-brief-next {
+  display: grid;
+  gap: 6px;
+  align-self: center;
+  padding-left: 20px;
+  border-left: 1px solid var(--b-line);
+  color: var(--b-ink);
+}
+.nb-brief-next .name {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-archivo), "Arial Narrow", sans-serif;
+  font-variation-settings: "wdth" 62;
+  font-weight: 900;
+  font-size: 22px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.nb-brief-next:hover .name {
+  color: var(--b-accent);
+}
+.nb-brief-back:focus-visible,
+.nb-brief-next:focus-visible {
+  outline: 2px solid var(--b-accent);
+  outline-offset: 3px;
+}
+
+/* IRIS: leave the arm cell the right-hand side of the stage, clear of the brief. */
+@media (min-width: 900px) {
+  .nb-project[data-world="iris"] .nb-stage-overlay {
+    left: min(440px, 40vw);
+    bottom: 110px;
   }
 }
 
-.nb-stage-panel {
-  position: absolute;
-  right: clamp(16px, 4vw, 48px);
-  bottom: 40px;
-  z-index: 6;
-}
-@media (max-width: 900px) {
+/* Narrow screens: the world on top, the brief below it in the page flow. */
+@media (max-width: 899px) {
+  .nb-stage {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+  .nb-stage-view {
+    position: relative;
+    height: 58svh;
+    min-height: 360px;
+    overflow: hidden;
+  }
   .nb-stage-panel {
     display: none;
+  }
+  .nb-brief {
+    position: static;
+    width: auto;
+    margin: -48px 16px 0;
+    padding: 0;
+  }
+  .nb-brief-back {
+    display: none;
+  }
+  .nb-brief-strip {
+    position: static;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    margin: 12px 16px 24px;
+  }
+  .nb-brief-next {
+    padding: 14px 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--b-line);
   }
 }
 

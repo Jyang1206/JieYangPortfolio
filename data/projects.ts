@@ -1,6 +1,6 @@
-// Project registry: one entry per world that has a long-form story at /projects/[slug].
-// The story text itself lives in components/project/stories/*; this file holds what the
-// home page, routing and metadata need.
+// Project registry: one entry per world with a page at /projects/[slug].
+// The page's short brief lives in data/briefs.ts; this file holds what the home page,
+// routing and metadata need.
 
 export type ProjectCategory = "experience" | "project" | "hackathon";
 

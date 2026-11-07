@@ -1,7 +1,5 @@
 import { notFound, permanentRedirect } from "next/navigation";
-import { StoryPage } from "../../../components/project/StoryPage";
-import { getStory } from "../../../components/project/stories";
-import { getProjectBySlug, legacySlugs, nextProject, projects } from "../../../data/projects";
+import { getProjectBySlug, legacySlugs, projects } from "../../../data/projects";
 import { WorldStage } from "../../../components/worlds/WorldStage";
 import { worlds } from "../../../data/worlds";
 
@@ -30,14 +28,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   if (legacySlugs[slug]) permanentRedirect(`/projects/${legacySlugs[slug]}`);
 
   const project = getProjectBySlug(slug);
-  const story = getStory(slug);
-  if (!project || !story) notFound();
+  if (!project) notFound();
 
   const worldIndex = worlds.findIndex((world) => world.id === project.worldId);
-  return (
-    <>
-      {worldIndex >= 0 && <WorldStage worlds={worlds} index={worldIndex} />}
-      <StoryPage story={story} project={project} next={nextProject(slug)} />
-    </>
-  );
+  if (worldIndex < 0) notFound();
+  return <WorldStage worlds={worlds} index={worldIndex} />;
 }

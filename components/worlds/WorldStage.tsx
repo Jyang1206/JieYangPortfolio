@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowDown } from "lucide-react";
+import Link from "next/link";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import type { World } from "../../data/worlds";
+import { briefs } from "../../data/briefs";
+import { nextProject, projects } from "../../data/projects";
 import { WORLD_EXTRAS, type ParamValues } from "./panels";
 import { categoryLabel, categoryOf, shortName } from "./categories";
 import { ProjectLinks } from "./notebook/ProjectLinks";
@@ -18,9 +21,9 @@ type WorldStageProps = {
 };
 
 /**
- * The live world at the top of a project page: its shader on a full-screen stage, the overlay the world
- * registers (IRIS arm, Battlecode replay) and the invisible driver some worlds steer the shader with.
- * The story's write-up follows below it.
+ * A project page: the live world on a full-screen stage (its shader, the overlay the world registers,
+ * the invisible driver some worlds steer the shader with) with the short brief around it: what it is,
+ * what I did, the stack and the skills.
  */
 export function WorldStage({ worlds, index }: WorldStageProps) {
   const world = worlds[index];
@@ -106,36 +109,90 @@ export function WorldStage({ worlds, index }: WorldStageProps) {
   }, [index, world.fallback]);
 
   const category = categoryOf(world.id);
+  const brief = briefs[world.id];
+  const project = projects.find((p) => p.worldId === world.id);
+  const next = project ? nextProject(project.slug) : undefined;
 
   return (
-    <section ref={stageRef} className="nb-stage" data-world={world.id} aria-label={`${world.name}: the world, rendered live`}>
-      <canvas ref={canvasRef} className="nb-stage-canvas" aria-hidden="true" hidden={!webgl} />
-      {webgl && Overlay && (
-        <div className="nb-stage-overlay" aria-hidden="true">
-          <Overlay active still={still} />
+    <main className="nb-project" data-world={world.id}>
+      <section ref={stageRef} className="nb-stage" aria-labelledby="project-name">
+        <div className="nb-stage-view">
+          <canvas ref={canvasRef} className="nb-stage-canvas" aria-hidden="true" hidden={!webgl} />
+          {webgl && Overlay && (
+            <div className="nb-stage-overlay" aria-hidden="true">
+              <Overlay active still={still} />
+            </div>
+          )}
+          {Driver && (
+            <div hidden>
+              <Driver setParams={setParams} still={still} />
+            </div>
+          )}
+          {world.id === "iris" && <IrisDetectionsPanel still={still} className="nb-stage-panel" />}
         </div>
-      )}
-      {Driver && (
-        <div hidden>
-          <Driver setParams={setParams} still={still} />
+
+        <div className="nb-brief">
+          <Link href="/#explore" className="nb-brief-back">
+            <ArrowLeft size={14} aria-hidden="true" />
+            All work
+          </Link>
+          <article className="nb-brief-card">
+            <span className="nb-chip" data-category={category}>
+              {categoryLabel(world.id)}
+            </span>
+            <h1 id="project-name" className="nb-brief-name">
+              {shortName(world.name)}
+            </h1>
+            {project && (
+              <p className="nb-brief-meta">
+                {project.role} · {project.dates}
+              </p>
+            )}
+            {brief && (
+              <>
+                <p className="nb-brief-what">{brief.what}</p>
+                <h2 className="nb-brief-h">What I did</h2>
+                <ul className="nb-brief-did">
+                  {brief.did.map((line) => (
+                    <li key={line}>{line}</li>
+                  ))}
+                </ul>
+              </>
+            )}
+            <ProjectLinks worldId={world.id} />
+          </article>
         </div>
-      )}
-      {world.id === "iris" && <IrisDetectionsPanel still={still} className="nb-stage-panel" />}
-      <div className="nb-stage-lead">
-        <div className="nb-card">
-          <span className="nb-chip" data-category={category}>
-            {categoryLabel(world.id)}
-          </span>
-          <span className="name">{shortName(world.name)}</span>
-          <p className="nb-meta">{world.place}</p>
-          <ProjectLinks worldId={world.id} />
-          <a href="#story" className="nb-pill nb-stage-down">
-            <span className="dot" aria-hidden="true" />
-            Read the story
-            <ArrowDown size={13} aria-hidden="true" />
-          </a>
-        </div>
-      </div>
-    </section>
+
+        {brief && (
+          <div className="nb-brief-strip">
+            <div>
+              <h2 className="nb-brief-h">Stack</h2>
+              <ul className="nb-brief-tags">
+                {brief.stack.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h2 className="nb-brief-h">Skills</h2>
+              <ul className="nb-brief-tags is-skills">
+                {brief.skills.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+            {next && (
+              <Link href={`/projects/${next.slug}`} className="nb-brief-next">
+                <span className="nb-brief-h">Next</span>
+                <span className="name">
+                  {next.title}
+                  <ArrowUpRight size={16} aria-hidden="true" />
+                </span>
+              </Link>
+            )}
+          </div>
+        )}
+      </section>
+    </main>
   );
 }
