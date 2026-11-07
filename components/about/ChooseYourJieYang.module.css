@@ -32,8 +32,8 @@
   inset: 0;
   z-index: -1;
   background: url(/notebook/paper-grain-light.svg) 0 0 / 320px 320px;
-  opacity: 0.35;
-  mix-blend-mode: multiply;
+  /* Plain blending: multiply rendered differently under the fixed nav bar, leaving a hard line. */
+  opacity: 0.3;
   pointer-events: none;
 }
 

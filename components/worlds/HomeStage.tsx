@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowUpRight, RotateCw } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import type { World } from "../../data/worlds";
 import { categoryOf, categoryShort, shortName, worldHref, type Category } from "./categories";
 import { ProjectLinks } from "./notebook/ProjectLinks";
@@ -339,8 +339,8 @@ export function HomeStage({ worlds }: HomeStageProps) {
           </h2>
         </div>
 
-        <div className="nb-hub-centre nb-paper" aria-hidden="true" title="Drag to spin">
-          <RotateCw size={22} strokeWidth={1.75} />
+        <div className="nb-hub-centre nb-paper" aria-hidden="true">
+          <span className="nb-hub-centre-text">Hold to rotate</span>
         </div>
 
         <div className="nb-hub-band">
