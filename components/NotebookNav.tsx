@@ -15,23 +15,85 @@ type NotebookNavProps = {
   hideBelow?: string;
 };
 
-// Plain anchors, not next/link: a same-page hash change must fire `hashchange`, which the hub listens to
-// (it scrolls to itself and filters to experience or projects). About scrolls to the about section.
+// Plain anchors, not next/link: a same-page hash change must fire `hashchange`, which the hub listens to.
 const LINKS = [
   { hash: "about", label: "About" },
-  { hash: "experience", label: "Experience" },
-  { hash: "projects", label: "Projects" },
+  { hash: "skills", label: "Skills" },
+  { hash: "explore", label: "Experience & projects" },
+  { hash: "contact", label: "Contact" },
 ];
 
 /** Re-run the jump when the hash is already the one clicked (no hashchange fires then). */
 function jumpAgain(event: React.MouseEvent<HTMLAnchorElement>, hash: string) {
-  if (window.location.pathname !== "/" || window.location.hash !== `#${hash}`) return;
+  if (window.location.pathname !== "/" || window.location.hash !== `#${hash}`)
+    return;
   event.preventDefault();
-  const target = document.getElementById(hash) ?? document.getElementById("explore");
+  const target =
+    document.getElementById(hash) ?? document.getElementById("explore");
   target?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-/** The notebook's top bar: four links on a paper strip. It steps aside while a world is being read. */
+/**
+ * Home: the side nav lists the page's sections and marks the one in view; it fades while the page is still
+ * and comes back on scroll or when the pointer nears the left edge. Phones get the same list in the menu.
+ */
+function SideNav() {
+  const [active, setActive] = useState("about");
+  const [awake, setAwake] = useState(true);
+  // Kept out of the hero, where it would sit over the title; the top bar is enough there.
+  const [past, setPast] = useState(false);
+  useEffect(() => {
+    // The section in view is the last one whose top has passed the upper part of the screen
+    // (Skills sits inside About, so an intersection test would keep About marked).
+    const mark = () => {
+      let current = LINKS[0].hash;
+      for (const link of LINKS) {
+        const el = document.getElementById(link.hash);
+        if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.4) current = link.hash;
+      }
+      setActive(current);
+    };
+    let timer = 0;
+    const wake = () => {
+      mark();
+      setPast(window.scrollY > window.innerHeight * 0.6);
+      setAwake(true);
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => setAwake(false), 2200);
+    };
+    const near = (event: PointerEvent) => {
+      if (event.clientX < 220) wake();
+    };
+    wake();
+    window.addEventListener("scroll", wake, { passive: true });
+    window.addEventListener("pointermove", near);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("scroll", wake);
+      window.removeEventListener("pointermove", near);
+    };
+  }, []);
+  return (
+    <nav
+      className={`nb-side-nav ${awake ? "is-awake" : ""} ${past ? "" : "is-away"}`}
+      aria-label="Sections"
+    >
+      {LINKS.map((link) => (
+        <a
+          key={link.hash}
+          href={`/#${link.hash}`}
+          aria-current={active === link.hash ? "true" : undefined}
+          onClick={(event) => jumpAgain(event, link.hash)}
+        >
+          <span className="dot" aria-hidden="true" />
+          <span className="label">{link.label}</span>
+        </a>
+      ))}
+    </nav>
+  );
+}
+
+/** The top bar: the name and Contact (plus a menu of sections on phones); the home page adds the side nav. */
 export function NotebookNav({ mode, hideBelow }: NotebookNavProps) {
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
@@ -60,39 +122,50 @@ export function NotebookNav({ mode, hideBelow }: NotebookNavProps) {
   }, [mode, hideBelow, open]);
 
   return (
-    <header className={`nb-nav ${hidden && !open ? "is-hidden" : ""}`}>
-      <Link href="/" className="nb-nav-brand nb-paper">
-        <span className="nb-label">Jie Yang</span>
-      </Link>
-      <button
-        type="button"
-        className="nb-nav-toggle nb-paper"
-        aria-expanded={open}
-        aria-controls="nb-nav-menu"
-        onClick={() => setOpen((v) => !v)}
-      >
-        {open ? <X size={16} aria-hidden="true" /> : <Menu size={16} aria-hidden="true" />}
-        <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
-      </button>
-      <nav id="nb-nav-menu" className={`nb-nav-menu nb-paper ${open ? "is-open" : ""}`} aria-label="Site">
-        {LINKS.map((link) => (
-          <a
-            key={link.hash}
-            href={`/#${link.hash}`}
-            className="nb-label"
-            onClick={(event) => {
-              setOpen(false);
-              jumpAgain(event, link.hash);
-            }}
-          >
-            {link.label}
+    <>
+      {mode === "home" && <SideNav />}
+      <header className={`nb-nav ${hidden && !open ? "is-hidden" : ""}`}>
+        <Link href="/" className="nb-nav-brand nb-paper">
+          <span className="nb-label">Jie Yang</span>
+        </Link>
+        <button
+          type="button"
+          className="nb-nav-toggle nb-paper"
+          aria-expanded={open}
+          aria-controls="nb-nav-menu"
+          onClick={() => setOpen((v) => !v)}
+        >
+          {open ? (
+            <X size={16} aria-hidden="true" />
+          ) : (
+            <Menu size={16} aria-hidden="true" />
+          )}
+          <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
+        </button>
+        <nav
+          id="nb-nav-menu"
+          className={`nb-nav-menu nb-paper ${open ? "is-open" : ""}`}
+          aria-label="Site"
+        >
+          {LINKS.map((link) => (
+            <a
+              key={link.hash}
+              href={`/#${link.hash}`}
+              className="nb-label nb-nav-section"
+              onClick={(event) => {
+                setOpen(false);
+                jumpAgain(event, link.hash);
+              }}
+            >
+              {link.label}
+            </a>
+          ))}
+          <a href={`mailto:${contact.email}`} className="nb-btn nb-nav-contact">
+            <Mail size={13} aria-hidden="true" />
+            Contact
           </a>
-        ))}
-        <a href={`mailto:${contact.email}`} className="nb-btn nb-nav-contact">
-          <Mail size={13} aria-hidden="true" />
-          Contact
-        </a>
-      </nav>
-    </header>
+        </nav>
+      </header>
+    </>
   );
 }

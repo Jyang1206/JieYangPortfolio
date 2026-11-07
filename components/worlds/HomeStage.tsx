@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import type { World } from "../../data/worlds";
-import { categoryOf, categoryShort, shortName, worldHref, type Category } from "./categories";
+import { categoryOf, categoryShort, shortName, worldHref } from "./categories";
 import { ProjectLinks } from "./notebook/ProjectLinks";
 import { BattlecodeSlice } from "./hub/battlecodeSlice";
 import { WorldRenderer } from "./WorldRenderer";
@@ -22,7 +22,6 @@ type HomeStageProps = {
 };
 
 const clamp01 = (x: number) => Math.min(Math.max(x, 0), 1);
-const filterOf = (hash: string): Category | null => (hash === "experience" ? "experience" : hash === "projects" ? "project" : null);
 
 /**
  * The hub: the six worlds cut like a pizza on one WebGL canvas, each slice a window onto exactly one world.
@@ -40,7 +39,6 @@ export function HomeStage({ worlds }: HomeStageProps) {
   const [dragging, setDragging] = useState(false);
   const [webgl, setWebgl] = useState(true);
   const [readyMask, setReadyMask] = useState(0);
-  const [filter, setFilter] = useState<Category | null>(null);
   const count = Math.min(worlds.length, 6);
   // Phones: the row of slices pans by itself like a panorama; `centre` is the slice in the middle.
   const listRef = useRef<HTMLOListElement>(null);
@@ -262,7 +260,7 @@ export function HomeStage({ worlds }: HomeStageProps) {
     };
   }, [count, worlds]);
 
-  // Keys 1-6 open a world; /#<world id> does the same; /#experience and /#projects filter the hub.
+  // Keys 1-6 open a world; /#explore (and the old /#experience, /#projects links) scroll to the hub.
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.metaKey || event.ctrlKey || event.altKey) return;
@@ -276,9 +274,7 @@ export function HomeStage({ worlds }: HomeStageProps) {
     };
     const onHash = () => {
       const hash = window.location.hash.slice(1);
-      const f = filterOf(hash);
-      setFilter(f);
-      if (f || hash === "explore") hubRef.current?.scrollIntoView({ behavior: "instant", block: "start" });
+      if (hash === "explore" || hash === "experience" || hash === "projects") hubRef.current?.scrollIntoView({ behavior: "instant", block: "start" });
     };
     onHash();
     window.addEventListener("keydown", onKey);
@@ -360,8 +356,7 @@ export function HomeStage({ worlds }: HomeStageProps) {
     if (performance.now() - rot.lastTime > 120) rot.velocity = 0;
   };
 
-  const hubTitle = filter === "experience" ? "Professional experience" : filter === "project" ? "Projects and hackathons" : "Explore my experiences and projects";
-  const shownBy = (world: World) => !filter || categoryOf(world.id) === filter || (filter === "project" && categoryOf(world.id) === "hackathon");
+  const hubTitle = "Explore my experiences and projects";
 
   return (
     <section
@@ -405,14 +400,13 @@ export function HomeStage({ worlds }: HomeStageProps) {
             {worlds.slice(0, count).map((world, i) => {
               const category = categoryOf(world.id);
               const ready = (readyMask >> i) & 1;
-              const dim = !shownBy(world);
               return (
                 <li
                   key={world.id}
                   ref={(el) => {
                     sliceRefs.current[i] = el;
                   }}
-                  className={`nb-slice ${hovered === i ? "is-hot" : ""} ${centre === i ? "is-centre" : ""} ${dim ? "is-dim" : ""}`}
+                  className={`nb-slice ${hovered === i ? "is-hot" : ""} ${centre === i ? "is-centre" : ""}`}
                   data-world={world.id}
                 >
                   <Link href={worldHref(world.id)} onFocus={() => hover(i)} onBlur={() => hover(-1)} onPointerEnter={() => hover(i)}>

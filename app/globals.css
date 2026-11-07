@@ -2855,36 +2855,51 @@
   display: none;
 }
 /* Calendar left, phone right, filling the space the caption and characters used to take. */
-/* Height follows the space available (cqw of the .tsy container), so calendar plus phone always fit. */
+/* Calendar and phone as one centred pair; the height follows the space available (cqw of .tsy). */
 .nb-stage-extra .tsy .tsy-stage {
-  height: min(60vh, 600px, 58cqw);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4%;
+  height: min(60vh, 600px, 52cqw);
 }
-/* A nearly square desk calendar: its height sets its width. */
-.nb-stage-extra .tsy .hs-device {
-  left: 2%;
-  right: auto;
-  top: 9%;
-  bottom: 9%;
+.nb-stage-extra .tsy .tsy-scene {
+  position: relative;
+  inset: auto;
+  flex: 0 0 auto;
+  height: 82%;
   aspect-ratio: 1.12;
 }
+/* A nearly square desk calendar filling its slot. */
+.nb-stage-extra .tsy .hs-device {
+  inset: 0;
+}
 .nb-stage-extra .tsy .tsy-phone {
-  top: 2%;
-  bottom: 2%;
-  right: 2%;
-  width: 30%;
+  position: relative;
+  inset: auto;
+  flex: 0 0 auto;
+  height: 96%;
+  width: auto;
+  aspect-ratio: 0.5;
 }
 @media (max-width: 899px) {
   .nb-stage-extra .tsy .tsy-stage {
-    height: min(320px, 62cqw);
-  }
-  .nb-stage-extra .tsy .hs-device {
-    top: 14%;
-    bottom: 14%;
-  }
-  .nb-stage-extra .tsy .tsy-phone {
-    width: 36%;
+    height: min(320px, 58cqw, calc(max(58svh, 360px) - 72px));
   }
 }
+/* Narrow screens: the calendar alone, larger. */
+@media (max-width: 599px) {
+  .nb-stage-extra .tsy .tsy-phone {
+    display: none;
+  }
+  .nb-stage-extra .tsy .tsy-stage {
+    height: min(calc(max(58svh, 360px) - 72px), 84cqw);
+  }
+  .nb-stage-extra .tsy .tsy-scene {
+    height: 100%;
+  }
+}
+
 
 .nb-brief {
   position: absolute;
@@ -3122,12 +3137,14 @@
   .nb-project[data-world="guitar"] .nb-stage-controls {
     left: auto;
   }
+  /* On the world itself, in the part of the view above the brief card. */
   .nb-stage-extra {
-    position: static;
-    padding: 16px;
-  }
-  .nb-project[data-world="tarii"] .nb-brief {
-    margin-top: 8px;
+    top: 16px;
+    bottom: auto;
+    left: 16px;
+    right: 16px;
+    height: calc(max(58svh, 360px) - 72px);
+    justify-content: center;
   }
   .nb-brief-strip {
     position: static;
@@ -3201,5 +3218,84 @@
     height: 100vh;
     height: 100dvh;
     scroll-snap-align: start;
+  }
+}
+
+/* ---------- side nav (home): sections, the one in view marked ---------- */
+.nb-side-nav {
+  display: none;
+}
+@media (min-width: 900px) {
+  /* Section links live in the side nav on desktop; the top bar keeps the name and Contact. */
+  .nb-nav-section {
+    display: none !important;
+  }
+  .nb-side-nav {
+    position: fixed;
+    left: 18px;
+    top: 50%;
+    z-index: 55;
+    display: grid;
+    gap: 4px;
+    translate: 0 -50%;
+    opacity: 0.25;
+    transition: opacity 320ms ease;
+  }
+  .nb-side-nav.is-awake,
+  .nb-side-nav:hover,
+  .nb-side-nav:focus-within {
+    opacity: 1;
+  }
+  .nb-side-nav.is-away {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .nb-side-nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 12px 6px 8px;
+    border-radius: 999px;
+    color: var(--nb-ink);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .nb-side-nav .dot {
+    width: 8px;
+    height: 8px;
+    border: 1.5px solid currentColor;
+    border-radius: 50%;
+    transition: background-color 200ms ease, transform 200ms ease;
+  }
+  .nb-side-nav .label {
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: var(--nb-card);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    translate: -6px 0;
+    transition: opacity 200ms ease, translate 200ms ease;
+  }
+  /* Dots only at rest, so the nav never covers the page; names show while pointing at it. */
+  .nb-side-nav:hover .label,
+  .nb-side-nav:focus-within .label {
+    opacity: 1;
+    translate: 0 0;
+  }
+  .nb-side-nav a[aria-current="true"] .dot {
+    background: var(--nb-blue);
+    border-color: var(--nb-blue);
+    transform: scale(1.3);
+  }
+  .nb-side-nav a[aria-current="true"] .label {
+    background: var(--nb-ink);
+    color: var(--nb-paper);
+  }
+  .nb-side-nav a:focus-visible {
+    outline: 2px solid var(--nb-blue);
+    outline-offset: 2px;
   }
 }

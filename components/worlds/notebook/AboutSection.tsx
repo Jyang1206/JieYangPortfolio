@@ -27,7 +27,9 @@ export function AboutSection() {
           ))}
         </div>
 
-        <h2 className="nb-display nb-about-title nb-about-title-2">Skills</h2>
+        <h2 id="skills" className="nb-display nb-about-title nb-about-title-2">
+          Skills
+        </h2>
         <SkillTiles groups={skills} languages={languages} />
       </div>
     </section>
